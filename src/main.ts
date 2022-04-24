@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from "three"
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {Object3D} from "three/src/core/Object3D";
 
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
 
@@ -14,7 +15,7 @@ let mixer: THREE.AnimationMixer
 
 let modelReady = false
 
-
+let targets: {[name: string]: THREE.Object3D} = {}
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -56,17 +57,16 @@ loader.load(
             (object as THREE.Object3D).animations[0]
         )
         activeAction = animationAction
-        console.log(activeAction)
         modelReady = true
 
         object.traverse(function (child) {
-            // console.log(child)
-            /* if ((child as THREE.Mesh).isMesh) {
-                // (child as THREE.Mesh).material = material
-                if ((child as THREE.Mesh).material) {
+             if ((child as THREE.Mesh).isMesh) {
+                 targets[child.name] = child
+                 // (child as THREE.Mesh).material = material
+                /* if ((child as THREE.Mesh).material) {
                     ((child as THREE.Mesh).material as THREE.MeshBasicMaterial).transparent = false
-                }
-            } */
+                } */
+            }
         })
         object.scale.set(0.01, 0.01, 0.01)
 
@@ -108,7 +108,7 @@ const tick = () =>
     // Update controls
     controls.update()
 
-    // if (modelReady) mixer.update(clock.getDelta())
+    if (modelReady) mixer.update(clock.getDelta())
 
     // Render
     render()
@@ -130,17 +130,20 @@ const setAction = (toAction: THREE.AnimationAction) => {
 }
 
 function render() {
+    raycaster.setFromCamera( pointer, camera );
+    // calculate objects intersecting the picking ray
+    // let intersects
+    if (modelReady) {
+        const intersects = raycaster.intersectObjects(Object.values(targets));
+        console.log(intersects.length)
+        for ( let i = 0; i < intersects.length; i ++ ) {
+            ((intersects[ i ].object as THREE.Mesh).material as THREE.MeshPhongMaterial).color.set( 0xff0000 );
+        }
+    }
     renderer.render(scene, camera)
 }
 
-document.querySelector<HTMLDivElement>('#webgl')?.addEventListener('mousemove', (event) => {
-    // console.log(event.clientX / 500)
-    // console.log(activeAction.getClip().duration)
-    // console.log(event.target?.clienWidth)
-
-    if (modelReady) mixer.setTime((event.clientX * activeAction.getClip().duration) / (event.target as HTMLCanvasElement).clientWidth )
-})
-
+window.addEventListener( 'pointermove', onPointerMove );
 function onPointerMove( event ) {
 
     // calculate pointer position in normalized device coordinates
