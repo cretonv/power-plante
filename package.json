@@ -13,6 +13,7 @@
     "vite": "^2.9.5"
   },
   "dependencies": {
-    "three": "^0.139.2"
+    "three": "^0.139.2",
+    "three-outlinepass": "^1.2.0"
   }
 }
