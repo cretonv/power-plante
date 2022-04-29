@@ -1,163 +1,116 @@
 import './style.css'
 import * as THREE from "three"
+import {Object3D} from "three/src/core/Object3D";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-
+import Proton from 'three.proton.js';
+const sizes = {
+  width: 800,
+  height: 600
+}
+let is_intersecting = false
+let display_cube = true
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  preserveDrawingBuffer: true,
+   antialias: true 
+})
+var scene = new THREE.Scene();
 
-const scene = new THREE.Scene()
-scene.add(new THREE.AxesHelper(5))
+// Make highly-transparent plane
+var fadeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    transparent: true,
+    opacity: 0.02
+});
+var fadePlane = new THREE.PlaneBufferGeometry(1, 1);
+var fadeMesh = new THREE.Mesh(fadePlane, fadeMaterial);
 
-let activeAction: THREE.AnimationAction
-let lastAction: THREE.AnimationAction
-let mixer: THREE.AnimationMixer
+// Create Object3D to hold camera and transparent plane
+var camGroup = new THREE.Object3D();
+var camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 1000);
+camGroup.add(camera);
+camGroup.add(fadeMesh);
 
-let modelReady = false
+// Put plane in front of camera
+fadeMesh.position.z = -0.1;
 
+// Make plane render before particles
+fadeMesh.renderOrder = -1;
 
+// Add camGroup to scene
+scene.add(camGroup);
 
+let targets: {[name: string]: THREE.Object3D} = {}
 
+const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
 
-/**
- * Sizes
- */
-const sizes = {
-    width: 800,
-    height: 600
+renderer.autoClearColor = false;
+renderer.setSize(sizes.width, sizes.height);
+
+document.addEventListener('DOMContentLoaded', function () {   
+    document.body.appendChild(renderer.domElement);
+});
+
+var geometry = new THREE.BoxGeometry(1,1,1);
+var material = new THREE.MeshBasicMaterial({color: 0xffffff});
+var cube = new THREE.Mesh(geometry, material);
+if (display_cube){
+  scene.add(cube);
 }
 
-/**
- * Camera
- */
-const camera = new THREE.PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 3
-scene.add(camera)
+cube.position.z = -5;
 
-
-const loader = new FBXLoader()
-
-
-/**
- * Renderer
- */
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
-})
-renderer.setClearColor(0xffffff, 1)
-renderer.setSize(sizes.width, sizes.height)
-
-const controls = new OrbitControls(camera, renderer.domElement)
-controls.enableDamping = true
-
-
-var listener = new THREE.AudioListener();
-camera.add( listener );
-
-// create a global audio source
-var sound = new THREE.Audio( listener );
-//trigger sound
-document.querySelector<HTMLDivElement>('.btn-default')?.addEventListener('click', (e) => {
-  sound.play();
-})
-var audioLoader = new THREE.AudioLoader();
-
-//Load a sound and set it as the Audio object's buffer
-audioLoader.load( 'assets/sounds/tick.mp3', function( buffer ) {
-    sound.setBuffer( buffer );
-    sound.setLoop(false);
-    sound.setVolume(0.5);
-    //sound.play();
-},
-            // onProgress callback
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-
-            // onError callback
-            function ( err ) {
-                console.log( 'Un error ha ocurrido' );
-            }
-
-);
-
-var sound2 = new THREE.Audio( listener );
-//trigger sound
-document.querySelector<HTMLDivElement>('.btn-default')?.addEventListener('click', (e) => {
-  sound.play();
-})
-var audioLoader = new THREE.AudioLoader();
-
-//Load a sound and set it as the Audio object's buffer
-audioLoader.load( 'assets/sounds/sample1.ogg', function( buffer ) {
-    sound2.setBuffer( buffer );
-    sound2.setLoop(true);
-    sound2.setVolume(0.1);
-    sound2.play();
-},
-            // onProgress callback
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-
-            // onError callback
-            function ( err ) {
-                console.log( 'Un error ha ocurrido' );
-            }
-
-);
-// Animate
-const clock = new THREE.Clock()
-
-const tick = () =>
-{
-    // const elapsedTime = clock.getElapsedTime()
-
-    // Update controls
-    controls.update()
-
-    // if (modelReady) mixer.update(clock.getDelta())
-
-    // Render
-    render()
-
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
-}
-
-const setAction = (toAction: THREE.AnimationAction) => {
-    if (toAction != activeAction) {
-        lastAction = activeAction
-        activeAction = toAction
-        lastAction.stop()
-        //lastAction.fadeOut(1)
-        activeAction.reset()
-        //activeAction.fadeIn(1)
-        activeAction.play()
+var step = .03;
+function animate(){
+   // console.log(cube.position.x)
+    cube.rotation.x += 0.02;
+    cube.rotation.y += 0.02;
+    cube.position.x += step;
+    cube.visible = display_cube
+    if(Math.abs(cube.position.x) > 10.0)
+    {
+        step = -step;
     }
+    raycaster.setFromCamera( pointer, camera );
+    // calculate objects intersecting the picking ray
+    // let intersects
+
+    const intersects = raycaster.intersectObjects([cube]);
+    if(intersects.length>0){
+      is_intersecting = true
+    }
+    else{
+      is_intersecting = false
+    }
+    console.log(display_cube)
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(animate);
 }
 
-function render() {
-    renderer.render(scene, camera)
-}
+animate();
 
-document.querySelector<HTMLDivElement>('#webgl')?.addEventListener('mousemove', (event) => {
-    // console.log(event.clientX / 500)
-    // console.log(activeAction.getClip().duration)
-    // console.log(event.target?.clienWidth)
-
-    if (modelReady) mixer.setTime((event.clientX * activeAction.getClip().duration) / (event.target as HTMLCanvasElement).clientWidth )
-})
-
+window.addEventListener( 'pointermove', onPointerMove );
 function onPointerMove( event ) {
 
     // calculate pointer position in normalized device coordinates
     // (-1 to +1) for both components
 
-    pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    pointer.x = ( event.clientX / sizes.width ) * 2 - 1;
+    pointer.y = - ( event.clientY / sizes.height ) * 2 + 1;
 
 }
 
-tick()
+window.addEventListener( 'click', suppressParticle );
+function suppressParticle( event ) {
+
+    if(is_intersecting){
+        display_cube=false
+    }
+}
+
