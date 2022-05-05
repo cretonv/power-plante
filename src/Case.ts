@@ -1,6 +1,7 @@
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
+import {Indication} from "./Indication";
 
 export class Case {
 
@@ -10,12 +11,15 @@ export class Case {
 
     private clock: THREE.Clock
 
+    private indications: Indication
+
     private loader: FBXLoader;
     private activeAction: THREE.AnimationAction;
     private lastAction: THREE.AnimationAction;
     private animationActions: THREE.AnimationAction[];
     private modelReady: boolean;
 
+    // Animations and interactions attributes
     private mouseDown: boolean
     private pointer = THREE.Vector2
     private raycaster = THREE.Raycaster
@@ -38,7 +42,8 @@ export class Case {
         this.runLastAnim = false
     }
 
-    init(callback: Function, camera, controls) {
+    init(callback: Function, camera, controls, indications: Indication) {
+        this.indications = indications
         this.loader.load(
            `assets/models/case/${this.modelFileName}`,
             (object: THREE.Group) => {
@@ -62,8 +67,6 @@ export class Case {
                 this.targets = tempArray
 
                 this.activeAction.play()
-                console.log(this.animationActions)
-                console.log(this.targets)
 
                 object.scale.set(0.01, 0.01, -0.01)
 
@@ -111,6 +114,8 @@ export class Case {
                         this.activeAction.setLoop(THREE.LoopOnce)
                         this.activeAction.clampWhenFinished = true
                         controls.enabled = false
+                        this.indications.points[0].element.classList.add('destroyed')
+                        this.indications.points[1].element.classList.remove('destroyed')
                         this.triggerSecondAnimation(camera)
                     }
                 }
@@ -151,7 +156,7 @@ export class Case {
                             const completion =
                                 ((event.clientX - this.x0) *
                                 this.activeAction.getClip().duration) /
-                                ((event.target as HTMLCanvasElement).clientWidth / 2)
+                                ((event.target as HTMLCanvasElement).clientWidth / 3)
                             intersects[i].object.material.transparent = true
                             intersects[i].object.material.opacity = completion / this.activeAction.getClip().duration
                             this.mixer.setTime(completion)
@@ -160,6 +165,7 @@ export class Case {
                                 this.setAction(this.animationActions[2])
                                 this.activeAction.setLoop(THREE.LoopOnce)
                                 this.activeAction.clampWhenFinished = true
+                                this.indications.points[1].element.classList.add('destroyed')
                                 this.triggerFinalAnimation(camera)
                                 this.blockLoop = true
                             }

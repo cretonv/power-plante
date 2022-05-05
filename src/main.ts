@@ -2,11 +2,12 @@ import './style.css'
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {Case} from "./Case";
+import {Indication} from "./Indication";
 
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
 
 const scene = new THREE.Scene()
-scene.add(new THREE.AxesHelper(5))
+// scene.add(new THREE.AxesHelper(5))
 
 /**
  * Sizes
@@ -29,7 +30,7 @@ renderer.setSize(sizes.width, sizes.height)
 * Camera
 */
 const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
-camera.position.z = 3
+camera.position.z = 1.3563360735759848
 scene.add(camera)
 
 /**
@@ -41,11 +42,20 @@ controls.enableDamping = true
 /**
  * Objects
  */
+
+// Init 2D indications
+const indications = new Indication()
+indications.init()
+
+// Init case
 const caseElement = new Case()
 caseElement.init(() => {
     scene.add(caseElement.object)
-}, camera, controls)
+}, camera, controls, indications)
 
+/**
+ * Lights
+ */
 const light = new THREE.AmbientLight( 0x404040, 3.5 )
 // light.position.set(0.8, 1.4, 1.0)
 scene.add(light)
@@ -71,6 +81,7 @@ const tick = () =>
 
     // if (modelReady) mixer.update(clock.getDelta())
     caseElement.anim(camera)
+    indications.anim(camera, sizes, scene)
 
     // Render
     render()
