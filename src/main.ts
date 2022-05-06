@@ -3,6 +3,7 @@ import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {Case} from "./Case";
 import {Indication} from "./Indication";
+import {ObjectViewModal} from "./ObjectViewModal";
 
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
 
@@ -23,7 +24,7 @@ const sizes = {
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
-renderer.setClearColor(0x000000, 1)
+renderer.setClearColor(0xFFFFFF, 1)
 renderer.setSize(sizes.width, sizes.height)
 
 /**
@@ -57,11 +58,16 @@ const points =  [
 const indications = new Indication()
 indications.init(points)
 
+// Init modal for chamber
+const chamberModal = new ObjectViewModal()
+chamberModal.init('assets/models/cab/CAB_flo_v-1.gltf', camera, canvas, renderer)
+scene.add(chamberModal.plane)
+
 // Init case
 const caseElement = new Case()
 caseElement.init(() => {
     scene.add(caseElement.object)
-}, camera, controls, indications)
+}, camera, controls, indications, chamberModal)
 
 /**
  * Lights
@@ -92,6 +98,7 @@ const tick = () =>
     // if (modelReady) mixer.update(clock.getDelta())
     caseElement.anim(camera)
     indications.anim(camera, sizes, scene)
+    chamberModal.anim(renderer, camera)
 
     // Render
     render()

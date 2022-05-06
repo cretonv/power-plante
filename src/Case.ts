@@ -2,6 +2,7 @@ import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
 import {Indication} from "./Indication";
+import {ObjectViewModal} from "./ObjectViewModal";
 
 export class Case {
 
@@ -25,10 +26,15 @@ export class Case {
     private raycaster = THREE.Raycaster
     private targets: {[name: string]: THREE.Object3D} = {}
     private x0: number
+
+    // Animations blocker var
     private blockLoop: boolean
     private runLastAnim: boolean
+    private animEnded: boolean
 
-    private modelFileName = 'case_flo_v-6.fbx';
+    private modelFileName = 'case_flo_v-7.fbx';
+
+    private modal: ObjectViewModal
 
     constructor() {
         this.loader = new FBXLoader()
@@ -40,10 +46,12 @@ export class Case {
         this.blockLoop = false
         this.clock = new THREE.Clock()
         this.runLastAnim = false
+        this.animEnded = false
     }
 
-    init(callback: Function, camera, controls, indications: Indication) {
+    init(callback: Function, camera, controls, indications: Indication, modal: ObjectViewModal) {
         this.indications = indications
+        this.modal = modal
         this.loader.load(
            `assets/models/case/${this.modelFileName}`,
             (object: THREE.Group) => {
@@ -180,23 +188,43 @@ export class Case {
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
             'mousedown',
             () => {
-                this.raycaster.setFromCamera( this.pointer, camera );
+                if(!this.animEnded) {
+                    this.raycaster.setFromCamera( this.pointer, camera );
+                    const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                    for ( let i = 0; i < intersects.length; i ++ ) {
+                        if(intersects[i].object.name === "packaging") {
+                            this.runLastAnim = true
+                            const targetCoords = {
+                                x: 0,
+                                y: 0.8343677459755188,
+                                z: 0.49586116341112374
+                            }
+                            const coords = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+                            new TWEEN.Tween(coords)
+                                .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
+                                .onUpdate(() =>
+                                    camera.position.set(coords.x, coords.y, coords.z)
+                                )
+                                .start();
+                            this.detectClickOnCaseElement(camera)
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    detectClickOnCaseElement(camera) {
+        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
+            'mousedown',
+            () => {
+                this.raycaster.setFromCamera(this.pointer, camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 for ( let i = 0; i < intersects.length; i ++ ) {
-                    if(intersects[i].object.name === "packaging") {
-                        this.runLastAnim = true
-                        const targetCoords = {
-                            x: 0,
-                            y: 0.8343677459755188,
-                            z: 0.49586116341112374
-                        }
-                        const coords = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
-                        new TWEEN.Tween(coords)
-                            .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
-                            .onUpdate(() =>
-                                camera.position.set(coords.x, coords.y, coords.z)
-                            )
-                            .start();
+                    if(intersects[i].object.name === "bloc") {
+                        console.log('ON OUVRE LA POP UP')
+                        console.log(camera.position)
+                        this.modal.plane.visible = true
                     }
                 }
             }
