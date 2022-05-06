@@ -44,8 +44,18 @@ controls.enableDamping = true
  */
 
 // Init 2D indications
+const points =  [
+    {
+        position: new THREE.Vector3(-0.1, 0.05, 0.5),
+        element: document.querySelector('.indication-0')
+    },
+    {
+        position: new THREE.Vector3(-0.1, 0.11, 0.5),
+        element: document.querySelector('.indication-1')
+    }
+]
 const indications = new Indication()
-indications.init()
+indications.init(points)
 
 // Init case
 const caseElement = new Case()
