@@ -223,6 +223,7 @@ export class Case {
                 for ( let i = 0; i < intersects.length; i ++ ) {
                     if(intersects[i].object.name === "bloc") {
                         this.modal.plane.visible = true
+                        this.modal.htmlDescriptionElement.classList.add('visible')
                     }
                 }
             }

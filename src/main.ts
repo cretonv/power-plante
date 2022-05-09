@@ -59,8 +59,15 @@ const indications = new Indication()
 indications.init(points)
 
 // Init modal for chamber
+
 const chamberModal = new ObjectViewModal()
-chamberModal.init('assets/models/cab/CAB_flo_v-2.gltf', camera, canvas, renderer)
+chamberModal.init(
+    'assets/models/cab/CAB_flo_v-2.gltf',
+    document.querySelector('.cab-desc'),
+    camera,
+    canvas,
+    renderer
+)
 scene.add(chamberModal.plane)
 
 // Init case

@@ -5,6 +5,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 export class ObjectViewModal {
     private object: THREE.Group
     public plane: THREE.Mesh
+    public htmlDescriptionElement: HTMLDivElement
     private renderTarget: THREE.WebGLRenderTarget
     private rtScene: THREE.Scene
     private rtCamera: THREE.Camera
@@ -17,7 +18,9 @@ export class ObjectViewModal {
         this.loader = new GLTFLoader()
     }
 
-    init(filePath: String, camera, canvas, renderer) {
+    init(filePath: String, htmlDescElement: HTMLDivElement, camera, canvas, renderer) {
+
+        this.htmlDescriptionElement = htmlDescElement
 
         // Scene
         this.rtScene = new THREE.Scene()
@@ -53,14 +56,6 @@ export class ObjectViewModal {
                 console.log(error)
             }
         )
-
-        // Test cube
-        const cube_geometry = new THREE.BoxGeometry( 1, 1, 1);
-        const cube_material = new THREE.MeshBasicMaterial( {color: 0x000000} );
-        this.testCube = new THREE.Mesh( cube_geometry, cube_material );
-        this.testCube.position.set(0, 0, 0)
-        this.testCube.rotateY(90)
-        // this.rtScene.add(this.testCube)
 
         // Surface who host the target rendering
         const geometry = new THREE.PlaneGeometry( 0.7, 0.4 );
