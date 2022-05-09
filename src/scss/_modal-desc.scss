@@ -1,0 +1,31 @@
+.modal-desc {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  padding-bottom: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s;
+}
+.modal-desc.visible {
+  transition: all 0.5s;
+  opacity: 1;
+}
+.modal-desc.visible a {
+  pointer-events: auto;
+}
+.modal-desc p {
+  max-width: 250px;
+  margin: 32px auto;
+}
+.modal-desc a {
+  width: fit-content;
+  margin: 32px auto;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 16px;
+  background-color: forestgreen;
+  color: #FFF;
+}
