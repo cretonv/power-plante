@@ -8,6 +8,7 @@ export class ObjectViewModal {
     private renderTarget: THREE.WebGLRenderTarget
     private rtScene: THREE.Scene
     private rtCamera: THREE.Camera
+    private rtLight: THREE.Spothlight
     private testCube: THREE.Mesh
     private loader: GLTFLoader
     private controls: OrbitControls
@@ -25,27 +26,25 @@ export class ObjectViewModal {
         // Camera
         this.rtCamera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
         this.rtCamera.position.z = 2
-        // this.rtScene.add(this.rtCamera)
 
         // Controls
         this.controls = new OrbitControls(this.rtCamera, renderer.domElement)
         this.controls.enableDamping = true
 
         // Light
-        const light = new THREE.SpotLight(0xffffff, 3)
-
-        light.position.set(1, -1, 5)
-        this.rtScene.add(light)
+        this.rtLight = new THREE.SpotLight(0xffffff, 3)
+        this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
+        this.rtScene.add(this.rtLight)
 
         // GLTF
         this.loader.load(
             filePath,
             (gltf) => {
-                console.log("🧠")
-                console.log(gltf)
                 gltf.scene.scale.set(0.05, 0.05, 0.05)
                 gltf.scene.position.set(0, -0.25, 0)
-                this.rtScene.add(gltf.scene)
+                this.object = gltf.scene
+                this.rtScene.add(this.object)
+                this.rtLight.lookAt(this.object.position)
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -80,6 +79,7 @@ export class ObjectViewModal {
         renderer.setRenderTarget(this.renderTarget);
         renderer.render(this.rtScene, this.rtCamera);
         renderer.setRenderTarget(null);
+        this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
     }
 
     destroy() {

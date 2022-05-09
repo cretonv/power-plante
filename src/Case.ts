@@ -222,8 +222,6 @@ export class Case {
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 for ( let i = 0; i < intersects.length; i ++ ) {
                     if(intersects[i].object.name === "bloc") {
-                        console.log('ON OUVRE LA POP UP')
-                        console.log(camera.position)
                         this.modal.plane.visible = true
                     }
                 }
