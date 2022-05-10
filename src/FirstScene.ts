@@ -33,7 +33,7 @@ export class FirstScene {
         this.tick()
     }
 
-    initThreeElements() {
+    initThreeElements = () => {
         /**
          * Renderer
          */
@@ -64,7 +64,7 @@ export class FirstScene {
         this.scene.add(this.light)
     }
 
-    initSceneObjects() {
+    initSceneObjects = () => {
         // Init 2D indications
         const points =  [
             {
@@ -97,7 +97,18 @@ export class FirstScene {
         }, this.camera, this.controls, this.indications, this.chamberModal)
     }
 
-    tick() {
+    resizeRendererToDisplaySize = () => {
+        const width = this.canvas.clientWidth;
+        const height = this.canvas.clientHeight;
+        const needResize = this.canvas.clientWidth !== this.sizes.width || this.canvas.clientHeight !== this.sizes.height;
+        if (needResize) {
+            this.renderer.setSize(width, height, false);
+        }
+
+        return needResize
+    }
+
+    tick = () => {
         // const elapsedTime = clock.getElapsedTime()
 
         // Check canvas size and resolution
@@ -124,19 +135,8 @@ export class FirstScene {
         window.requestAnimationFrame(this.tick)
     }
 
-    render() {
+    render = () => {
         this.renderer.render(this.scene, this.camera)
-    }
-
-    resizeRendererToDisplaySize() {
-        const width = this.canvas.clientWidth;
-        const height = this.canvas.clientHeight;
-        const needResize = this.canvas.clientWidth !== this.sizes.width || this.canvas.clientHeight !== this.sizes.height;
-        if (needResize) {
-            this.renderer.setSize(width, height, false);
-        }
-
-        return needResize
     }
 
     destroy() {
