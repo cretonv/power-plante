@@ -59,7 +59,7 @@ export class Case {
         this.indications = indications
         this.modal = modal
         this.loader.load(
-           `assets/models/case/${this.modelFileName}`,
+           `/models/case/${this.modelFileName}`,
             (object: THREE.Group) => {
                 this.object = object
                 this.mixer = new THREE.AnimationMixer(this.object)

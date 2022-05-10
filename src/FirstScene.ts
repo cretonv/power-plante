@@ -82,7 +82,7 @@ export class FirstScene {
         // Init modal for chamber
         this.chamberModal = new ObjectViewModal()
         this.chamberModal.init(
-            'assets/models/cab/CAB_flo_v-2.gltf',
+            '/models/cab/CAB_flo_v-2.gltf',
             document.querySelector('.cab-desc'),
             this.camera,
             this.canvas,
