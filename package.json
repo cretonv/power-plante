@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "compile-scss": "node-sass -w src/scss/ -o dist/css/ --output-style compressed"
+    "compile-scss": "node-sass -w src/scss/ -o assets/css/ --output-style compressed"
   },
   "devDependencies": {
     "concurrently": "^7.1.0",
