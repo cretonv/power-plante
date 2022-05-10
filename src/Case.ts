@@ -47,7 +47,7 @@ export class Case {
         this.clock = new THREE.Clock()
         this.runLastAnim = false
         this.animEnded = false
-    }
+    } 
 
     init(callback: Function, camera, controls, indications: Indication, modal: ObjectViewModal) {
         this.indications = indications

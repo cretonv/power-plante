@@ -3,7 +3,13 @@ import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {Case} from "./Case";
 import {Indication} from "./Indication";
+import {transformMeshToGlass} from "./Glassifier";
 import {ObjectViewModal} from "./ObjectViewModal";
+import { DragControls } from 'three/examples/jsm/controls/DragControls'
+import { EyeDropper } from './Eyedropper';
+import {loadSceneBackgroundFromHDR} from './SceneBackgroundLoader';
+
+
 
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
 
@@ -38,7 +44,8 @@ scene.add(camera)
  * Controls
  */
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.enableDamping = true
+controls.enableDamping = false
+controls.enabled = false 
 
 /**
  * Objects
@@ -57,25 +64,23 @@ const points =  [
 ]
 const indications = new Indication()
 indications.init(points)
+loadSceneBackgroundFromHDR('test.hdr',scene)
 
-// Init modal for chamber
-const chamberModal = new ObjectViewModal()
-chamberModal.init('assets/models/cab/CAB_flo_v-1.gltf', camera, canvas, renderer)
-scene.add(chamberModal.plane)
-
-// Init case
-const caseElement = new Case()
-caseElement.init(() => {
-    scene.add(caseElement.object)
-}, camera, controls, indications, chamberModal)
+// Init eye
+const eyeDropperElement = new EyeDropper()
+eyeDropperElement.init(() => {
+    //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
+    transformMeshToGlass(eyeDropperElement.object.scene.children[0],'test.hdr')
+    scene.add(eyeDropperElement.object.scene)
+},camera,new THREE.Plane(new THREE.Vector3(0, 0, 1), 0))
 
 /**
  * Lights
  */
-const light = new THREE.AmbientLight( 0x404040, 3.5 )
-// light.position.set(0.8, 1.4, 1.0)
+const light = new THREE.AmbientLight( 0x404040, 3.4 )
+//light.position.set(0.8, 1.4, 1.0)
 scene.add(light)
-
+scene.add(new THREE.PlaneHelper( new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), 1, 0xffff00 ));
 // Animate
 const clock = new THREE.Clock()
 
@@ -95,11 +100,7 @@ const tick = () =>
     // Update controls
     controls.update()
 
-    // if (modelReady) mixer.update(clock.getDelta())
-    caseElement.anim(camera)
-    indications.anim(camera, sizes, scene)
-    chamberModal.anim(renderer, camera)
-
+   
     // Render
     render()
 
