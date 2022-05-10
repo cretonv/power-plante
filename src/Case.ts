@@ -180,6 +180,7 @@ export class Case {
                                 this.activeAction.setLoop(THREE.LoopOnce)
                                 this.activeAction.clampWhenFinished = true
                                 this.indications.points[1].element.classList.add('destroyed')
+                                this.indications.points[2].element.classList.remove('destroyed')
                                 this.triggerFinalAnimation(camera)
                                 this.blockLoop = true
                             }
@@ -200,6 +201,7 @@ export class Case {
                     for ( let i = 0; i < intersects.length; i ++ ) {
                         if(intersects[i].object.name === "packaging" && !this.modalOpen) {
                             this.runLastAnim = true
+                            this.indications.points[2].element.classList.add('destroyed')
                             const targetCoords = {
                                 x: 0,
                                 y: 0.8343677459755188,

@@ -1,6 +1,6 @@
 import './style.css'
 import '../assets/css/main.css'
-import {FirstScene} from "./FirstScene";
+import {FirstScene} from "./Scenes/FirstScene";
 
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
 const firstScene = new FirstScene()

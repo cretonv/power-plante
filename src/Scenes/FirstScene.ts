@@ -1,8 +1,8 @@
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {Case} from "./Case";
-import {Indication} from "./Indication";
-import {ObjectViewModal} from "./ObjectViewModal";
+import {Case} from "../Case";
+import {Indication} from "../Indication";
+import {ObjectViewModal} from "../ObjectViewModal";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
@@ -74,7 +74,11 @@ export class FirstScene {
             {
                 position: new THREE.Vector3(-0.1, 0.11, 0.5),
                 element: document.querySelector('.indication-1')
-            }
+            },
+            {
+                position: new THREE.Vector3(-0.045, 0.15, 0.5),
+                element: document.querySelector('.indication-2')
+            },
         ]
         this.indications = new Indication()
         this.indications.init(points)

@@ -21,7 +21,7 @@ export class ObjectViewModal {
 
         this.htmlDescriptionElement = htmlDescElement
 
-        // Scene
+        // Scenes
         this.rtScene = new THREE.Scene()
         this.renderTarget = new THREE.WebGLRenderTarget(1400, 800)
 
