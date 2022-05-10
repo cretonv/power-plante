@@ -60,7 +60,6 @@ const indications = new Indication()
 indications.init(points)
 
 // Init modal for chamber
-
 const chamberModal = new ObjectViewModal()
 chamberModal.init(
     'assets/models/cab/CAB_flo_v-2.gltf',
@@ -85,7 +84,7 @@ const light = new THREE.AmbientLight( 0x404040, 3.5 )
 scene.add(light)
 
 // Animate
-const clock = new THREE.Clock()
+// const clock = new THREE.Clock()
 
 const tick = () =>
 {
