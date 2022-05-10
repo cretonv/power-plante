@@ -10,7 +10,6 @@ export class ObjectViewModal {
     private rtScene: THREE.Scene
     private rtCamera: THREE.Camera
     private rtLight: THREE.Spothlight
-    private testCube: THREE.Mesh
     private loader: GLTFLoader
     private controls: OrbitControls
 

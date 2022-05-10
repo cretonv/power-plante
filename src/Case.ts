@@ -35,6 +35,10 @@ export class Case {
     private modelFileName = 'case_flo_v-7.fbx';
 
     private modal: ObjectViewModal
+    private modalOpen: boolean
+
+    // Temporary attributes waiting refacto of main.ts
+    private controls: THREE.OrbitControls
 
     constructor() {
         this.loader = new FBXLoader()
@@ -47,9 +51,11 @@ export class Case {
         this.clock = new THREE.Clock()
         this.runLastAnim = false
         this.animEnded = false
+        this.modalOpen = false
     }
 
     init(callback: Function, camera, controls, indications: Indication, modal: ObjectViewModal) {
+        this.controls = controls
         this.indications = indications
         this.modal = modal
         this.loader.load(
@@ -192,7 +198,7 @@ export class Case {
                     this.raycaster.setFromCamera( this.pointer, camera );
                     const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                     for ( let i = 0; i < intersects.length; i ++ ) {
-                        if(intersects[i].object.name === "packaging") {
+                        if(intersects[i].object.name === "packaging" && !this.modalOpen) {
                             this.runLastAnim = true
                             const targetCoords = {
                                 x: 0,
@@ -205,6 +211,15 @@ export class Case {
                                 .onUpdate(() =>
                                     camera.position.set(coords.x, coords.y, coords.z)
                                 )
+                                .onComplete(() => {
+                                    if(!this.modalOpen) {
+                                        this.controls.enabled = true
+                                        this.controls.minPolarAngle = this.controls.getPolarAngle();
+                                        this.controls.maxPolarAngle = this.controls.getPolarAngle();
+                                        this.controls.minAzimuthAngle = - Infinity;
+                                        this.controls.maxAzimuthAngle = Infinity;
+                                    }
+                                })
                                 .start();
                             this.detectClickOnCaseElement(camera)
                         }
@@ -222,6 +237,8 @@ export class Case {
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 for ( let i = 0; i < intersects.length; i ++ ) {
                     if(intersects[i].object.name === "bloc") {
+                        this.controls.enabled = false
+                        this.modalOpen = true
                         this.modal.plane.visible = true
                         this.modal.htmlDescriptionElement.classList.add('visible')
                     }
