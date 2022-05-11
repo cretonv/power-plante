@@ -1,0 +1,24 @@
+.drag-indication .content {
+  animation-name: dragAnim;
+  animation-duration: 1.25s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes dragAnim {
+  0% {
+    transform: scale(1) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+  }
+  35% {
+    transform: scale(0.5) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5) translateX(200px);
+    opacity: 0;
+  }
+}

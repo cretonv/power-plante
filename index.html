@@ -10,20 +10,26 @@
 
   <canvas id="webgl"></canvas>
 
-  <div class="indication indication-0">
+  <div class="indication indication-0 destroyed">
     <div class="content">
       <img src="./assets/billboard/360.png" alt="Aïe">
     </div>
   </div>
 
-  <div class="indication indication-1 destroyed">
+  <div class="indication indication-1 drag-indication destroyed">
     <div class="content">
-      <img src="./assets/billboard/arrow2.png" alt="Aïe">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50" height="50">
+        <circle cx="25" cy="25" r="20" fill="#000000" />
+      </svg>
     </div>
   </div>
 
-  <div class="indication indication-2 destroyed">
-    <div class="content tappable"></div>
+  <div class="indication indication-2 tap-indication destroyed">
+    <div class="content"></div>
+  </div>
+
+  <div class="indication indication-3 tap-indication destroyed">
+    <div class="content"></div>
   </div>
 
   <div class="cab-desc modal-desc">

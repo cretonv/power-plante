@@ -1,0 +1,43 @@
+.tap-indication {
+  .content {
+    position: relative;
+    width: 77px;
+    height: 77px;
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: inherit;
+      height: inherit;
+      opacity: 0;
+      border-radius: 50%;
+      border: 2px solid #F0F0F0F0;
+    }
+
+    &::before {
+      animation: pulseAnim 2s cubic-bezier(.8,.2,.1,.5) infinite;
+    }
+
+    &::after {
+      animation: pulseAnim 2s cubic-bezier(.8,.4,.1,.5) 0.3s infinite;
+    }
+  }
+}
+
+@keyframes pulseAnim {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  30% {
+    opacity: 1;
+  }
+  60%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
