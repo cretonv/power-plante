@@ -79,6 +79,10 @@ export class FirstScene {
                 position: new THREE.Vector3(-0.045, 0.15, 0.5),
                 element: document.querySelector('.indication-2')
             },
+            {
+                position: new THREE.Vector3(-0.025, 0.30, 0.20),
+                element: document.querySelector('.indication-3')
+            },
         ]
         this.indications = new Indication()
         this.indications.init(points)

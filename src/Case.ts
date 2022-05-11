@@ -120,16 +120,20 @@ export class Case {
                         const coords = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
                         new TWEEN.Tween(coords)
                             .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
-                            .onUpdate(() =>
+                            .onUpdate(() => {
                                 camera.position.set(coords.x, coords.y, coords.z)
-                            )
+                            })
+                            .onComplete(() => {
+                                if(!this.blockLoop) {
+                                    this.indications.points[1].element.classList.remove('destroyed')
+                                }
+                            })
                             .start();
                         this.setAction(this.animationActions[1])
                         this.activeAction.setLoop(THREE.LoopOnce)
                         this.activeAction.clampWhenFinished = true
                         controls.enabled = false
                         this.indications.points[0].element.classList.add('destroyed')
-                        this.indications.points[1].element.classList.remove('destroyed')
                         this.triggerSecondAnimation(camera)
                     }
                 }
@@ -220,6 +224,7 @@ export class Case {
                                         this.controls.maxPolarAngle = this.controls.getPolarAngle();
                                         this.controls.minAzimuthAngle = - Infinity;
                                         this.controls.maxAzimuthAngle = Infinity;
+                                        this.indications.points[3].element.classList.remove('destroyed')
                                     }
                                 })
                                 .start();
@@ -243,6 +248,7 @@ export class Case {
                         this.modalOpen = true
                         this.modal.plane.visible = true
                         this.modal.htmlDescriptionElement.classList.add('visible')
+                        this.indications.points[3].element.classList.add('destroyed')
                     }
                 }
             }
