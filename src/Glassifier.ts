@@ -7,7 +7,7 @@ const defaultGlassParams = {
     opacity: 1.0,
     metalness: 0,
     roughness: 0.1,
-    ior: 0.5,
+    ior: 0.9,
     thickness: 0.01,
     specularIntensity: 1,
     specularColor: 0xff00ff,
