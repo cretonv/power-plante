@@ -4,6 +4,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import { Experience2Part1 } from './Experience2Part1';
 import { Experience2Part2 } from './Experience2Part2';
 import { AppLiveParameter } from './AppLiveParameter'
+import { Experience2Part3 } from './Experience2Part3';
 
 
 const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
@@ -25,15 +26,15 @@ const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clien
  
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = false
-controls.enabled = false 
+controls.enabled = true 
 
 
 const clock = new THREE.Clock()
 const currentscene = new Experience2Part1()
 currentscene.init(renderer,controls,camera,clock)
 
-const currentscene2 = new Experience2Part2()
-currentscene2.init(renderer,controls,camera,clock)
+//const currentscene2 = new Experience2Part3()
+//currentscene2.init(renderer,controls,camera,clock)
 
 const tick = () =>
 {
@@ -53,7 +54,7 @@ const tick = () =>
             currentscene.anim(tick)
             break;
         case 'scene2':
-            currentscene2.anim(tick)
+            //currentscene2.anim(tick)
             break;
         default:
           console.log(`on est perdu`);

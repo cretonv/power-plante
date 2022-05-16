@@ -7,10 +7,13 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Dye } from "./Dye";
 import { TestTube } from "./TestTube";
+import { AlcoolBottle } from "./AlcoolBottle";
+import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
 export class EyeDropper {
     private stateEnum = Object.freeze({
         Empty:"empty",
         RedDye:"redDye",
+        Alcool:"alcool",
         YellowDye:"yellowDye",
         BlueDye:"blueDye"
     });
@@ -18,97 +21,140 @@ export class EyeDropper {
     private pointer  = new THREE.Vector2();
     private raycaster = new THREE.Raycaster();
     public object:THREE.Group
-    private modelFileName = 'eyedropper_sam_v-1.gltf';
+    private modelFileName = 'eyedropper_animation_sam_v-2.fbx';
     private loader:GLTFLoader;
     private plane: THREE.Plane;
     private intersects = new THREE.Vector3();
     private camera: THREE.Camera
     private state = this.stateEnum.Empty
     private redDyeObject:Dye
-    private yellowDyeObject:Dye
-    private blueDyeObject:Dye
+    private mixer: THREE.AnimationMixer
+    private activeAction : THREE.clipAction
+    private alcoolBottle:AlcoolBottle
     private tubeObject:TestTube
     private cameraControler:OrbitControls
 
     constructor() {
-        this.loader = new GLTFLoader()
+        this.loader = new FBXLoader()
        
     }
 
-    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,yellowDyeObject:Dye,blueDyeObject:Dye,tubeObject:TestTube,cameraControler:OrbitControls) {
+    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls) {
         this.camera = camera
         this.cameraControler = cameraControler
         this.plane = plane
+        this.alcoolBottle = alcoolBottle
         this.redDyeObject = redDyeObject
-        this.yellowDyeObject = yellowDyeObject
-        this.blueDyeObject = blueDyeObject
         this.tubeObject = tubeObject
 
-        this.loader.load(
-            // resource URL
-            `assets/models/eyedropper/${this.modelFileName}`,
-            // called when the resource is loaded
-            (object: THREE.Group) => {
-                this.object = object
-                // this.object = objectt
-                console.log(object)
-                object.scene.children[0].scale.set(0.01, 0.01, -0.01)
+        // this.loader.load(
+        //     // resource URL
+        //     `assets/models/eyedropper/${this.modelFileName}`,
+        //     // called when the resource is loaded
+        //     (object: THREE.Group) => {
+        //         this.object = object
+        //         // this.object = objectt
+        //         console.log(object)
+        //         object.scene.children[0].scale.set(0.01, 0.01, -0.01)
                 
+        //         callback()
+        //     },
+        //     // called while loading is progressing
+        //     function ( xhr ) {
+        
+        //         console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+        
+        //     },
+        //     // called when loading has errors
+        //     function ( error ) {
+        
+        //         console.log( 'An error happened' + error );
+        
+        //     }
+        // );
+        this.loader.load(
+            `assets/models/eyedropper/${this.modelFileName}`,
+            (object) => {
+                this.object = object
+                this.mixer = new THREE.AnimationMixer(object)
+
+                // const animationAction = this.mixer.clipAction(
+                //     (object as THREE.Object3D).animations[0]
+                // )
+                //this.activeAction = animationAction
+                object.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        console.log(child)
+                        if (child.name == "Pipette") {
+                            transformMeshToPlastic(child, 'test.hdr')
+                        }
+                        else if (child.name.includes("L")) {
+                            //this.liquidSample.push(child)
+                            child.visible = false
+                        }
+                        else if (child.name.includes("bouchon")) {
+                            
+                            child.visible = false
+
+                        }
+                    
+                    }
+                })
+
+                object.scale.set(0.01, 0.01, 0.01)
+
+                object.position.set(0.1, 0.1, 0)
                 callback()
             },
-            // called while loading is progressing
-            function ( xhr ) {
-        
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
-            // called when loading has errors
-            function ( error ) {
-        
-                console.log( 'An error happened' + error );
-        
+            (error) => {
+                console.log(error)
             }
-        );
-
+        )
 
 
         window.addEventListener('mousedown', () => {
             console.log(this.state)
-            this.raycaster.set( this.object.scene.children[0].position, new THREE.Vector3(0,-1,0) );
-            const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object.scene.children[0]);
-            if(intersectsDownRed.length > 0  ){
+            this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
+            const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object);
+            if(intersectsDownRed.length > 0 && this.redDyeObject.capacity>0 && this.state == this.stateEnum.Empty ){
                 //triggerranim 
+                if(this.redDyeObject.object.position.distanceTo(this.object.position)<0.12){
                 this.state = this.stateEnum.RedDye
+                this.redDyeObject.removeLiquid()
+                this.colorContent(new THREE.MeshBasicMaterial( {color: 0x880000} ))
+                }
             }
-            this.raycaster.set( this.object.scene.children[0].position, new THREE.Vector3(0,-1,0) );
-            const intersectsDownBlue = this.raycaster.intersectObject(this.blueDyeObject.object.scene.children[0]);
-            if(intersectsDownBlue.length > 0 ){
-                //triggerranim 
-                this.state = this.stateEnum.BlueDye
-            }
-            this.raycaster.set( this.object.scene.children[0].position, new THREE.Vector3(0,-1,0) );
-            const intersectsDownYellow = this.raycaster.intersectObject(this.yellowDyeObject.object.scene.children[0]);
-            if(intersectsDownYellow.length > 0 ){
-                //triggerranim 
-                this.state = this.stateEnum.YellowDye
-
-            }
+            this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
+            const intersectsAlcool = this.raycaster.intersectObject(this.alcoolBottle.object);
             
-            this.raycaster.set( this.object.scene.children[0].position, new THREE.Vector3(0,-1,0) );
-            const intersectsDownTube = this.raycaster.intersectObject(this.tubeObject.object.scene.children[0]);
-            if(intersectsDownTube.length > 0 ){
+            if(intersectsAlcool.length > 0 && this.alcoolBottle.capacity>0 && this.state == this.stateEnum.Empty ){
+                //triggerranim 
+                if(this.alcoolBottle.object.position.distanceTo(this.object.position)<0.12){
+                    this.state = this.stateEnum.Alcool
+                    this.alcoolBottle.removeLiquid()
+                    this.colorContent(new THREE.MeshBasicMaterial( {color: 0x000088} ))
+                }
+            }
+
+            
+            this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
+            const intersectsDownTube = this.raycaster.intersectObject(this.tubeObject.object);
+            console.log(intersectsDownTube)
+            if(intersectsDownTube.length > 0  && this.tubeObject.object.position.distanceTo(this.object.position)<0.12){
                 //triggerranim 
                 
                 switch ( this.state) {
                     case this.stateEnum.RedDye:
                         this.tubeObject.addRed()
-                        break
-                    case this.stateEnum.YellowDye:
-                        this.tubeObject.addYellow()
-                        break
+                        this.removeAllContent()
 
-                    case this.stateEnum.BlueDye:
-                        this.tubeObject.addBlue()                    
+                        break
+                    case this.stateEnum.Alcool:
+                        this.tubeObject.addAlcool()
+                        this.removeAllContent()
                         break
 
                     default:
@@ -120,7 +166,7 @@ export class EyeDropper {
             }
 
             this.raycaster.setFromCamera( this.pointer, this.camera );
-            const intersects = this.raycaster.intersectObjects(this.object.scene.children);
+            const intersects = this.raycaster.intersectObjects(this.object.children);
             if (intersects.length > 0 ){
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
@@ -140,6 +186,7 @@ export class EyeDropper {
             //console.log(this.camera)
             this.pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
             this.pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+            console.log()
             if(this.isMouseDownOnModel){
                
                 this.raycaster.setFromCamera(this.pointer, this.camera);
@@ -148,7 +195,7 @@ export class EyeDropper {
                 //console.log(this.pointer)
                 //console.log(this.object.scene.children[0].position)
                 // -0.4 is offset to grab on the 
-                this.object.scene.children[0].position.set(this.intersects.x, this.intersects.y-0.07, this.intersects.z);
+                this.object.position.set(this.intersects.x, this.intersects.y-0.07, this.intersects.z);
             }
         });
     }
@@ -156,6 +203,33 @@ export class EyeDropper {
 
     anim() {
        
+    }
+    removeAllContent(){
+        this.object.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                console.log(child)
+                if (child.name.includes("L")) {
+                    //this.liquidSample.push(child)
+                    child.visible = false
+                }
+                
+            
+            }
+        })
+    }
+    colorContent(material){
+        this.object.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                console.log(child)
+                if (child.name.includes("L")) {
+                    //this.liquidSample.push(child)
+                    child.visible = true
+                    child.material = material
+                }
+                
+            
+            }
+        })
     }
 
     setAction() {

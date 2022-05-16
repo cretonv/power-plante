@@ -4,10 +4,11 @@ import * as TWEEN from "@tweenjs/tween.js";
 import {Indication} from "./Indication";
 import {ObjectViewModal} from "./ObjectViewModal";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { transformMeshToGlass } from "./Glassifier";
 export const dyeColorEnum = Object.freeze({
-    RedDye:"dyeRed_sam_v-1.gltf",
-    YellowDye:"dyeRed_sam_v-1.gltf",
-    BlueDye:"dyeRed_sam_v-1.gltf"
+    RedDye:"dyeRed_animation_sam_v-2.fbx",
+    YellowDye:"dyeRed_animation_sam_v-2.fbx",
+    BlueDye:"dyeRed_animation_sam_v-2.fbx"
 });
 export class Dye {
   
@@ -19,7 +20,11 @@ export class Dye {
     private camera: THREE.Camera
     private pointer  = new THREE.Vector2();
     private raycaster = new THREE.Raycaster();
-    
+    public capacity = 4
+    private mixer: THREE.AnimationMixer
+    private activeAction : THREE.clipAction
+    private liquidSample: Array<THREE.Mesh> = []
+    private liquidIndex: number = 0 
     constructor() {
 
        
@@ -30,79 +35,50 @@ export class Dye {
         this.modelFileName = modelFileName
         this.camera = camera
         // instantiate a loader
-        const textureLoader = new THREE.TextureLoader();
-        const loader = new GLTFLoader();
+        //const textureLoader = new THREE.TextureLoader();
+        const loader = new FBXLoader();
         loader.load(
-            // resource URL
             `assets/models/dye/${modelFileName}`,
-            // called when the resource is loaded
-            (object: THREE.Group) => {
-                
-                
+            (object) => {
                 this.object = object
-                  // load a resource
-                textureLoader.load(
-                    // resource URL
-                    'assets/textures/etiquettecolorantbleuv2.png',
+                this.mixer = new THREE.AnimationMixer(object)
 
-                    // onLoad callback
-                    function ( texture ) {
-                        //texture.repeat.set(-1,-1)
-                        //texture.offset.set(0.5,0.5)
-                        //texture.mapping = 2000
-                        //texture.rotation = Math.PI/2 * 3
-                        //texture.offset.set(1,1) 
-                        //texture.wrapS = 200.0;
-                        //texture.repeat.x = - 1;
-                        // in this example we create the material when the texture is loaded
-                        
-                        object.scene.traverse((o) => {
-                            if (o.isMesh) {
-                                if(o.name == 'ColorantBase-Mat'){
-                                    
-                                    o.material.map = texture;
-                                    
-                                    o.material.needsUpdate = true;
-                                }
-                                else{
-                                    //o.visible = false
-                                }
+                // const animationAction = this.mixer.clipAction(
+                //     (object as THREE.Object3D).animations[0]
+                // )
+                // this.activeAction = animationAction
+                object.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        //console.log(child)
+                        if (child.name == "HelixBouchon" || child.name == "ColorantBase") {
+                            transformMeshToGlass(child, 'test.hdr')
+                        }
+                        else if (child.name.includes("L")) {
+                            this.liquidSample.push(child)
+                            child.material = new THREE.MeshBasicMaterial( {color: 0x880000} )
+                            child.visible = true
+                        }
+                        else if (child.name.includes("bouchon")) {
+                            
+                            child.visible = false
 
-                            }
-                        });
-
-                        object.scene.children[0].scale.set(0.1, 0.1, -0.1)
-                        //object.scene.children[0].position.set(0.01, 0.01, -0.01)
-                        
-                        
-                        callback()
-                    },
-
-
-                    // onProgress callback currently not supported
-                    undefined,
-
-                    // onError callback
-                    function ( err ) {
-                        console.error( 'An error happened.' );
+                        }
+                    
                     }
-                );
-                // this.ob  ject = objectt
-               
+                })
+
+                object.scale.set(0.01, 0.01, 0.01)
+
+                object.position.set(0.1, 0.1, 0)
+                callback()
             },
-            // called while loading is progressing
-            function ( xhr ) {
-        
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
-            // called when loading has errors
-            function ( error ) {
-        
-                console.log( 'An error happened' + error );
-        
+            (error) => {
+                console.log(error)
             }
-        );
+        )
       
         
 
@@ -112,14 +88,34 @@ export class Dye {
             //console.log("down")
            
             this.raycaster.setFromCamera( this.pointer, this.camera );
-            const intersects = this.raycaster.intersectObjects(this.object.scene.children);
+            const intersects = this.raycaster.intersectObjects(this.object.children);
             //Trigger first anim( bottle oppenning here)
             
         })
 
        
     }
-
+    removeLiquid(){
+        this.capacity -=1 
+        console.log("çaremouveleliquid")
+        //const mesh = this.object.getObjectByName( this.liquidSample[this.liquidIndex].name)
+        var mesh = this.liquidSample[this.liquidSample.length -this.liquidIndex-1]
+        //console.log(mesh)
+        mesh.visible = false
+                    //this.liquidSample.push(child) 
+        this.liquidIndex = this.liquidIndex + 1
+         mesh = this.liquidSample[this.liquidSample.length -this.liquidIndex-1]
+        //console.log(mesh)
+        mesh.visible = false
+                    //this.liquidSample.push(child) 
+        this.liquidIndex = this.liquidIndex + 1
+        //callback(mesh)
+        //callback(mesh)
+        //console.log(this)
+    
+   
+   
+}
 
     anim() {
        

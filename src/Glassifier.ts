@@ -17,7 +17,23 @@ const defaultGlassParams = {
     transparent: true
 };
 
+const pipetteGlassParams = {
+    color: 0xffffff,
+    transmission: 1,
+    opacity: 1.0,
+    metalness: 0,
+    roughness: 0.8,
+    ior: 0.9,
+    thickness: 1,
+    specularIntensity: 1,
+    specularColor: 0xff00ff,
+    envMapIntensity: 1,
+    lightIntensity: 1,
+    exposure: 1,
+    transparent: true
+};
 export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string){
+    //console.log(meshToGlassify)
     const hdrEquirect = new RGBELoader()
 				.setPath( 'assets/textures/' )
 				.load( hdrPath, function () {
@@ -42,6 +58,39 @@ export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string
         specularIntensity: defaultGlassParams.specularIntensity,
         specularColor: defaultGlassParams.specularColor,
         opacity: defaultGlassParams.opacity,
+        side: THREE.DoubleSide,
+        transparent: true
+    } );
+    meshToGlassify.material = material
+
+}
+
+export function transformMeshToPlastic( meshToGlassify: THREE.Mesh,hdrPath: string){
+    //console.log(meshToGlassify)
+    const hdrEquirect = new RGBELoader()
+				.setPath( 'assets/textures/' )
+				.load( hdrPath, function () {
+
+					hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+                   
+				} );
+    const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
+				texture.magFilter = THREE.NearestFilter;
+				texture.wrapT = THREE.RepeatWrapping;
+				texture.wrapS = THREE.RepeatWrapping;
+				texture.repeat.set( 1, 3.5 );
+    const material = new THREE.MeshPhysicalMaterial( {
+        color: pipetteGlassParams.color,
+        metalness: pipetteGlassParams.metalness,
+        roughness: pipetteGlassParams.roughness,
+        ior: pipetteGlassParams.ior,
+        alphaMap: texture,
+        envMap: hdrEquirect,
+        envMapIntensity: pipetteGlassParams.envMapIntensity,
+        transmission: pipetteGlassParams.transmission, // use material.transmission for glass materials
+        specularIntensity: pipetteGlassParams.specularIntensity,
+        specularColor: pipetteGlassParams.specularColor,
+        opacity: pipetteGlassParams.opacity,
         side: THREE.DoubleSide,
         transparent: true
     } );

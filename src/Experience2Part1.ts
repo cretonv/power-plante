@@ -10,6 +10,7 @@ import { EyeDropper } from './Eyedropper';
 import { Dye, dyeColorEnum } from './Dye';
 import { loadSceneBackgroundFromHDR } from './SceneBackgroundLoader';
 import { TestTube } from './TestTube';
+import { AlcoolBottle } from './AlcoolBottle';
 
 
 
@@ -19,6 +20,7 @@ export class Experience2Part1 {
     private scene: THREE.Scene
     private renderer: THREE.WebGLRenderer
     private clock: THREE.Clock
+  
 
 
     constructor() {
@@ -40,7 +42,7 @@ export class Experience2Part1 {
         * Camera
         */
         this.camera = camera
-        this.camera.position.z = 1.3563360735759848
+        this.camera.position.z = 0.5
         this.scene.add(this.camera)
 
         /**
@@ -62,47 +64,66 @@ export class Experience2Part1 {
         redDyeElement.init(() => {
             //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
             //transformMeshToGlass(eyeDropperElement.object.scene.children[0],'test.hdr')
-            redDyeElement.object.scene.scale.set(0.1, 0.1, 0.1)
-            redDyeElement.object.scene.position.set(-0.1, 0.0, 0.0)
-            this.scene.add(redDyeElement.object.scene)
+
+            redDyeElement.object.position.set(-0.1, 0.0, 0.0)
+            this.scene.add(redDyeElement.object)
         }, camera, dyeColorEnum.RedDye)
 
-        const yellowDyeElement = new Dye()
-        yellowDyeElement.init(() => {
+        const alcoolBottle = new AlcoolBottle()
+        alcoolBottle.init(() => {
             //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
-            //transformMeshToGlass(eyeDropperElement.object.scene.children[0],'test.hdr')
-            yellowDyeElement.object.scene.scale.set(0.1, 0.1, 0.1)
-            yellowDyeElement.object.scene.position.set(0.2, 0.0, 0.0)
-            this.scene.add(yellowDyeElement.object.scene)
-        }, camera, dyeColorEnum.YellowDye)
+            //console.log(test.object)
+           
+            //transformMeshToGlass(test.object,'test.hdr')
 
-        const blueDyeElement = new Dye()
-        blueDyeElement.init(() => {
-            //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
-            //transformMeshToGlass(eyeDropperElement.object.scene.children[0],'test.hdr')
-            blueDyeElement.object.scene.scale.set(0.1, 0.1, 0.1)
-            blueDyeElement.object.scene.position.set(-0.4, 0.0, 0.0)
-            this.scene.add(blueDyeElement.object.scene)
-        }, camera, dyeColorEnum.BlueDye)
+
+            // this.scene.add(this.test.object)
+            // window.onclick = (event)=>{
+            //     const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+            //     this.test.liquidSetNextLayer(()=>{},material)
+               
+            // }
+            this.scene.add(alcoolBottle.object)
+
+        }, camera)
+
+
+        // const yellowDyeElement = new Dye()
+        // yellowDyeElement.init(() => {
+        //     //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
+        //     //transformMeshToGlass(eyeDropperElement.object.scene.children[0],'test.hdr')
+        //     yellowDyeElement.object.scene.scale.set(0.1, 0.1, 0.1)
+        //     yellowDyeElement.object.scene.position.set(0.2, 0.0, 0.0)
+        //     this.scene.add(yellowDyeElement.object.scene)
+        // }, camera, dyeColorEnum.YellowDye)
+
+        // const blueDyeElement = new Dye()
+        // blueDyeElement.init(() => {
+        //     //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
+        //     //transformMeshToGlass(eyeDropperElement.object.scene.children[0],'test.hdr')
+        //     blueDyeElement.object.scene.scale.set(0.1, 0.1, 0.1)
+        //     blueDyeElement.object.scene.position.set(-0.4, 0.0, 0.0)
+        //     this.scene.add(blueDyeElement.object.scene)
+        // }, camera, dyeColorEnum.BlueDye)
 
 
 
         const testtubeElement = new TestTube()
         testtubeElement.init(() => {
             //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
-            transformMeshToGlass(testtubeElement.object.scene.children[0].children[1], 'test.hdr')
-            console.log(testtubeElement.object.scene.children[0].children[1])
+    
+           
             // redDyeElement.object.position.set(1.0,1.0,1.0)
-            this.scene.add(testtubeElement.object.scene)
+            this.scene.add(testtubeElement.object)
         }, camera)
 
         // Init eye
         const eyeDropperElement = new EyeDropper()
         eyeDropperElement.init(() => {
             //const cubecontrols = new DragControls(eyeDropperElement.object.scene.children, camera, renderer.domElement)
-            transformMeshToGlass(eyeDropperElement.object.scene.children[0], 'test.hdr')
-            this.scene.add(eyeDropperElement.object.scene)
-        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, yellowDyeElement, blueDyeElement, testtubeElement, controls)
+            //transformMeshToGlass(eyeDropperElement.object.children[0], 'test.hdr')
+            this.scene.add(eyeDropperElement.object)
+        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, testtubeElement, controls)
 
 
 
