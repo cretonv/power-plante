@@ -32,7 +32,7 @@ export class Case {
     private runLastAnim: boolean
     private animEnded: boolean
 
-    private modelFileName = 'case_flo_v-7.fbx';
+    private modelFileName = 'case_flo_v-10.fbx';
 
     private modal: ObjectViewModal
     private modalOpen: boolean
@@ -62,6 +62,7 @@ export class Case {
            `/models/case/${this.modelFileName}`,
             (object: THREE.Group) => {
                 this.object = object
+                console.log(object)
                 this.mixer = new THREE.AnimationMixer(this.object)
                 for(let i = 0; i < (this.object as THREE.Object3D).animations.length; i++) {
                     const animationAction = this.mixer.clipAction(
@@ -82,7 +83,7 @@ export class Case {
 
                 this.activeAction.play()
 
-                object.scale.set(0.01, 0.01, -0.01)
+                object.scale.set(-0.01, 0.01, 0.01)
 
                 object.position.set(0, 0, 0)
                 callback()
@@ -110,8 +111,9 @@ export class Case {
             if(this.modelReady && !this.blockLoop) {
                 this.raycaster.setFromCamera( this.pointer, camera );
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                const regex = /packaging_/g
                 for ( let i = 0; i < intersects.length; i ++ ) {
-                    if(intersects[i].object.name === "packaging") {
+                    if(regex.test(intersects[i].object.name)) {
                         const targetCoords = {
                             x: 0.0021811573810216803,
                             y: 0.30347417279793715,
@@ -162,11 +164,12 @@ export class Case {
                 if(!this.blockLoop) {
                     this.raycaster.setFromCamera( this.pointer, camera );
                     const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                    const regex = /packaging_/g
                     for ( let i = 0; i < intersects.length; i ++ ) {
                         if (this.modelReady
                             && this.activeAction.getClip().name == "Unboxing"
                             && this.mouseDown
-                            && intersects[i].object.name === "packaging")
+                            && regex.test(intersects[i].object.name))
                         {
                             if (this.x0 == undefined) {
                                 this.x0 = event.clientX
@@ -179,7 +182,7 @@ export class Case {
                             intersects[i].object.material.opacity = completion / this.activeAction.getClip().duration
                             this.mixer.setTime(completion)
                             if (completion >= this.activeAction.getClip().duration - (5 * this.activeAction.getClip().duration) / 100) {
-                                intersects[i].object.visible = false
+                                this.object.getObjectByName("packaging").visible = false
                                 this.setAction(this.animationActions[2])
                                 this.activeAction.setLoop(THREE.LoopOnce)
                                 this.activeAction.clampWhenFinished = true
@@ -202,8 +205,9 @@ export class Case {
                 if(!this.animEnded) {
                     this.raycaster.setFromCamera( this.pointer, camera );
                     const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                    const regex = /case_/g
                     for ( let i = 0; i < intersects.length; i ++ ) {
-                        if(intersects[i].object.name === "packaging" && !this.modalOpen) {
+                        if(regex.test(intersects[i].object.name) && !this.modalOpen) {
                             this.runLastAnim = true
                             this.indications.points[2].element.classList.add('destroyed')
                             const targetCoords = {
@@ -219,6 +223,7 @@ export class Case {
                                 )
                                 .onComplete(() => {
                                     if(!this.modalOpen) {
+                                        console.log('🧠')
                                         this.controls.enabled = true
                                         this.controls.minPolarAngle = this.controls.getPolarAngle();
                                         this.controls.maxPolarAngle = this.controls.getPolarAngle();
@@ -243,10 +248,10 @@ export class Case {
                 this.raycaster.setFromCamera(this.pointer, camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 for ( let i = 0; i < intersects.length; i ++ ) {
-                    if(intersects[i].object.name === "bloc") {
+                    if(intersects[i].object.name === "bloc_cab") {
                         this.controls.enabled = false
-                        this.modalOpen = true
                         this.modal.plane.visible = true
+                        this.modalOpen = true
                         this.modal.htmlDescriptionElement.classList.add('visible')
                         this.indications.points[3].element.classList.add('destroyed')
                     }

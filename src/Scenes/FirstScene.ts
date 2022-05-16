@@ -13,6 +13,7 @@ export class FirstScene {
     public camera: THREE.PerspectiveCamera
     public controls: OrbitControls
     public light: THREE.AmbientLight
+    public directionalLight: THREE.DirectionalLight
     // 3D Objects
     public indications: Indication
     public chamberModal: ObjectViewModal
@@ -62,6 +63,8 @@ export class FirstScene {
         this.light = new THREE.AmbientLight( 0x404040, 3.5 )
         // light.position.set(0.8, 1.4, 1.0)
         this.scene.add(this.light)
+        this.directionalLight = new THREE.DirectionalLight(0x404040, 5)
+        this.scene.add(this.directionalLight)
     }
 
     initSceneObjects = () => {
