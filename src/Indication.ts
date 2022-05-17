@@ -21,7 +21,7 @@ export class Indication {
             screenPosition.project(camera)
 
             this.raycaster.setFromCamera(screenPosition, camera)
-            const intersects = this.raycaster.intersectObjects(scene.children, true)
+            /* const intersects = this.raycaster.intersectObjects(scene.children, true)
 
             if(intersects.length === 0)
             {
@@ -40,7 +40,7 @@ export class Indication {
                 {
                     point.element.classList.add('visible')
                 }
-            }
+            }*/
 
             const translateX = screenPosition.x * sizes.width * 0.5
             const translateY = - screenPosition.y * sizes.height * 0.5

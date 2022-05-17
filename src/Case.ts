@@ -32,7 +32,7 @@ export class Case {
     private runLastAnim: boolean
     private animEnded: boolean
 
-    private modelFileName = 'case_flo_v-10.fbx';
+    private modelFileName = 'case_flo_v-11.fbx';
 
     private modal: ObjectViewModal
     private modalOpen: boolean
@@ -110,10 +110,14 @@ export class Case {
         window.addEventListener('mousedown', () => {
             if(this.modelReady && !this.blockLoop) {
                 this.raycaster.setFromCamera( this.pointer, camera );
-                const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                const intersects = this.raycaster.intersectObjects(Object.values(this.targets), false);
                 const regex = /packaging_/g
                 for ( let i = 0; i < intersects.length; i ++ ) {
+                    console.log(intersects[i].object.name)
                     if(regex.test(intersects[i].object.name)) {
+                        if(!intersects[i].object.isMesh) {
+                            continue
+                        }
                         const targetCoords = {
                             x: 0.0021811573810216803,
                             y: 0.30347417279793715,
@@ -223,7 +227,6 @@ export class Case {
                                 )
                                 .onComplete(() => {
                                     if(!this.modalOpen) {
-                                        console.log('🧠')
                                         this.controls.enabled = true
                                         this.controls.minPolarAngle = this.controls.getPolarAngle();
                                         this.controls.maxPolarAngle = this.controls.getPolarAngle();
