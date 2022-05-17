@@ -9,7 +9,7 @@ export class ObjectViewModal {
     private renderTarget: THREE.WebGLRenderTarget
     private rtScene: THREE.Scene
     private rtCamera: THREE.Camera
-    private rtLight: THREE.Spothlight
+    private rtLight: THREE.DirectionalLight
     private loader: GLTFLoader
     private controls: OrbitControls
 
@@ -34,7 +34,7 @@ export class ObjectViewModal {
         this.controls.enableDamping = true
 
         // Light
-        this.rtLight = new THREE.SpotLight(0xffffff, 3)
+        this.rtLight = new THREE.DirectionalLight(0xffffff, 1)
         this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
         this.rtScene.add(this.rtLight)
 
