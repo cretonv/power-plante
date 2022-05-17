@@ -110,6 +110,9 @@ export class Case {
         window.addEventListener('mousedown', () => {
             if(this.modelReady && !this.blockLoop) {
                 this.raycaster.setFromCamera( this.pointer, camera );
+                Object.values(this.targets).forEach((e) => {
+                    console.log(e.material)
+                })
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets), false);
                 const regex = /packaging_/g
                 for ( let i = 0; i < intersects.length; i ++ ) {
