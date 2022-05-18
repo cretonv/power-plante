@@ -3,6 +3,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {Case} from "../Case";
 import {Indication} from "../Indication";
 import {ObjectViewModal} from "../ObjectViewModal";
+import {ModalViewport} from "../ModalViewport";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
@@ -18,6 +19,7 @@ export class FirstScene {
     public indications: Indication
     public chamberModal: ObjectViewModal
     public case: Case
+    public modalViewport: ModalViewport
 
     constructor() {
         this.scene = new THREE.Scene()
@@ -43,6 +45,7 @@ export class FirstScene {
         })
         this.renderer.setClearColor(0xFFFFFF, 1)
         this.renderer.setSize(this.sizes.width, this.sizes.height)
+        this.renderer.autoClear = false;
 
         /**
          * Camera
@@ -90,21 +93,19 @@ export class FirstScene {
         this.indications = new Indication()
         this.indications.init(points)
 
-        // Init modal for chamber
-        this.chamberModal = new ObjectViewModal()
-        this.chamberModal.init(
+        // Init ModalViewport
+        this.modalViewport = new ModalViewport()
+        this.modalViewport.init(
             '/models/cab/CAB_flo_v-3.gltf',
             document.querySelector('.cab-desc'),
-            this.camera,
-            this.renderer
+            this.canvas,
         )
-        this.scene.add(this.chamberModal.plane)
 
         // Init case
         this.case = new Case()
         this.case.init(() => {
             this.scene.add(this.case.object)
-        }, this.camera, this.controls, this.indications, this.chamberModal)
+        }, this.camera, this.controls, this.indications, this.modalViewport)
     }
 
     resizeRendererToDisplaySize = () => {
@@ -136,16 +137,18 @@ export class FirstScene {
         // if (modelReady) mixer.update(clock.getDelta())
         this.case.anim(this.camera)
         this.indications.anim(this.camera, this.sizes, this.scene)
-        this.chamberModal.anim(this.renderer, this.camera)
 
         // Render
         this.render()
+
+        this.modalViewport.anim(this.canvas, this.renderer)
 
         // Call tick again on the next frame
         window.requestAnimationFrame(this.tick)
     }
 
     render = () => {
+        this.renderer.setViewport( 0, 0, this.canvas.clientWidth, this.canvas.clientHeight );
         this.renderer.render(this.scene, this.camera)
     }
 

@@ -1,13 +1,39 @@
 .modal-desc {
   position: absolute;
+  top: calc(57% + 72px);
   left: 0;
-  bottom: 0;
   right: 0;
   text-align: center;
   padding-bottom: 16px;
   opacity: 0;
   pointer-events: none;
   transition: all 0.5s;
+  max-width: 50%;
+  margin: 0 auto;
+  h2 {
+    font-family: 'Kalam';
+    font-weight: 700;
+    font-size: 28px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  p {
+    margin: 16px auto;
+    font-family: 'DM Sans';
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+  }
+  a {
+    width: fit-content;
+    margin: 32px auto;
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 16px;
+    background-color: forestgreen;
+    color: #FFF;
+  }
 }
 .modal-desc.visible {
   transition: all 0.5s;
@@ -16,16 +42,17 @@
 .modal-desc.visible a {
   pointer-events: auto;
 }
-.modal-desc p {
-  max-width: 250px;
-  margin: 32px auto;
-}
-.modal-desc a {
-  width: fit-content;
-  margin: 32px auto;
-  text-align: center;
-  padding: 8px 16px;
-  border-radius: 16px;
-  background-color: forestgreen;
-  color: #FFF;
+
+.modal-border {
+  position: absolute;
+  display: none;
+  top: 40px;
+  left: 24%;
+  width: 50%;
+  height: 54.9%;
+  border: 16px solid #FFC149;
+  pointer-events: none;
+  &.visible {
+    display: block;
+  }
 }

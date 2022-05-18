@@ -2,7 +2,7 @@ import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
 import {Indication} from "./Indication";
-import {ObjectViewModal} from "./ObjectViewModal";
+import {ModalViewport} from "./ModalViewport";
 
 export class Case {
 
@@ -34,7 +34,7 @@ export class Case {
 
     private modelFileName = 'case_flo_v-13.fbx';
 
-    private modal: ObjectViewModal
+    private modal: ModalViewport
     private modalOpen: boolean
 
     // Temporary attributes waiting refacto of main.ts
@@ -54,7 +54,7 @@ export class Case {
         this.modalOpen = false
     }
 
-    init(callback: Function, camera, controls, indications: Indication, modal: ObjectViewModal) {
+    init(callback: Function, camera, controls, indications: Indication, modal: ModalViewport) {
         this.controls = controls
         this.indications = indications
         this.modal = modal
@@ -223,7 +223,6 @@ export class Case {
                                 )
                                 .onComplete(() => {
                                     if(!this.modalOpen) {
-                                        console.log('🧠')
                                         this.controls.enabled = true
                                         this.controls.minPolarAngle = this.controls.getPolarAngle();
                                         this.controls.maxPolarAngle = this.controls.getPolarAngle();
@@ -250,9 +249,10 @@ export class Case {
                 for ( let i = 0; i < intersects.length; i ++ ) {
                     if(intersects[i].object.name === "bloc_cab") {
                         this.controls.enabled = false
-                        this.modal.plane.visible = true
+                        this.modal.isVisible = true
                         this.modalOpen = true
                         this.modal.htmlDescriptionElement.classList.add('visible')
+                        document.querySelector('.modal-border').classList.add('visible')
                         this.indications.points[3].element.classList.add('destroyed')
                     }
                 }
