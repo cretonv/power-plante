@@ -1,0 +1,57 @@
+.top-block {
+  padding-top: 40px;
+  display: flex;
+  flex-flow: row nowrap;
+  .left {
+    width: 50%;
+    padding-left: 32px;
+    padding-bottom: 60px;
+    .on-title {
+      font-family: $secondary-fonts;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 31px;
+    }
+    h1 {
+      font-family: $primary-fonts;
+      font-weight: 700;
+      font-size: 76px;
+      color: $color-1;
+      line-height: 96px;
+      max-width: 700px;
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+    .sub-title {
+      font-family: $primary-fonts;
+      font-weight: 700;
+      font-size: 26px;
+      text-transform: uppercase;
+      color: #09130B;
+    }
+    p {
+      font-family: $secondary-fonts;
+      font-weight: 400;
+      font-size: 18px;
+    }
+  }
+  .right {
+    width: 50%;
+    position: relative;
+    .bg {
+      height: 100%;
+      width: auto;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .cab-img {
+      position: absolute;
+      height: 100%;
+      width: auto;
+      top: 50%;
+      right: 50%;
+      transform: translateX(50%) translateY(-60%);
+    }
+  }
+}

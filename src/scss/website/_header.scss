@@ -1,0 +1,34 @@
+header {
+  display: flex;
+  flex-flow: row nowrap;
+  width: calc(100% - 64px);
+  height: 133px;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+  .logos {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 50%;
+      width: 4px;
+      background-color: #096259;
+    }
+  }
+  img {
+    height: 62px;
+    width: auto;
+    &:first-of-type {
+      margin-right: 40px;
+    }
+    &:last-of-type {
+      margin-left: 40px;
+    }
+  }
+}

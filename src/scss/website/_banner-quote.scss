@@ -1,0 +1,16 @@
+.banner-quote {
+  width: 100%;
+  padding-top: 56px;
+  padding-bottom: 56px;
+  background-color: $color-1;
+  margin-top: 40px;
+  div {
+    color: #FFFFFF;
+    font-family: $primary-fonts;
+    font-weight: 700;
+    font-size: 25px;
+    text-align: center;
+    width: auto;
+    margin: 0 auto;
+  }
+}

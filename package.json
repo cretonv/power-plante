@@ -3,20 +3,21 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite && @compile-scss",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "compile-scss": "node-sass -w src/scss/ -o assets/css/ --output-style compressed"
+    "compile-scss": "sass ./src/scss/main.scss:./assets/css/main.css --watch --style compressed"
   },
   "devDependencies": {
     "concurrently": "^7.1.0",
-    "node-sass": "^7.0.1",
     "nodemon": "^2.0.16",
+    "sass": "^1.51.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.5"
   },
   "dependencies": {
     "@tweenjs/tween.js": "^18.6.4",
+    "locomotive-scroll": "^4.1.4",
     "three": "^0.139.2"
   }
 }

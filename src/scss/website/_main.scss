@@ -1,0 +1,20 @@
+@import "header";
+@import "vars";
+@import "top-block";
+@import "banner-quote";
+
+body.website {
+  background-color: #F5F4F0;
+  margin: 0;
+  overflow: hidden;
+}
+.btn.default {
+  padding: 15px 17px;
+  border-radius: 50px;
+  background-color: green;
+  font-family: $secondary-fonts;
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 16px;
+}
