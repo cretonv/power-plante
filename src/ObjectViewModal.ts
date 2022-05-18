@@ -17,7 +17,7 @@ export class ObjectViewModal {
         this.loader = new GLTFLoader()
     }
 
-    init(filePath: String, htmlDescElement: HTMLDivElement, camera, canvas, renderer) {
+    init(filePath: String, htmlDescElement: HTMLDivElement, camera, renderer) {
 
         this.htmlDescriptionElement = htmlDescElement
 
@@ -26,16 +26,26 @@ export class ObjectViewModal {
         this.renderTarget = new THREE.WebGLRenderTarget(1400, 800)
 
         // Camera
-        this.rtCamera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
+        // this.rtCamera = new THREE.OrthographicCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
+        this.rtCamera = new THREE.OrthographicCamera(
+            0.7 / - 2,
+            0.7 / 2,
+            0.4 / 2,
+            0.4 / - 2,
+            0.1,
+            1000
+        );
+        this.rtCamera.zoom = 0.3
         this.rtCamera.position.z = 2
+        this.rtCamera.updateProjectionMatrix();
 
         // Controls
         this.controls = new OrbitControls(this.rtCamera, renderer.domElement)
         this.controls.enableDamping = true
 
         // Light
-        this.rtLight = new THREE.DirectionalLight(0xffffff, 1)
-        this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
+        this.rtLight = new THREE.DirectionalLight(0xffffff, 1.5)
+        this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y + 0.5, this.rtCamera.position.z + 1)
         this.rtScene.add(this.rtLight)
 
         // GLTF

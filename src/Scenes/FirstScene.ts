@@ -97,7 +97,6 @@ export class FirstScene {
             document.querySelector('.cab-desc'),
             this.camera,
             this.canvas,
-            this.renderer
         )
         this.scene.add(this.chamberModal.plane)
 

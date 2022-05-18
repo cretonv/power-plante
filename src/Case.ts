@@ -32,7 +32,7 @@ export class Case {
     private runLastAnim: boolean
     private animEnded: boolean
 
-    private modelFileName = 'case_flo_v-10.fbx';
+    private modelFileName = 'case_flo_v-13.fbx';
 
     private modal: ObjectViewModal
     private modalOpen: boolean
