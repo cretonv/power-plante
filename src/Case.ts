@@ -32,7 +32,7 @@ export class Case {
     private runLastAnim: boolean
     private animEnded: boolean
 
-    private modelFileName = 'case_flo_v-13.fbx';
+    private modelFileName = 'case_flo_v-14.fbx';
 
     private modal: ModalViewport
     private modalOpen: boolean
@@ -83,7 +83,7 @@ export class Case {
 
                 this.activeAction.play()
 
-                object.scale.set(-0.01, 0.01, 0.01)
+                object.scale.set(0.01, 0.01, 0.01)
 
                 object.position.set(0, 0, 0)
                 callback()
