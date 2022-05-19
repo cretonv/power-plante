@@ -4,6 +4,8 @@ import {Case} from "../Case";
 import {Indication} from "../Indication";
 import {ObjectViewModal} from "../ObjectViewModal";
 import {ModalViewport} from "../ModalViewport";
+import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
+import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
@@ -37,6 +39,7 @@ export class FirstScene {
         this.initThreeElements()
         this.initSceneObjects()
         this.tick()
+        loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr",this.scene)
     }
 
     initThreeElements = () => {
@@ -105,8 +108,24 @@ export class FirstScene {
 
         // Init ModalViewport
         this.modalViewport = new ModalViewport()
-        this.modalViewport.init(
-            '/models/cab/CAB_flo_v-3.gltf',
+        this.modalViewport.init(()=>{
+            this.modalViewport.object.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    console.log(child)
+                    if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {
+
+                        transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                    }
+                    else if (child.name.includes("led")) {
+
+                        transformMeshToLed(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                    }
+                }
+            })
+        },
+            '/models/cab/cab_flo_v-4.gltf',
             document.querySelector('.cab-desc'),
             this.canvas,
         )

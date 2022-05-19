@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 export class ModalViewport {
-    private object: THREE.Group
+    public object: THREE.Group
     public htmlDescriptionElement: HTMLDivElement
     public isVisible: boolean
     private rtScene: THREE.Scene
@@ -21,7 +21,7 @@ export class ModalViewport {
         this.isVisible = false
     }
 
-    init(filePath: String, htmlDescElement: HTMLDivElement, canvas: HTMLDivElement) {
+    init(callback:Function ,filePath: String, htmlDescElement: HTMLDivElement, canvas: HTMLDivElement) {
 
         this.htmlDescriptionElement = htmlDescElement
 
@@ -72,6 +72,7 @@ export class ModalViewport {
                 gltf.scene.scale.set(0.05, 0.05, 0.05)
                 gltf.scene.position.set(0, -0.5, 0)
                 this.object = gltf.scene
+                callback()
                 this.rtScene.add(this.object)
                 this.rtCameraLight.lookAt(this.object.position)
                 this.rtWarmLight.lookAt(this.object.position)

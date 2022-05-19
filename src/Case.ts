@@ -3,6 +3,7 @@ import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
 import {Indication} from "./Indication";
 import {ModalViewport} from "./ModalViewport";
+import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
 
 export class Case {
 
@@ -77,6 +78,16 @@ export class Case {
                 object.traverse( (child) => {
                     if ((child as THREE.Mesh).isMesh) {
                         tempArray[child.name] = child
+                         if (child.name.includes( "GLASS_" || child.name == "Pipette")) {
+
+                            transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                        }
+                        if (child.name.includes( "led" )) {
+
+                            transformMeshToLed(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                        }
                     }
                 })
                 this.targets = tempArray
