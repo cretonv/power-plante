@@ -15,6 +15,9 @@ export class FirstScene {
     public controls: OrbitControls
     public light: THREE.AmbientLight
     public directionalLight: THREE.DirectionalLight
+    public backLight: THREE.DirectionalLight
+    public warmLight: THREE.SpotLight
+    public coldLight: THREE.PointLight
     // 3D Objects
     public indications: Indication
     public chamberModal: ObjectViewModal
@@ -46,6 +49,7 @@ export class FirstScene {
         this.renderer.setClearColor(0xFFFFFF, 1)
         this.renderer.setSize(this.sizes.width, this.sizes.height)
         this.renderer.autoClear = false;
+        this.renderer.outputEncoding = THREE.sRGBEncoding
 
         /**
          * Camera
@@ -63,11 +67,17 @@ export class FirstScene {
         /**
          * Lights
          */
-        this.light = new THREE.AmbientLight( 0x404040, 3.5 )
-        // light.position.set(0.8, 1.4, 1.0)
+        this.light = new THREE.AmbientLight(0xFFFFFF, 0.3)
+        this.light.position.set(0.44, 0.18, 0.34)
         this.scene.add(this.light)
-        this.directionalLight = new THREE.DirectionalLight(0x404040, 5)
+        this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.6)
+        this.directionalLight.position.set(0.46, 0.13, 0.03)
         this.scene.add(this.directionalLight)
+        this.backLight = new THREE.DirectionalLight(0xFFFFFF, 0.4)
+        this.backLight.position.set(0, -0.43, -0.3)
+        this.warmLight = new THREE.SpotLight( 0xFFFFFF, 1, 2.19 );
+        this.warmLight.position.set(0, -1.09, 0)
+        this.warmLight.lookAt(0, 0, 0)
     }
 
     initSceneObjects = () => {
@@ -105,6 +115,8 @@ export class FirstScene {
         this.case = new Case()
         this.case.init(() => {
             this.scene.add(this.case.object)
+            this.backLight.target = this.case.object
+            // this.directionalLight.target = this.case.object
         }, this.camera, this.controls, this.indications, this.modalViewport)
     }
 
