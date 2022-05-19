@@ -8,7 +8,9 @@ export class ModalViewport {
     public isVisible: boolean
     private rtScene: THREE.Scene
     private rtCamera: THREE.Camera
-    private rtLight: THREE.DirectionalLight
+    private rtCameraLight: THREE.DirectionalLight
+    private rtWarmLight: THREE.DirectionalLight
+    private rtColdLight: THREE.DirectionalLight
     private loader: GLTFLoader
     private controls: OrbitControls
     private rtRenderer: THREE.WebGLRenderer
@@ -52,10 +54,16 @@ export class ModalViewport {
         this.controls.enableDamping = true
         this.controls.enableZoom = false
 
-        // Light
-        this.rtLight = new THREE.DirectionalLight(0xffffff, 1.5)
-        this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y + 0.5, this.rtCamera.position.z + 1)
-        this.rtScene.add(this.rtLight)
+        // Lights
+        this.rtCameraLight = new THREE.DirectionalLight(0xFCFFED, 2)
+        this.rtCameraLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y + 0.5, this.rtCamera.position.z + 1)
+        this.rtScene.add(this.rtCameraLight)
+        this.rtWarmLight = new THREE.DirectionalLight(0xFCF9D9, 2)
+        this.rtWarmLight.position.set(3, 2, -2)
+        this.rtCamera.add(this.rtWarmLight)
+        this.rtColdLight = new THREE.DirectionalLight(0xE5FBFF, 1)
+        this.rtColdLight.position.set(-3, 2, -1)
+        this.rtCamera.add(this.rtColdLight)
 
         // GLTF
         this.loader.load(
@@ -65,7 +73,9 @@ export class ModalViewport {
                 gltf.scene.position.set(0, -0.5, 0)
                 this.object = gltf.scene
                 this.rtScene.add(this.object)
-                this.rtLight.lookAt(this.object.position)
+                this.rtCameraLight.lookAt(this.object.position)
+                this.rtWarmLight.lookAt(this.object.position)
+                this.rtColdLight.target = this.object
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -93,7 +103,7 @@ export class ModalViewport {
                 0.57 * canvas.clientHeight
             )
             renderer.render(this.rtScene, this.rtCamera);
-            this.rtLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
+            this.rtCameraLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
         }
     }
 
