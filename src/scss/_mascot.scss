@@ -1,0 +1,38 @@
+.mascot {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: fit-content;
+  border-top: solid 6px #15CD8B;
+  background-image: url('./assets/textures/gridModal.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  display: none;
+  img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    height: auto;
+    transform: translateX(50px) translateY(50px);
+  }
+  .quote {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 31px;
+    color: #028153;
+    max-width: 50%;
+  }
+  &.visible {
+    display: block;
+  }
+}
