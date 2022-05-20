@@ -4,6 +4,7 @@ import {Case} from "../Case";
 import {Indication} from "../Indication";
 import {ObjectViewModal} from "../ObjectViewModal";
 import {ModalViewport} from "../ModalViewport";
+import {BloomEffect, EffectComposer, EffectPass, KawaseBlurPass, RenderPass} from "postprocessing";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
@@ -23,6 +24,8 @@ export class FirstScene {
     public chamberModal: ObjectViewModal
     public case: Case
     public modalViewport: ModalViewport
+    // Postprocessing
+    public composer: EffectComposer
 
     constructor() {
         this.scene = new THREE.Scene()
@@ -50,6 +53,13 @@ export class FirstScene {
         this.renderer.setSize(this.sizes.width, this.sizes.height)
         this.renderer.autoClear = false;
         this.renderer.outputEncoding = THREE.sRGBEncoding
+
+        /**
+         * Effect Composer
+         */
+        this.composer = new EffectComposer(this.renderer)
+        this.composer.addPass(new RenderPass(this.scene, this.camera))
+        this.composer.addPass(new KawaseBlurPass({height: 480}))
 
         /**
          * Camera
