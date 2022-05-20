@@ -1,5 +1,6 @@
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import * as THREE from 'three'
+import { GlobalLoader } from './GlobalLoader';
 
 const defaultGlassParams = {
     color: 0xffffff,
@@ -50,13 +51,18 @@ const ledGlassParams = {
 };
 export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string){
     //console.log(meshToGlassify)
-    const hdrEquirect = new RGBELoader()
-				.setPath( 'assets/textures/' )
-				.load( hdrPath, function () {
+    let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
+	if ( hdrEquirect == null){
+         hdrEquirect = new RGBELoader()
+        .setPath( 'assets/textures/' )
+        .load( hdrPath, function () {
 
-					hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-                   
-				} );
+            hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+           
+        } );
+	}
+
+                
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
 				texture.magFilter = THREE.NearestFilter;
 				texture.wrapT = THREE.RepeatWrapping;
@@ -83,13 +89,16 @@ export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string
 
 export function transformMeshToPlastic( meshToGlassify: THREE.Mesh,hdrPath: string){
     //console.log(meshToGlassify)
-    const hdrEquirect = new RGBELoader()
-				.setPath( 'assets/textures/' )
-				.load( hdrPath, function () {
+    let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
+	if ( hdrEquirect == null){
+         hdrEquirect = new RGBELoader()
+        .setPath( 'assets/textures/' )
+        .load( hdrPath, function () {
 
-					hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-                   
-				} );
+            hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+           
+        } );
+	}
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
 				texture.magFilter = THREE.NearestFilter;
 				texture.wrapT = THREE.RepeatWrapping;
@@ -117,13 +126,16 @@ export function transformMeshToPlastic( meshToGlassify: THREE.Mesh,hdrPath: stri
 
 export function transformMeshToLed( meshToGlassify: THREE.Mesh,hdrPath: string){
     //console.log(meshToGlassify)
-    const hdrEquirect = new RGBELoader()
-				.setPath( 'assets/textures/' )
-				.load( hdrPath, function () {
+    let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
+	if ( hdrEquirect == null){
+         hdrEquirect = new RGBELoader()
+        .setPath( 'assets/textures/' )
+        .load( hdrPath, function () {
 
-					hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-                   
-				} );
+            hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+           
+        } );
+	}
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
 				texture.magFilter = THREE.NearestFilter;
 				texture.wrapT = THREE.RepeatWrapping;
