@@ -4,6 +4,7 @@ import * as TWEEN from "@tweenjs/tween.js";
 import {Indication} from "./Indication";
 import {ModalViewport} from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
+import {Mascot} from "./Mascot";
 
 export class Case {
 
@@ -35,8 +36,10 @@ export class Case {
 
     private modelFileName = 'case_flo_v-14.fbx';
 
+    // Other scene elements
     private modal: ModalViewport
     private modalOpen: boolean
+    private mascot: Mascot
 
     // Temporary attributes waiting refacto of main.ts
     private controls: THREE.OrbitControls
@@ -55,10 +58,11 @@ export class Case {
         this.modalOpen = false
     }
 
-    init(callback: Function, camera, controls, indications: Indication, modal: ModalViewport) {
+    init(callback: Function, camera, controls, indications: Indication, modal: ModalViewport, mascot: Mascot) {
         this.controls = controls
         this.indications = indications
         this.modal = modal
+        this.mascot = mascot
         this.loader.load(
            `/models/case/${this.modelFileName}`,
             (object: THREE.Group) => {
@@ -240,6 +244,7 @@ export class Case {
                                         this.controls.minAzimuthAngle = - Infinity;
                                         this.controls.maxAzimuthAngle = Infinity;
                                         this.indications.points[3].element.classList.remove('destroyed')
+                                        this.mascot.makeVisible()
                                     }
                                 })
                                 .start();
@@ -259,6 +264,7 @@ export class Case {
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 for ( let i = 0; i < intersects.length; i ++ ) {
                     if(intersects[i].object.name === "bloc_cab") {
+                        this.mascot.hide()
                         this.controls.enabled = false
                         this.modal.isVisible = true
                         this.modalOpen = true

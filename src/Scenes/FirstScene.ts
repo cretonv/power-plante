@@ -7,6 +7,7 @@ import {ModalViewport} from "../ModalViewport";
 import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
 import { BlendFunction, OutlineEffect } from "postprocessing";
+import {Mascot} from "../Mascot";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
@@ -26,6 +27,8 @@ export class FirstScene {
     public chamberModal: ObjectViewModal
     public case: Case
     public modalViewport: ModalViewport
+    // 2D elements
+    public mascot: Mascot
 
     constructor() {
         this.scene = new THREE.Scene()
@@ -131,13 +134,26 @@ export class FirstScene {
             this.canvas,
         )
 
+        // Init mascot
+        this.mascot = new Mascot()
+        const quotes = [
+            "Salut ! Je suis Glowy, un physicien, et j’ai besoin de ton aide pour refaire fonctionner ma centrale nucléaire à l’uranium recyclé ! Est-tu prêt à aider la planète dans cette “Green Adventure” avec moi ? ",
+            "Je te présente le Kit du Petit Physicien ! Comme tu peux le voir il faut recomposer mon kit recyclé d’energie autonome pour qu’il puisse de nouveau purifier l’air et recharger nos appareils sans élécricités pour sauver la planète !"
+        ]
+        console.log(document.querySelector('.mascot .quote'))
+        this.mascot.init(
+            quotes,
+            document.querySelector('.mascot'),
+            document.querySelector('.mascot .quote')
+        )
+
         // Init case
         this.case = new Case()
         this.case.init(() => {
             this.scene.add(this.case.object)
             this.backLight.target = this.case.object
             // this.directionalLight.target = this.case.object
-        }, this.camera, this.controls, this.indications, this.modalViewport)
+        }, this.camera, this.controls, this.indications, this.modalViewport, this.mascot)
     }
     initPostProcessing  = () => {
         const outlineEffect = new OutlineEffect(this.scene, this.camera, {
