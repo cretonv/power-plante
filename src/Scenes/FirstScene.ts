@@ -6,6 +6,7 @@ import {ObjectViewModal} from "../ObjectViewModal";
 import {ModalViewport} from "../ModalViewport";
 import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
+import { BlendFunction, OutlineEffect } from "postprocessing";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
@@ -137,6 +138,26 @@ export class FirstScene {
             this.backLight.target = this.case.object
             // this.directionalLight.target = this.case.object
         }, this.camera, this.controls, this.indications, this.modalViewport)
+    }
+    initPostProcessing  = () => {
+        const outlineEffect = new OutlineEffect(this.scene, this.camera, {
+			blendFunction: BlendFunction.SCREEN,
+			edgeStrength: 2.5,
+			pulseSpeed: 0.0,
+			visibleEdgeColor: 0xffffff,
+			hiddenEdgeColor: 0x22090a,
+			height: 480,
+			blur: false,
+			xRay: true
+		});
+
+		//outlineEffect.selection.set(selection);
+
+		//const smaaPass = new EffectPass(camera, smaaEffect);
+		//const outlinePass = new EffectPass(camera, outlineEffect);
+
+		//this.effect = outlineEffect;
+
     }
 
     resizeRendererToDisplaySize = () => {
