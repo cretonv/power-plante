@@ -4,6 +4,8 @@
   padding-bottom: 56px;
   background-color: $color-1;
   margin-top: 40px;
+  position: relative;
+  overflow: hidden;
   div {
     color: #FFFFFF;
     font-family: $primary-fonts;
@@ -12,5 +14,20 @@
     text-align: center;
     width: auto;
     margin: 0 auto;
+  }
+  .drawing {
+    position: absolute;
+    &.circle {
+      height: 90px;
+      width: auto;
+      top: -16px;
+      left: 90px;
+    }
+    &.zigzag {
+      height: 120px;
+      width: auto;
+      bottom: -22px;
+      right: 120px;
+    }
   }
 }
