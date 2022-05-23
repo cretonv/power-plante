@@ -6,7 +6,7 @@ import {ObjectViewModal} from "../ObjectViewModal";
 import {ModalViewport} from "../ModalViewport";
 import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
-import { BlendFunction, OutlineEffect } from "postprocessing";
+import { BlendFunction, Effect, EffectComposer, EffectPass, OutlineEffect, RenderPass, PixelationEffect } from "postprocessing";
 import {Mascot} from "../Mascot";
 
 export class FirstScene {
@@ -26,10 +26,21 @@ export class FirstScene {
     public indications: Indication
     public chamberModal: ObjectViewModal
     public case: Case
-    public modalViewport: ModalViewport
+    public modalExp1Viewport: ModalViewport
+    public modalExp2Viewport: ModalViewport
     // 2D elements
     public mascot: Mascot
+    //Postprocessing
+    private outlineEffect:OutlineEffect
+    private composer:EffectComposer
+    //private selectedObject:Array<THREE.Object3D> = []
+    private outlinePass:EffectPass
 
+
+    /**
+     * Test
+     */
+     //private testCube
     constructor() {
         this.scene = new THREE.Scene()
     }
@@ -41,6 +52,8 @@ export class FirstScene {
             height: this.canvas.clientHeight,
         }
         this.initThreeElements()
+        this.initPostProcessing()
+
         this.initSceneObjects()
         this.tick()
         loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr",this.scene)
@@ -51,13 +64,22 @@ export class FirstScene {
          * Renderer
          */
         this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas
+            canvas: this.canvas,
+            powerPreference: "high-performance",
+            antialias: false,
+            stencil: false
         })
         this.renderer.setClearColor(0xFFFFFF, 1)
         this.renderer.setSize(this.sizes.width, this.sizes.height)
         this.renderer.autoClear = false;
         this.renderer.outputEncoding = THREE.sRGBEncoding
 
+
+        /**
+         * Composer
+         */
+         this.composer = new EffectComposer(this.renderer);
+        console.log(this.composer)
         /**
          * Camera
          */
@@ -111,15 +133,40 @@ export class FirstScene {
         this.indications.init(points)
 
         // Init ModalViewport
-        this.modalViewport = new ModalViewport()
-        this.modalViewport.init(()=>{
-            this.modalViewport.object.traverse((child) => {
+        this.modalExp1Viewport = new ModalViewport()
+        this.modalExp1Viewport.init(()=>{
+            this.modalExp1Viewport.object.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
-                    console.log(child)
+                    //console.log(child)
                     if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {
 
                         transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
+          
+                    }
+                    else if (child.name.includes("led")) {
 
+                        transformMeshToLed(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                    }
+                }
+            })
+        },
+            '/models/cab/cab_flo_v-4.gltf',
+            document.querySelector('.dye-desc'),
+            this.canvas,
+            this.renderer
+        )
+
+        // Init ModalViewport
+        this.modalExp2Viewport = new ModalViewport()
+        this.modalExp2Viewport.init(()=>{
+            this.modalExp2Viewport.object.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    //console.log(child)
+                    if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {
+
+                        transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
+          
                     }
                     else if (child.name.includes("led")) {
 
@@ -132,6 +179,7 @@ export class FirstScene {
             '/models/cab/cab_flo_v-4.gltf',
             document.querySelector('.cab-desc'),
             this.canvas,
+            this.renderer
         )
 
         // Init mascot
@@ -153,26 +201,48 @@ export class FirstScene {
             this.scene.add(this.case.object)
             this.backLight.target = this.case.object
             // this.directionalLight.target = this.case.object
-        }, this.camera, this.controls, this.indications, this.modalViewport, this.mascot)
+        }, this.camera, this.controls, this.indications, this.modalExp1Viewport,this.modalExp2Viewport, this.mascot,
+        ()=>{
+            //console.log("yaaa")
+            //console.log(this.case.caseSelectedObject)
+            this.outlineEffect.selection.set(this.case.caseSelectedObject);
+            //this.outlinePass.recompile()
+            //this.composer.addPass(this.outlinePass);
+            
+        })
+        // const geometry = new THREE.BoxGeometry( 0.01, 1, 1 );
+        // const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        // this.testCube = new THREE.Mesh( geometry, material );
+        // this.scene.add( this.testCube );
+
+
     }
     initPostProcessing  = () => {
-        const outlineEffect = new OutlineEffect(this.scene, this.camera, {
-			blendFunction: BlendFunction.SCREEN,
-			edgeStrength: 2.5,
-			pulseSpeed: 0.0,
-			visibleEdgeColor: 0xffffff,
-			hiddenEdgeColor: 0x22090a,
-			height: 480,
-			blur: false,
-			xRay: true
+        this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
+            blendFunction: BlendFunction.ADD,
+            edgeStrength: 1000,
+            pulseSpeed: 0.64,
+            visibleEdgeColor: 0xee00ee,
+            hiddenEdgeColor: 0x550055,
+            blur: true,
+		
+			//blur: false,
+			//xRay: true
 		});
+        this.outlineEffect.resolution.width = this.canvas.clientWidth 
+        this.outlineEffect.resolution.height = this.canvas.clientHeight
 
-		//outlineEffect.selection.set(selection);
-
-		//const smaaPass = new EffectPass(camera, smaaEffect);
-		//const outlinePass = new EffectPass(camera, outlineEffect);
+		//this.outlineEffect.selection.add(this.testCube);
+        
+		//const smaaPass = new EffectPass(this.camera, this.smaaEffect);
+		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
 
 		//this.effect = outlineEffect;
+        //this.composer.addPass(new EffectPass(this.camera,this.outlineEffect));
+        //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
+        this.composer.addPass(new RenderPass(this.scene, this.camera));
+        this.composer.addPass(this.outlinePass);
+        
 
     }
 
@@ -207,17 +277,24 @@ export class FirstScene {
         this.indications.anim(this.camera, this.sizes, this.scene)
 
         // Render
-        this.render()
+        this.render(this.tick)
 
-        this.modalViewport.anim(this.canvas, this.renderer)
+        this.modalExp1Viewport.anim(this.canvas)
+        this.modalExp2Viewport.anim(this.canvas)
 
         // Call tick again on the next frame
         window.requestAnimationFrame(this.tick)
     }
 
-    render = () => {
+    render = (tick) => {
         this.renderer.setViewport( 0, 0, this.canvas.clientWidth, this.canvas.clientHeight );
-        this.renderer.render(this.scene, this.camera)
+        //this.renderer.render(this.scene, this.camera)
+        //this.outlineEffect.selection.set(this.selectedObject);
+        
+        this.composer.render();
+        //console.log(this.outlineEffect.selection);
+        // console.log(this.case.caseSelectedObject)
+        //console.log(this.composer)
     }
 
     destroy() {

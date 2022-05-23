@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import { GlobalLoader } from "./GlobalLoader";
 
 export class ModalViewport {
     public object: THREE.Group
@@ -21,18 +22,21 @@ export class ModalViewport {
         this.isVisible = false
     }
 
-    init(callback:Function ,filePath: String, htmlDescElement: HTMLDivElement, canvas: HTMLDivElement) {
+    init(callback:Function ,filePath: String, htmlDescElement: HTMLDivElement, canvas: HTMLDivElement, renderer:THREE.WebGLRenderer) {
 
         this.htmlDescriptionElement = htmlDescElement
 
         // Scenes
         this.rtScene = new THREE.Scene()
+        this.rtRenderer = renderer
+        
+        //removed the renderer 
 
         // Renderer
-        this.rtRenderer = new THREE.WebGLRenderer({
-            canvas: canvas
-        })
-        this.rtRenderer.setSize(canvas.clientWidth, canvas.clientHeight)
+        // this.rtRenderer = new THREE.WebGLRenderer({
+        //     canvas: canvas
+        // })
+        // this.rtRenderer.setSize(canvas.clientWidth, canvas.clientHeight)
 
         // Camera
         // this.rtCamera = new THREE.OrthographicCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
@@ -66,17 +70,20 @@ export class ModalViewport {
         this.rtCamera.add(this.rtColdLight)
 
         // GLTF
+        GlobalLoader.getInstance().getGLTFLoaded("cab", (object) => {
+            this.object = object
+            this.object.scale.set(0.05, 0.05, 0.05)
+            this.object.position.set(0, -0.5, 0)
+            this.rtScene.add(this.object)
+            this.rtCameraLight.lookAt(this.object.position)
+            this.rtWarmLight.lookAt(this.object.position)
+            this.rtColdLight.target = this.object
+            callback()
+        })
         this.loader.load(
             filePath,
             (gltf) => {
-                gltf.scene.scale.set(0.05, 0.05, 0.05)
-                gltf.scene.position.set(0, -0.5, 0)
-                this.object = gltf.scene
-                callback()
-                this.rtScene.add(this.object)
-                this.rtCameraLight.lookAt(this.object.position)
-                this.rtWarmLight.lookAt(this.object.position)
-                this.rtColdLight.target = this.object
+               
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -95,15 +102,15 @@ export class ModalViewport {
         this.rtCamera.add( this.plane );
     }
 
-    anim(canvas, renderer: THREE.WebGLRenderer) {
+    anim(canvas) {
         if(this.isVisible) {
-            renderer.setViewport(
+            this.rtRenderer.setViewport(
                 canvas.clientWidth / 2 - ((canvas.clientWidth / 2) / 2),
                 canvas.clientHeight - 40 - 0.57 * canvas.clientHeight,
                 canvas.clientWidth / 2,
                 0.57 * canvas.clientHeight
             )
-            renderer.render(this.rtScene, this.rtCamera);
+            this.rtRenderer.render(this.rtScene, this.rtCamera);
             this.rtCameraLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
         }
     }
