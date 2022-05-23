@@ -1,0 +1,58 @@
+.alternation-block {
+  display: flex;
+  flex-flow: row nowrap;
+  .left {
+    width: 40%;
+    position: relative;
+    .case-model {
+      width: 100%;
+      height: auto;
+      transform: scale(1.1) translateX(-13%) translateY(-5%);
+    }
+    .back-fili {
+      position: absolute;
+      top: 64px;
+      left: 60%;
+      width: 64px;
+      height: auto;
+    }
+  }
+  .right {
+    width: 60%;
+    padding-top: 72px;
+    h2 {
+      font-family: $primary-fonts;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 32px;
+      margin-bottom: 40px;
+      transform: translateX(-98px);
+      position: relative;
+      max-width: calc(60% + 98px);
+      img {
+        position: absolute;
+        &.mark-logo {
+          height: 96px;
+          width: 96px;
+          right: 0;
+          top: -32px;
+        }
+        &.underline {
+          width: 50%;
+          height: auto;
+          right: 114px;
+          bottom: 0;
+          transform: translateY(100%);
+        }
+      }
+    }
+    p {
+      font-family: $secondary-fonts;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 26px;
+      max-width: 60%;
+      transform: translateX(32px);
+    }
+  }
+}
