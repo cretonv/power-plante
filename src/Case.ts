@@ -1,10 +1,11 @@
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
-import {Indication} from "./Indication";
-import {ModalViewport} from "./ModalViewport";
+import { Indication } from "./Indication";
+import { ModalViewport } from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
-import {Mascot} from "./Mascot";
+import { Mascot } from "./Mascot";
+import { GlobalLoader } from "./GlobalLoader";
 
 export class Case {
 
@@ -21,12 +22,13 @@ export class Case {
     private lastAction: THREE.AnimationAction;
     private animationActions: THREE.AnimationAction[];
     private modelReady: boolean;
+    private hasBeenOpened: boolean
 
     // Animations and interactions attributes
     private mouseDown: boolean
     private pointer = THREE.Vector2
     private raycaster = THREE.Raycaster
-    private targets: {[name: string]: THREE.Object3D} = {}
+    private targets: { [name: string]: THREE.Object3D } = {}
     private x0: number
 
     // Animations blocker var
@@ -34,15 +36,27 @@ export class Case {
     private runLastAnim: boolean
     private animEnded: boolean
 
-    private modelFileName = 'case_flo_v-14.fbx';
+    // private modelFileName = 'case_flo_v-14.fbx';
 
     // Other scene elements
-    private modal: ModalViewport
-    private modalOpen: boolean
+    private modalExp1: ModalViewport
+    private modalExp1Open: boolean
+    private modalExp2: ModalViewport
+    private modalExp2Open: boolean
     private mascot: Mascot
+    public caseSelectedObject: Array<THREE.Object3D> = []
 
     // Temporary attributes waiting refacto of main.ts
     private controls: THREE.OrbitControls
+    private selectedObjectCallback: Function
+
+    //groups of objects 
+    private experience1ObjectsNames: Array<string> = ["Pipette", "ColorantBase", "ColorantBase_2", "ColorantBase_3", "Bouchon", "Bouchon_2", "Bouchon_3", "bouchon", "bouchon_2", "bouchon_3", "GLASS_tube", "GLASS_tube_2", "GLASS_tube_3", "GLASS_Alcoolbase", "BouchonAlcool"]
+    private experience1Objects: Array<THREE.Mesh> = []
+    private experience2ObjectsNames: Array<string> = ["Cloner", "bloc_cab", "base_top", "base_bottom", "dome_place", "plug_battery", "GLASS_dome", "GLASS_Boiteplexy", "battery", "GLASS_tube_4", "base_bottom", "ecroux_top"]
+    private experience2Objects: Array<THREE.Mesh> = []
+    //status of hover 
+    private selectedStatus: string = "none"
 
     constructor() {
         this.loader = new FBXLoader()
@@ -55,80 +69,122 @@ export class Case {
         this.clock = new THREE.Clock()
         this.runLastAnim = false
         this.animEnded = false
-        this.modalOpen = false
+        this.modalExp1Open = false
+        this.modalExp2Open = false
+        this.hasBeenOpened = false
     }
 
-    init(callback: Function, camera, controls, indications: Indication, modal: ModalViewport, mascot: Mascot) {
+    init(callback: Function, camera, controls, indications: Indication, modalExp1: ModalViewport, modalExp2: ModalViewport, mascot: Mascot, selectedObjectCallback: Function) {
         this.controls = controls
         this.indications = indications
-        this.modal = modal
+        this.modalExp1 = modalExp1
+        this.modalExp2 = modalExp2
         this.mascot = mascot
-        this.loader.load(
-           `/models/case/${this.modelFileName}`,
-            (object: THREE.Group) => {
-                this.object = object
-                console.log(object)
-                this.mixer = new THREE.AnimationMixer(this.object)
-                for(let i = 0; i < (this.object as THREE.Object3D).animations.length; i++) {
-                    const animationAction = this.mixer.clipAction(
-                        (this.object as THREE.Object3D).animations[i]
-                    )
-                    this.animationActions.push(animationAction)
-                }
-                this.activeAction = this.animationActions[0]
-                this.modelReady = true
-
-                const tempArray: {[name: string]: THREE.Object3D} = {}
-                object.traverse( (child) => {
-                    if ((child as THREE.Mesh).isMesh) {
-                        tempArray[child.name] = child
-                         if (child.name.includes( "GLASS_" || child.name == "Pipette")) {
-
-                            transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
-
-                        }
-                        if (child.name.includes( "led" )) {
-
-                            transformMeshToLed(child, 'hdri_power_plante_flo_v-1.hdr')
-
-                        }
-                    }
-                })
-                this.targets = tempArray
-
-                this.activeAction.play()
-
-                object.scale.set(0.01, 0.01, 0.01)
-
-                object.position.set(0, 0, 0)
-                callback()
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-            },
-            (error) => {
-                console.log(error)
+        this.selectedObjectCallback = selectedObjectCallback
+        // this.loader.load(
+        //     `/models/case/${this.modelFileName}`,
+        //     (object: THREE.Group) => ,
+        //     (xhr) => {
+        //         //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        //     },
+        //     (error) => {
+        //         console.log(error)
+        //     }
+        // )
+        GlobalLoader.getInstance().getFBXLoaded("case", (object) => {
+            this.object = object
+            console.log(object)
+            this.mixer = new THREE.AnimationMixer(this.object)
+            for (let i = 0; i < (this.object as THREE.Object3D).animations.length; i++) {
+                const animationAction = this.mixer.clipAction(
+                    (this.object as THREE.Object3D).animations[i]
+                )
+                this.animationActions.push(animationAction)
             }
-        )
+            this.activeAction = this.animationActions[0]
+            this.modelReady = true
 
-        window.addEventListener( 'pointermove', (e) => {
+            const tempArray: { [name: string]: THREE.Object3D } = {}
+            object.traverse((child) => {
+                if ((child as THREE.Mesh).isMesh) {
+                   // console.log(child.name)
+                    tempArray[child.name] = child
+                    if (child.name.includes("GLASS_" || child.name == "Pipette")) {
+
+                        transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                    }
+                    else if (child.name.includes("led")) {
+
+                        transformMeshToLed(child, 'hdri_power_plante_flo_v-1.hdr')
+
+                    }
+                    if (this.experience1ObjectsNames.indexOf(child.name) > -1) {
+                        this.experience1Objects.push(child)
+                    }
+                    else if (this.experience2ObjectsNames.indexOf(child.name) > -1) {
+                        this.experience2Objects.push(child)
+                    }
+                }
+            })
+
+            this.selectedObjectCallback()
+            this.targets = tempArray
+
+            this.activeAction.play()
+
+            object.scale.set(0.01, 0.01, 0.01)
+
+            object.position.set(0, 0, 0)
+            callback()
+        })
+        window.addEventListener('pointermove', (e) => {
             // calculate pointer position in normalized device coordinates
             // (-1 to +1) for both components
             const width = document.querySelector('#webgl')?.clientWidth
             const heigth = document.querySelector('#webgl')?.clientHeight
-            if(width && heigth) {
-                this.pointer.x = ( e.clientX / width ) * 2 - 1;
-                this.pointer.y = - ( e.clientY / heigth ) * 2 + 1;
+            if (width && heigth) {
+                this.pointer.x = (e.clientX / width) * 2 - 1;
+                this.pointer.y = - (e.clientY / heigth) * 2 + 1;
+            }
+            if (this.modelReady && this.hasBeenOpened) {
+                this.raycaster.setFromCamera(this.pointer, camera);
+                const intersectsExp1 = this.raycaster.intersectObjects(this.experience1Objects);
+                const intersectsExp2 = this.raycaster.intersectObjects(this.experience2Objects);
+                if (intersectsExp1.length > 0) {
+                    if (this.selectedStatus != "exp1") {
+                        this.selectedStatus = "exp1"
+                        this.caseSelectedObject = this.experience1Objects
+                        this.selectedObjectCallback()
+                    }
+
+                }
+                else if (intersectsExp2.length > 0) {
+                    if (this.selectedStatus != "exp2") {
+                        this.selectedStatus = "exp2"
+                        this.caseSelectedObject = this.experience2Objects
+                        this.selectedObjectCallback()
+
+                    }
+
+                }
+                else if (this.selectedStatus != "none") {
+                    this.selectedStatus = "none"
+                    this.caseSelectedObject = []
+                    this.selectedObjectCallback()
+
+                }
+
             }
         });
 
         window.addEventListener('mousedown', () => {
-            if(this.modelReady && !this.blockLoop) {
-                this.raycaster.setFromCamera( this.pointer, camera );
+            if (this.modelReady && !this.blockLoop) {
+                this.raycaster.setFromCamera(this.pointer, camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 const regex = /packaging_/g
-                for ( let i = 0; i < intersects.length; i ++ ) {
-                    if(regex.test(intersects[i].object.name)) {
+                for (let i = 0; i < intersects.length; i++) {
+                    if (regex.test(intersects[i].object.name)) {
                         const targetCoords = {
                             x: 0.0021811573810216803,
                             y: 0.30347417279793715,
@@ -141,7 +197,7 @@ export class Case {
                                 camera.position.set(coords.x, coords.y, coords.z)
                             })
                             .onComplete(() => {
-                                if(!this.blockLoop) {
+                                if (!this.blockLoop) {
                                     this.indications.points[1].element.classList.remove('destroyed')
                                 }
                             })
@@ -176,30 +232,30 @@ export class Case {
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
             'mousemove',
             (event) => {
-                if(!this.blockLoop) {
-                    this.raycaster.setFromCamera( this.pointer, camera );
+                if (!this.blockLoop) {
+                    this.raycaster.setFromCamera(this.pointer, camera);
                     const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                     const regex = /packaging_/g
-                    for ( let i = 0; i < intersects.length; i ++ ) {
+                    for (let i = 0; i < intersects.length; i++) {
                         if (this.modelReady
                             && this.activeAction.getClip().name == "Unboxing"
                             && this.mouseDown
-                            && regex.test(intersects[i].object.name))
-                        {
+                            && regex.test(intersects[i].object.name)) {
                             if (this.x0 == undefined) {
                                 this.x0 = event.clientX
                             }
                             const completion =
                                 ((event.clientX - this.x0) *
-                                this.activeAction.getClip().duration) /
+                                    this.activeAction.getClip().duration) /
                                 ((event.target as HTMLCanvasElement).clientWidth / 3)
                             intersects[i].object.material.transparent = true
-                            intersects[i].object.material.opacity = completion / this.activeAction.getClip().duration
+                            //intersects[i].object.material.opacity = completion / this.activeAction.getClip().duration
                             this.mixer.setTime(completion)
                             if (completion >= this.activeAction.getClip().duration - (5 * this.activeAction.getClip().duration) / 100) {
                                 this.object.getObjectByName("packaging").visible = false
                                 this.setAction(this.animationActions[2])
                                 this.activeAction.setLoop(THREE.LoopOnce)
+
                                 this.activeAction.clampWhenFinished = true
                                 this.indications.points[1].element.classList.add('destroyed')
                                 this.indications.points[2].element.classList.remove('destroyed')
@@ -214,15 +270,16 @@ export class Case {
     }
 
     triggerFinalAnimation(camera) {
+
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
             'mousedown',
             () => {
-                if(!this.animEnded) {
-                    this.raycaster.setFromCamera( this.pointer, camera );
+                if (!this.animEnded) {
+                    this.raycaster.setFromCamera(this.pointer, camera);
                     const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                     const regex = /case_/g
-                    for ( let i = 0; i < intersects.length; i ++ ) {
-                        if(regex.test(intersects[i].object.name) && !this.modalOpen) {
+                    for (let i = 0; i < intersects.length; i++) {
+                        if (regex.test(intersects[i].object.name) && (!this.modalExp1Open && !this.modalExp2Open)) {
                             this.runLastAnim = true
                             this.indications.points[2].element.classList.add('destroyed')
                             const targetCoords = {
@@ -237,7 +294,8 @@ export class Case {
                                     camera.position.set(coords.x, coords.y, coords.z)
                                 )
                                 .onComplete(() => {
-                                    if(!this.modalOpen) {
+                                    this.hasBeenOpened = true
+                                    if ((!this.modalExp1Open && !this.modalExp2Open)) {
                                         this.controls.enabled = true
                                         this.controls.minPolarAngle = this.controls.getPolarAngle();
                                         this.controls.maxPolarAngle = this.controls.getPolarAngle();
@@ -260,28 +318,43 @@ export class Case {
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
             'mousedown',
             () => {
-                this.raycaster.setFromCamera(this.pointer, camera);
-                const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
-                for ( let i = 0; i < intersects.length; i ++ ) {
-                    if(intersects[i].object.name === "bloc_cab") {
+
+                switch (this.selectedStatus) {
+                    case 'exp1':
+
                         this.mascot.hide()
                         this.controls.enabled = false
-                        this.modal.isVisible = true
-                        this.modalOpen = true
-                        this.modal.htmlDescriptionElement.classList.add('visible')
+                        this.modalExp1.isVisible = true
+                        this.modalExp1Open = true
+                        this.modalExp1.htmlDescriptionElement.classList.add('visible')
                         document.querySelector('.modal-border').classList.add('visible')
                         this.indications.points[3].element.classList.add('destroyed')
-                    }
+                        break;
+                    case 'exp2':
+
+                        this.mascot.hide()
+                        this.controls.enabled = false
+                        this.modalExp2.isVisible = true
+                        this.modalExp2Open = true
+                        this.modalExp2.htmlDescriptionElement.classList.add('visible')
+                        document.querySelector('.modal-border').classList.add('visible')
+                        this.indications.points[3].element.classList.add('destroyed')
+                        // expected output: "Mangoes and papayas are $2.79 a pound."
+                        break;
+                    default:
+                    //onfaitrien
                 }
+
+
             }
         )
     }
 
     anim(camera) {
         TWEEN.update();
-        if(this.modelReady) {
-            this.raycaster.setFromCamera( this.pointer, camera );
-            if(this.blockLoop && this.runLastAnim) {
+        if (this.modelReady) {
+            this.raycaster.setFromCamera(this.pointer, camera);
+            if (this.blockLoop && this.runLastAnim) {
                 this.mixer.update(this.clock.getDelta())
             }
         }
