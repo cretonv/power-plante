@@ -8,10 +8,11 @@ import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
 import { BlendFunction, Effect, EffectComposer, EffectPass, OutlineEffect, RenderPass, PixelationEffect } from "postprocessing";
 import {Mascot} from "../Mascot";
+import { GlobalLoader } from "../GlobalLoader";
 
 export class FirstScene {
     private sizes: {[name: string]: Number}
-    private canvas: HTMLDivElement
+   // private canvas: HTMLDivElement
     // Three JS elements
     public scene: THREE.Scene
     public renderer: THREE.WebGLRenderer
@@ -45,17 +46,20 @@ export class FirstScene {
         this.scene = new THREE.Scene()
     }
 
-    init(canvas) {
-        this.canvas = canvas
-        this.sizes = {
-            width: this.canvas.clientWidth,
-            height: this.canvas.clientHeight,
-        }
+    init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
+        this.renderer = renderer
+        this.camera = camera
+        this.controls = controls
+        //GlobalLoader.getInstance().getCanvas() = canvas
+        // this.sizes = {
+        //     width: GlobalLoader.getInstance().getCanvas().clientWidth,
+        //     height: GlobalLoader.getInstance().getCanvas().clientHeight,
+        // }
         this.initThreeElements()
         this.initPostProcessing()
 
         this.initSceneObjects()
-        this.tick()
+        //this.tick()
         loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr",this.scene)
     }
 
@@ -63,14 +67,14 @@ export class FirstScene {
         /**
          * Renderer
          */
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas,
-            powerPreference: "high-performance",
-            antialias: false,
-            stencil: false
-        })
+        // this.renderer = new THREE.WebGLRenderer({
+        //     canvas: GlobalLoader.getInstance().getCanvas(),
+        //     powerPreference: "high-performance",
+        //     antialias: false,
+        //     stencil: false
+        // })
         this.renderer.setClearColor(0xFFFFFF, 1)
-        this.renderer.setSize(this.sizes.width, this.sizes.height)
+        this.renderer.setSize(GlobalLoader.getInstance().getSizes().width, GlobalLoader.getInstance().getSizes().height)
         this.renderer.autoClear = false;
         this.renderer.outputEncoding = THREE.sRGBEncoding
 
@@ -79,18 +83,18 @@ export class FirstScene {
          * Composer
          */
          this.composer = new EffectComposer(this.renderer);
-        console.log(this.composer)
+       //console.log(this.composer)
         /**
          * Camera
-         */
-        this.camera = new THREE.PerspectiveCamera(50, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 100)
+        //  */
+        // this.camera = new THREE.PerspectiveCamera(50, GlobalLoader.getInstance().getCanvas().clientWidth / GlobalLoader.getInstance().getCanvas().clientHeight, 0.1, 100)
         this.camera.position.z = 1.3563360735759848
         this.scene.add(this.camera)
 
         /**
          * Controls
          */
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+       // this.controls = new OrbitControls(this.camera, this.renderer.domElement)
         this.controls.enableDamping = true
 
         /**
@@ -153,7 +157,7 @@ export class FirstScene {
         },
             '/models/cab/cab_flo_v-4.gltf',
             document.querySelector('.dye-desc'),
-            this.canvas,
+            GlobalLoader.getInstance().getCanvas(),
             this.renderer
         )
 
@@ -178,7 +182,7 @@ export class FirstScene {
         },
             '/models/cab/cab_flo_v-4.gltf',
             document.querySelector('.cab-desc'),
-            this.canvas,
+            GlobalLoader.getInstance().getCanvas(),
             this.renderer
         )
 
@@ -229,8 +233,8 @@ export class FirstScene {
 			//blur: false,
 			//xRay: true
 		});
-        this.outlineEffect.resolution.width = this.canvas.clientWidth 
-        this.outlineEffect.resolution.height = this.canvas.clientHeight
+        this.outlineEffect.resolution.width = GlobalLoader.getInstance().getSizes().width
+        this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
 
 		//this.outlineEffect.selection.add(this.testCube);
         
@@ -247,9 +251,10 @@ export class FirstScene {
     }
 
     resizeRendererToDisplaySize = () => {
-        const width = this.canvas.clientWidth;
-        const height = this.canvas.clientHeight;
-        const needResize = this.canvas.clientWidth !== this.sizes.width || this.canvas.clientHeight !== this.sizes.height;
+        return false//TODO add resize in global 
+        const width = GlobalLoader.getInstance().getCanvas().width;
+        const height = GlobalLoader.getInstance().getCanvas().height;
+        const needResize = width !== this.sizes.width || height !== this.sizes.height;
         if (needResize) {
             this.renderer.setSize(width, height, false);
         }
@@ -257,12 +262,50 @@ export class FirstScene {
         return needResize
     }
 
-    tick = () => {
-        // const elapsedTime = clock.getElapsedTime()
+    // tick = () => {
+    //     // const elapsedTime = clock.getElapsedTime()
 
+    //     // Check canvas size and resolution
+    //     if (this.resizeRendererToDisplaySize()) {
+    //         const aspect = GlobalLoader.getInstance().getCanvas().clientWidth / GlobalLoader.getInstance().getCanvas().clientHeight
+    //         if (this.camera.isPerspectiveCamera || this.camera.isOrthographicCamera || this.camera.isCamera) {
+    //             this.camera.aspect = aspect
+    //             this.camera.updateProjectionMatrix()
+    //         }
+    //     }
+
+    //     // Update controls
+    //     this.controls.update()
+
+    //     // if (modelReady) mixer.update(clock.getDelta())
+    //     this.case.anim(this.camera)
+    //     this.indications.anim(this.camera, this.sizes, this.scene)
+
+    //     // Render
+    //     this.render(this.tick)
+
+    //     this.modalExp1Viewport.anim(GlobalLoader.getInstance().getCanvas())
+    //     this.modalExp2Viewport.anim(GlobalLoader.getInstance().getCanvas())
+
+    //     // Call tick again on the next frame
+    //     window.requestAnimationFrame(this.tick)
+    // }
+
+    render = (tick) => {
+        this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
+        //this.renderer.render(this.scene, this.camera)
+        //this.outlineEffect.selection.set(this.selectedObject);
+        
+        this.composer.render();
+        //console.log(this.outlineEffect.selection);
+        // console.log(this.case.caseSelectedObject)
+        //console.log(this.composer)
+    }
+
+    anim(tick) {
         // Check canvas size and resolution
         if (this.resizeRendererToDisplaySize()) {
-            const aspect = this.canvas.clientWidth / this.canvas.clientHeight
+            const aspect = GlobalLoader.getInstance().getCanvas().width / GlobalLoader.getInstance().getCanvas().height
             if (this.camera.isPerspectiveCamera || this.camera.isOrthographicCamera || this.camera.isCamera) {
                 this.camera.aspect = aspect
                 this.camera.updateProjectionMatrix()
@@ -274,27 +317,18 @@ export class FirstScene {
 
         // if (modelReady) mixer.update(clock.getDelta())
         this.case.anim(this.camera)
-        this.indications.anim(this.camera, this.sizes, this.scene)
+        this.indications.anim(this.camera, this.scene)
 
         // Render
-        this.render(this.tick)
+        this.render(tick)
 
-        this.modalExp1Viewport.anim(this.canvas)
-        this.modalExp2Viewport.anim(this.canvas)
+        this.modalExp1Viewport.anim(GlobalLoader.getInstance().getCanvas())
+        this.modalExp2Viewport.anim(GlobalLoader.getInstance().getCanvas())
 
         // Call tick again on the next frame
-        window.requestAnimationFrame(this.tick)
-    }
+        //window.requestAnimationFrame(tick)
 
-    render = (tick) => {
-        this.renderer.setViewport( 0, 0, this.canvas.clientWidth, this.canvas.clientHeight );
-        //this.renderer.render(this.scene, this.camera)
-        //this.outlineEffect.selection.set(this.selectedObject);
-        
-        this.composer.render();
-        //console.log(this.outlineEffect.selection);
-        // console.log(this.case.caseSelectedObject)
-        //console.log(this.composer)
+
     }
 
     destroy() {

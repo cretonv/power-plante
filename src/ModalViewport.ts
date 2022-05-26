@@ -12,13 +12,11 @@ export class ModalViewport {
     private rtCameraLight: THREE.DirectionalLight
     private rtWarmLight: THREE.DirectionalLight
     private rtColdLight: THREE.DirectionalLight
-    private loader: GLTFLoader
     private controls: OrbitControls
     private rtRenderer: THREE.WebGLRenderer
     private plane: THREE.PlaneGeometry
 
     constructor() {
-        this.loader = new GLTFLoader()
         this.isVisible = false
     }
 
@@ -80,18 +78,18 @@ export class ModalViewport {
             this.rtColdLight.target = this.object
             callback()
         })
-        this.loader.load(
-            filePath,
-            (gltf) => {
+        // this.loader.load(
+        //     filePath,
+        //     (gltf) => {
                
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
+        //     },
+        //     (xhr) => {
+        //         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        //     },
+        //     (error) => {
+        //         console.log(error)
+        //     }
+        // )
 
         // Plane background
         const planeGeometry = new THREE.PlaneGeometry( 2.5, 1.875 );

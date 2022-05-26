@@ -1,26 +1,115 @@
 import './style.css'
 import '../assets/css/main.css'
-import {FirstScene} from "./Scenes/FirstScene";
-import { BlendFunction, EffectComposer, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
+import { GlobalLoader } from './GlobalLoader';
+
+import './style.css'
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import { GlobalLoader } from './GlobalLoader';
-const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
-const appGlobalParameters = GlobalLoader.getInstance()
 
-startGame()
-function startGame(){
-    if (!appGlobalParameters.getLoadState()){
-        console.log(appGlobalParameters.getLoadState())
-        window.setTimeout(startGame, 400);
-        
-    }
-    else{
-        const firstScene = new FirstScene()
-        firstScene.init(canvas)
+import { FirstScene } from './Scenes/FirstScene';
+
+
+const globalLoader = GlobalLoader.getInstance()
+
+const tick = () =>
+{
+    if(globalLoader.getLoadState()){
+       // console.log("onélà")
+        globalLoader.getCurrentScene().anim(tick)  
     }
 
+    
+    window.requestAnimationFrame(tick)
+   
 }
+
+
+
+
+
+tick()
+
+
+ // const elapsedTime = clock.getElapsedTime()
+    // Check canvas size and resolution
+    // if (resizeRendererToDisplaySize()) {
+    //     const aspect = canvas.clientWidth / canvas.clientHeight
+    //     if (camera.isPerspectiveCamera || camera.isOrthographicCamera || camera.isCamera) {
+    //         camera.aspect = aspect
+    //         camera.updateProjectionMatrix()
+    //     }
+    // }
+
+// // RenderE
+// switch (globalLoader.getCurrentScene()) {
+//     case 'scene1':
+//         //color picker 
+//         currentscene.anim(tick)
+//         break;
+//     case 'scene2':
+//         //TODO shake 
+//         currentscene2.anim(tick)
+//         break;
+//     case 'scene2':
+//         //TODO shake 
+//         currentscene2.anim(tick)
+//         break;
+//     default:
+//       console.log(`on est perdu`);
+//   }
+// Call tick again on the next frame
+//window.requestAnimationFrame(tick)
+
+
+// function resizeRendererToDisplaySize() {
+//     const width = canvas.clientWidth;
+//     const height = canvas.clientHeight;
+//     const needResize = canvas.clientWidth !== sizes.width || canvas.clientHeight !== sizes.height;
+//     if (needResize) {
+//         renderer.setSize(width, height, false);
+//     }
+
+//     return needResize
+// }
+
+
+//console.log(AppLiveParameter.getInstance().setCurrentScene('scene2'));
+//console.log(AppLiveParameter.getInstance().getCurrentScene());
+
+
+
+// const canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
+
+// //const scene = new THREE.Scene()
+// const sizes = {
+//     width: canvas.clientWidth,
+//     height: canvas.clientHeight,
+// }
+
+// const renderer = new THREE.WebGLRenderer({
+//     canvas: canvas
+// })
+// renderer.setClearColor(0xFFFFFF, 1)
+// renderer.setSize(sizes.width, sizes.height)
+
+// const globalLoader = GlobalLoader.getInstance()
+// const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
+
+// const controls = new OrbitControls(camera, renderer.domElement)
+// controls.enableDamping = false
+// controls.enabled = false 
+
+
+// const clock = new THREE.Clock()
+// const currentscene = new Experience2Part1()
+// currentscene.init(renderer,controls,camera,clock)
+
+// const currentscene2 = new Experience2Part2()
+// currentscene2.init(renderer,controls,camera,clock)
+
+//const appGlobalParameters = GlobalLoader.getInstance()
+
+
 
 // const scene = new THREE.Scene()
 // /**

@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { GlobalLoader } from "./GlobalLoader"
 
 export class Indication {
 
@@ -13,7 +14,7 @@ export class Indication {
         this.raycaster = new THREE.Raycaster()
     }
 
-    anim(camera, sizes, scene) {
+    anim(camera, scene) {
         // Go through each point
         for(const point of this.points)
         {
@@ -42,8 +43,8 @@ export class Indication {
                 }
             }
 
-            const translateX = screenPosition.x * sizes.width * 0.5
-            const translateY = - screenPosition.y * sizes.height * 0.5
+            const translateX = screenPosition.x * GlobalLoader.getInstance().getSizes().width * 0.5
+            const translateY = - screenPosition.y *GlobalLoader.getInstance().getSizes().height * 0.5
             point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
         }
     }

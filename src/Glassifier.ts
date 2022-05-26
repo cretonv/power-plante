@@ -4,7 +4,7 @@ import { GlobalLoader } from './GlobalLoader';
 
 const defaultGlassParams = {
     color: 0xffffff,
-    transmission: 0.95,
+    transmission: 0.750,
     opacity: 1.0,
     metalness: 0,
     roughness: 0.1,
@@ -20,7 +20,7 @@ const defaultGlassParams = {
 
 const pipetteGlassParams = {
     color: 0xffffff,
-    transmission: 1,
+    transmission: 0.5,
     opacity: 1.0,
     metalness: 0,
     roughness: 0.8,

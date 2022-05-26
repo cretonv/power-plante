@@ -5,7 +5,7 @@ import { Indication } from "./Indication";
 import { ModalViewport } from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
 import { Mascot } from "./Mascot";
-import { GlobalLoader } from "./GlobalLoader";
+import { GlobalLoader,exp2Part1Name } from "./GlobalLoader";
 
 export class Case {
 
@@ -156,6 +156,8 @@ export class Case {
                         this.selectedStatus = "exp1"
                         this.caseSelectedObject = this.experience1Objects
                         this.selectedObjectCallback()
+                        GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                        GlobalLoader.getInstance().notifyTransitionDone()
                     }
 
                 }
