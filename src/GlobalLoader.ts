@@ -173,7 +173,7 @@ export var GlobalLoader = (function () {
 
         })
 
-        loadGltf(gltfLoader, GltfArray, "decor", "decor/decor_flo_v-2.gltf", () => {
+        loadGltf(gltfLoader, GltfArray, "decor", "decor/decor_flo_v-3.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)

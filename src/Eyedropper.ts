@@ -164,7 +164,10 @@ export class EyeDropper {
                 //console.log(this.pointer)
                 //console.log(this.object.scene.children[0].position)
                 // -0.4 is offset to grab on the 
-                this.object.position.set(this.intersects.x, this.intersects.y-0.07, this.intersects.z);
+                if(this.intersects.y > 0.06 ){
+                    this.object.position.set(this.intersects.x, this.intersects.y-0.07, this.intersects.z);
+                }
+
             }
         });
     }

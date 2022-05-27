@@ -9,8 +9,9 @@ import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
 import { BlendFunction, Effect, EffectComposer, EffectPass, OutlineEffect, RenderPass, PixelationEffect } from "postprocessing";
 import {Mascot} from "../Mascot";
 import { GlobalLoader } from "../GlobalLoader";
+import { ActivityScene } from "./ActivityScene";
 
-export class FirstScene {
+export class FirstScene extends ActivityScene {
     private sizes: {[name: string]: Number}
    // private canvas: HTMLDivElement
     // Three JS elements
@@ -43,6 +44,7 @@ export class FirstScene {
      */
      //private testCube
     constructor() {
+        super()
         this.scene = new THREE.Scene()
     }
 

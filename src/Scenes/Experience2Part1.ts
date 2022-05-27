@@ -60,7 +60,7 @@ export class Experience2Part1 extends ActivityScene {
 
         const redDyeElement = new Dye()
         redDyeElement.init(() => {
-            redDyeElement.object.position.set(-0.1, 0.0, 0.0)
+            redDyeElement.object.position.set(-0.05, 0.0, 0.0)
             this.scene.add(redDyeElement.object)
         }, camera, dyeColorEnum.RedDye)
 
@@ -74,7 +74,7 @@ export class Experience2Part1 extends ActivityScene {
         const testtubeElement = new TestTube()
         testtubeElement.init(() => {
             this.scene.add(testtubeElement.object)
-        }, camera)
+        }, camera,new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),controls)
 
         // Init pipette
         const eyeDropperElement = new EyeDropper()
@@ -89,13 +89,20 @@ export class Experience2Part1 extends ActivityScene {
         })
 
 
+        const geometry = new THREE.BoxGeometry( 0.04, 0.17, 0.0001 );
+        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        const cube = new THREE.Mesh( geometry, material );
+        cube.position.set(-0.15,0.05,0)
+        this.scene.add( cube );
+
+
         /**
          * Lights
          */
-        const light = new THREE.AmbientLight(0x404040, 3.4)
+        const light = new THREE.AmbientLight(0xffffff, 1)
         //light.position.set(0.8, 1.4, 1.0)
         this.scene.add(light)
-         const light2 = new THREE.SpotLight(0xffffff, 0.4)
+         const light2 = new THREE.SpotLight(0xffffff, 0.1)
          light2.position.set(0.8, 4, 0.20)
          this.scene.add(light2)
         // const light3 = new THREE.SpotLight(0xffffff, 3.4)
@@ -105,16 +112,17 @@ export class Experience2Part1 extends ActivityScene {
         // Animate
     }
     setup(){
-        this.camera.position.z = 0.5
-        this.camera.position.y = 0.1
+        this.camera.position.z = 0.4;
+        this.camera.position.y = 0.8;
         this.controls.minDistance = 0.35;
         this.controls.maxDistance = 0.65;
-        this.controls.enableDamping = true
-        this.controls.enabled = true
-        this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4; // radians
-        this.controls.maxPolarAngle = Math.PI/2-0.1; // radians
-        this.controls.minAzimuthAngle =-0.4 // radians
-        this.controls.maxAzimuthAngle = 0.4; // radians
+        this.controls.enableDamping = true;
+        this.controls.enabled = true;
+        this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4; 
+        this.controls.maxPolarAngle = Math.PI/2-0.1; 
+        this.controls.minAzimuthAngle =-0.4;
+        this.controls.maxAzimuthAngle = 0.4; 
+        this.controls.enablePan = false;    
     }
 
     anim(tick) {
