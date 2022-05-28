@@ -3,6 +3,7 @@ import * as THREE from "three"
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Experience2Part1 } from "./Scenes/Experience2Part1";
+import { Experience2Part2 } from "./Scenes/Experience2Part2";
 import { FirstScene } from "./Scenes/FirstScene";
 import { ActivityScene } from "./Scenes/ActivityScene";
 
@@ -89,7 +90,7 @@ export var GlobalLoader = (function () {
       return canvas
     }
     this.getLoadState = function () {
-      if (numberLoaded == 7) {
+      if (numberLoaded == 8) {
         if (firstsceneloaded) {
           return true
         }
@@ -104,7 +105,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = exp2Part1Name;
+  var sceneId = landingName;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -114,7 +115,7 @@ export var GlobalLoader = (function () {
   var landingScene: FirstScene = null
   var exp2Part1Scene: Experience2Part1 = null
   //TODO Change Scene When this will be imported 
-  var exp2Part2Scene: Experience2Part1 = null
+  var exp2Part2Scene: Experience2Part2 = null
   var exp2Part3Scene: Experience2Part1 = null
   var transitionRequested = false;
   var renderer
@@ -139,7 +140,7 @@ export var GlobalLoader = (function () {
         //Load all scenes ( no init for now )
         landingScene = new FirstScene()
         exp2Part1Scene = new Experience2Part1()
-        exp2Part2Scene = new Experience2Part1()
+        exp2Part2Scene = new Experience2Part2()
         exp2Part3Scene = new Experience2Part1()
 
         //Load all fbx and gltf in an array 
@@ -180,6 +181,14 @@ export var GlobalLoader = (function () {
 
         })
 
+        loadGltf(gltfLoader, GltfArray, "uranium", "uranium/uranium_flo_v-1.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+
         canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
         sizes = {
           width: canvas.clientWidth,
@@ -188,11 +197,12 @@ export var GlobalLoader = (function () {
 
         renderer = new THREE.WebGLRenderer({
           canvas: canvas,
-          powerPreference: "high-performance",
-            antialias: false,
-            stencil: false
+          //powerPreference: "high-performance",
+            antialias: true,
+            //stencil: false,
+            preserveDrawingBuffer: true
         })
-        renderer.setClearColor(0xFFFFFF, 1)
+      
         renderer.setSize(sizes.width, sizes.height)
 
         camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
@@ -203,10 +213,7 @@ export var GlobalLoader = (function () {
 
 
         clock = new THREE.Clock()
-
         //instance.loadScene(renderer, controls, camera, clock)
-
-
       }
 
       return instance;

@@ -156,8 +156,8 @@ export class Case {
                         this.selectedStatus = "exp1"
                         this.caseSelectedObject = this.experience1Objects
                         this.selectedObjectCallback()
-                        GlobalLoader.getInstance().setNextScene(exp2Part1Name)
-                        GlobalLoader.getInstance().notifyTransitionDone()
+                        // GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                        // GlobalLoader.getInstance().notifyTransitionDone()
                     }
 
                 }

@@ -155,7 +155,6 @@ export class EyeDropper {
             //console.log(this.camera)
             this.pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
             this.pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-            console.log()
             if(this.isMouseDownOnModel){
                
                 this.raycaster.setFromCamera(this.pointer, this.camera);

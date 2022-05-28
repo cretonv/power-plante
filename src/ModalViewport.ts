@@ -108,6 +108,7 @@ export class ModalViewport {
                 canvas.clientWidth / 2,
                 0.57 * canvas.clientHeight
             )
+            //this.rtRenderer.clear()
             this.rtRenderer.render(this.rtScene, this.rtCamera);
             this.rtCameraLight.position.set(this.rtCamera.position.x, this.rtCamera.position.y, this.rtCamera.position.z + 0.05)
         }

@@ -293,7 +293,8 @@ export class FirstScene extends ActivityScene {
     //     window.requestAnimationFrame(this.tick)
     // }
 
-    render = (tick) => {
+    render = () => {
+        
         this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
         //this.renderer.render(this.scene, this.camera)
         //this.outlineEffect.selection.set(this.selectedObject);
@@ -304,7 +305,7 @@ export class FirstScene extends ActivityScene {
         //console.log(this.composer)
     }
 
-    anim(tick) {
+    anim() {
         // Check canvas size and resolution
         if (this.resizeRendererToDisplaySize()) {
             const aspect = GlobalLoader.getInstance().getCanvas().width / GlobalLoader.getInstance().getCanvas().height
@@ -313,6 +314,7 @@ export class FirstScene extends ActivityScene {
                 this.camera.updateProjectionMatrix()
             }
         }
+        this.renderer.clear()
 
         // Update controls
         this.controls.update()
@@ -322,7 +324,7 @@ export class FirstScene extends ActivityScene {
         this.indications.anim(this.camera, this.scene)
 
         // Render
-        this.render(tick)
+        this.render()
 
         this.modalExp1Viewport.anim(GlobalLoader.getInstance().getCanvas())
         this.modalExp2Viewport.anim(GlobalLoader.getInstance().getCanvas())
