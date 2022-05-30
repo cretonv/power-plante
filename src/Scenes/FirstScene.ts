@@ -6,7 +6,16 @@ import {ObjectViewModal} from "../ObjectViewModal";
 import {ModalViewport} from "../ModalViewport";
 import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
-import { BlendFunction, Effect, EffectComposer, EffectPass, OutlineEffect, RenderPass, PixelationEffect } from "postprocessing";
+import {
+    BlendFunction,
+    Effect,
+    EffectComposer,
+    EffectPass,
+    OutlineEffect,
+    RenderPass,
+    PixelationEffect,
+    KawaseBlurPass
+} from "postprocessing";
 import {Mascot} from "../Mascot";
 import { GlobalLoader } from "../GlobalLoader";
 import { ActivityScene } from "./ActivityScene";
@@ -37,6 +46,7 @@ export class FirstScene extends ActivityScene {
     private composer:EffectComposer
     //private selectedObject:Array<THREE.Object3D> = []
     private outlinePass:EffectPass
+    private blurPass:KawaseBlurPass
 
 
     /**
@@ -147,7 +157,7 @@ export class FirstScene extends ActivityScene {
                     if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {
 
                         transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
-          
+
                     }
                     else if (child.name.includes("led")) {
 
@@ -172,7 +182,7 @@ export class FirstScene extends ActivityScene {
                     if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {
 
                         transformMeshToGlass(child, 'hdri_power_plante_flo_v-1.hdr')
-          
+
                     }
                     else if (child.name.includes("led")) {
 
@@ -214,8 +224,8 @@ export class FirstScene extends ActivityScene {
             this.outlineEffect.selection.set(this.case.caseSelectedObject);
             //this.outlinePass.recompile()
             //this.composer.addPass(this.outlinePass);
-            
-        })
+
+        }, this)
         // const geometry = new THREE.BoxGeometry( 0.01, 1, 1 );
         // const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         // this.testCube = new THREE.Mesh( geometry, material );
@@ -231,15 +241,17 @@ export class FirstScene extends ActivityScene {
             visibleEdgeColor: 0xee00ee,
             hiddenEdgeColor: 0x550055,
             blur: true,
-		
+
 			//blur: false,
 			//xRay: true
 		});
         this.outlineEffect.resolution.width = GlobalLoader.getInstance().getSizes().width
         this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
 
-		//this.outlineEffect.selection.add(this.testCube);
-        
+		// this.outlineEffect.selection.add(this.testCube);
+
+        this.blurPass = new KawaseBlurPass()
+
 		//const smaaPass = new EffectPass(this.camera, this.smaaEffect);
 		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
 
@@ -248,12 +260,11 @@ export class FirstScene extends ActivityScene {
         //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
         this.composer.addPass(new RenderPass(this.scene, this.camera));
         this.composer.addPass(this.outlinePass);
-        
 
     }
 
     resizeRendererToDisplaySize = () => {
-        return false//TODO add resize in global 
+        return false//TODO add resize in global
         const width = GlobalLoader.getInstance().getCanvas().width;
         const height = GlobalLoader.getInstance().getCanvas().height;
         const needResize = width !== this.sizes.width || height !== this.sizes.height;
@@ -262,6 +273,14 @@ export class FirstScene extends ActivityScene {
         }
 
         return needResize
+    }
+
+    addBlurOnScene = () => {
+        this.composer.addPass(this.blurPass)
+    }
+
+    removeBlurOnScene = () => {
+        this.composer.removePass(this.blurPass)
     }
 
     // tick = () => {
@@ -294,11 +313,11 @@ export class FirstScene extends ActivityScene {
     // }
 
     render = () => {
-        
+
         this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
         //this.renderer.render(this.scene, this.camera)
         //this.outlineEffect.selection.set(this.selectedObject);
-        
+
         this.composer.render();
         //console.log(this.outlineEffect.selection);
         // console.log(this.case.caseSelectedObject)
