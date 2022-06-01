@@ -90,7 +90,7 @@ export var GlobalLoader = (function () {
       return canvas
     }
     this.getLoadState = function () {
-      if (numberLoaded == 8) {
+      if (numberLoaded == 14) {
         if (firstsceneloaded) {
           return true
         }
@@ -162,7 +162,17 @@ export var GlobalLoader = (function () {
           console.log("charger")
 
         })
+        loadFBX(fbxLoader, FbxArray, "cab", "cab/cab_experience2_animation_sam_v3.fbx", () => {
+          numberLoaded += 1
+          console.log("charger")
+
+        })
         loadFBX(fbxLoader, FbxArray, "alcoolbottle", "alcoolbottle/alcohol_animation_sam_v-2.fbx", () => {
+          numberLoaded += 1
+          console.log("charger")
+
+        })
+        loadFBX(fbxLoader, FbxArray, "cabAnim", "cab/exp1_flo_v-4.fbx", () => {
           numberLoaded += 1
           console.log("charger")
 
@@ -181,7 +191,36 @@ export var GlobalLoader = (function () {
 
         })
 
+        loadGltf(gltfLoader, GltfArray, "support", "eyedropper-support/support-pipette_flo_v-1.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+
         loadGltf(gltfLoader, GltfArray, "uranium", "uranium/uranium_flo_v-1.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+        loadGltf(gltfLoader, GltfArray, "battery", "battery/battery_sam_v-2.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+        loadGltf(gltfLoader, GltfArray, "exp2", "exp2/popup_exp2.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_sam_v-2.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)

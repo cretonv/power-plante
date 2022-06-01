@@ -61,7 +61,6 @@ export class Case {
     private selectedStatus: string = "none"
 
     constructor() {
-        this.loader = new FBXLoader()
         this.animationActions = []
         this.modelReady = false
         this.raycaster = new THREE.Raycaster();

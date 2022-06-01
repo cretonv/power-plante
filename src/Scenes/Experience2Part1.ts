@@ -9,6 +9,10 @@ import { TestTube } from '../TestTube';
 import { AlcoolBottle } from '../AlcoolBottle';
 import { GlobalLoader } from '../GlobalLoader';
 import { ActivityScene } from './ActivityScene';
+import { EyedropperSupport } from '../EyedropperSupport';
+import {  BlendFunction, EffectComposer, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
+import * as TWEEN from "@tweenjs/tween.js";
+import { CAB } from '../CAB';
 
 
 
@@ -18,6 +22,11 @@ export class Experience2Part1 extends ActivityScene {
     private scene: THREE.Scene
     private renderer: THREE.WebGLRenderer
     private clock: THREE.Clock
+     //Postprocessing
+     private outlineEffect:OutlineEffect
+     private composer:EffectComposer
+     //private selectedObject:Array<THREE.Object3D> = []
+     private outlinePass:EffectPass
   
 
 
@@ -51,12 +60,17 @@ export class Experience2Part1 extends ActivityScene {
 
 
         /**
+         * Composer
+         */
+        this.composer = new EffectComposer(this.renderer);
+
+        /**
          * Objects
          */
         loadSceneBackgroundFromHDR('hdri_flo_v-2.hdr', this.scene)
 
 
-
+        
 
         const redDyeElement = new Dye()
         redDyeElement.init(() => {
@@ -70,17 +84,40 @@ export class Experience2Part1 extends ActivityScene {
 
         }, camera)
 
+        const cab = new CAB()
+        cab.init(()=>{
+            cab.object.position.set(0.55, 0.0, -0.058)
+            this.scene.add(cab.object)
+        },this.camera)
+
+
+        const geometry = new THREE.BoxGeometry( 0.04, 0.1, 0.0001 );
+        const material = new THREE.MeshBasicMaterial( { color: 0x000000,
+            transparent: true,
+            opacity: 0.0
+        } );
+        const testube_drop_zone = new THREE.Mesh( geometry, material );
+        testube_drop_zone.visible = false
+        testube_drop_zone.position.set(0.35,0.05,0)
+        this.scene.add( testube_drop_zone );
 
         const testtubeElement = new TestTube()
         testtubeElement.init(() => {
             this.scene.add(testtubeElement.object)
-        }, camera,new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),controls)
+        }, camera,controls,new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),controls,testube_drop_zone)
+
+        const eyeDropperSupport= new EyedropperSupport()
+        eyeDropperSupport.init(() => {
+            this.scene.add(eyeDropperSupport.object)
+        }, camera, controls)
 
         // Init pipette
         const eyeDropperElement = new EyeDropper()
         eyeDropperElement.init(() => {
             this.scene.add(eyeDropperElement.object)
-        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, testtubeElement, controls)
+        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, testtubeElement, controls, eyeDropperSupport,cab)
+
+
         
         GlobalLoader.getInstance().getGLTFLoaded('decor',(object)=>{
             object.scale.set(0.005,0.005,0.005)
@@ -89,12 +126,9 @@ export class Experience2Part1 extends ActivityScene {
         })
 
 
-        const geometry = new THREE.BoxGeometry( 0.04, 0.17, 0.0001 );
-        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-        const cube = new THREE.Mesh( geometry, material );
-        cube.position.set(-0.15,0.05,0)
-        this.scene.add( cube );
-
+      
+       
+        
 
         /**
          * Lights
@@ -110,10 +144,41 @@ export class Experience2Part1 extends ActivityScene {
         // this.scene.add(light3)
        // this.scene.add(new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), 1, 0xffff00));
         // Animate
+        this.initPostProcessing()
+        this.outlineEffect.selection.add(testube_drop_zone);
+    }
+    initPostProcessing  = () => {
+        this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
+            blendFunction: BlendFunction.ADD,
+            edgeStrength: 1000,
+            pulseSpeed: 0.64,
+            visibleEdgeColor: 0xee00ee,
+            hiddenEdgeColor: 0x550055,
+            blur: true,
+		
+			//blur: false,
+			//xRay: true
+		});
+        this.outlineEffect.resolution.width = GlobalLoader.getInstance().getSizes().width
+        this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
+
+		//this.outlineEffect.selection.add(this.testCube);
+        
+		//const smaaPass = new EffectPass(this.camera, this.smaaEffect);
+		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
+
+		//this.effect = outlineEffect;
+        //this.composer.addPass(new EffectPass(this.camera,this.outlineEffect));
+        //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
+        this.composer.addPass(new RenderPass(this.scene, this.camera));
+        this.composer.addPass(this.outlinePass);
+        
+
     }
     setup(){
-        this.camera.position.z = 0.4;
-        this.camera.position.y = 0.8;
+        this.camera.position.z = 0.6056062446915709;
+        this.camera.position.y = 0.22947195647688093;
+        this.camera.position.x = -0.05553105060454619;
         this.controls.minDistance = 0.35;
         this.controls.maxDistance = 0.65;
         this.controls.enableDamping = true;
@@ -123,9 +188,11 @@ export class Experience2Part1 extends ActivityScene {
         this.controls.minAzimuthAngle =-0.4;
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
+        console.log(this.controls.position)
     }
 
     anim(tick) {
+        TWEEN.update();
         // const elapsedTime = clock.getElapsedTime()
 
         // Check canvas size and resolution
@@ -133,6 +200,7 @@ export class Experience2Part1 extends ActivityScene {
 
         // Update controls
         this.controls.update()
+        //console.log(this.camera.position)
 
 
         // Render
@@ -145,7 +213,8 @@ export class Experience2Part1 extends ActivityScene {
 
     render() {
         //this.testtubeElement.anim(tick)
-        this.renderer.render(this.scene, this.camera)
+        this.composer.render();
+        //this.renderer.render(this.scene, this.camera)
     }
 
     setAction() {
