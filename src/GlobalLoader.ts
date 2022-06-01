@@ -105,7 +105,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = landingName;
+  var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()

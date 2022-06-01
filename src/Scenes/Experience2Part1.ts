@@ -13,6 +13,7 @@ import { EyedropperSupport } from '../EyedropperSupport';
 import {  BlendFunction, EffectComposer, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
 import * as TWEEN from "@tweenjs/tween.js";
 import { CAB } from '../CAB';
+import { Loupe } from '../Loupe';
 
 
 
@@ -118,6 +119,13 @@ export class Experience2Part1 extends ActivityScene {
         }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, testtubeElement, controls, eyeDropperSupport,cab)
 
 
+
+        const loupe = new Loupe()
+        loupe.init(() => {
+            // loupe.object.position.set(0.7, 0.0, 0)
+            loupe.object.rotation.set(Math.PI/2*0.80, 0, 0) 
+            this.scene.add(loupe.object)
+        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls)
         
         GlobalLoader.getInstance().getGLTFLoaded('decor',(object)=>{
             object.scale.set(0.005,0.005,0.005)
