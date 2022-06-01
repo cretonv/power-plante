@@ -9,12 +9,12 @@ export class Loupe {
     public object:THREE.Group
     private modelFileName: string = "magnifyingglass_sam_v-2.gltf";
     private plane: THREE.Plane;
-    public isEnabled  = false 
+    public isEnabled  = false
     private intersects = new THREE.Vector3();
     private camera: THREE.Camera
     private cameraControler:OrbitControls
     constructor() {
-     
+
     }
     //true in initialarray stands for red otherwise blue
     init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,cameraControler:OrbitControls) {
@@ -25,22 +25,22 @@ export class Loupe {
             this.object = object
             this.object.scale.set(0.006, 0.006, 0.006)
             callback()
-   
+
         })
 
         window.addEventListener('mousedown', () => {
-          
-            
+
+
             this.raycaster.setFromCamera( this.pointer, this.camera );
             console.log(this.object)
             const intersects = this.raycaster.intersectObjects(this.object.children);
             if (intersects.length > 0){
-                GlobalLoader.getInstance().getCanvas().classList.add('active');
+                document.querySelector('body').classList.add('active');
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
-      
+
             }
-            
+
         })
 
         window.addEventListener('mouseup', () => {
@@ -56,27 +56,27 @@ export class Loupe {
             this.pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
             if(this.isMouseDownOnModel){
                 this.raycaster.setFromCamera(this.pointer, this.camera);
-                this.raycaster.ray.intersectPlane(this.plane, this.intersects); 
+                this.raycaster.ray.intersectPlane(this.plane, this.intersects);
                 //console.log(this.intersects)
                 //console.log(this.pointer)
                 //console.log(this.object.scene.children[0].position)
-                // -0.4 is offset to grab on the 
+                // -0.4 is offset to grab on the
                 this.object.position.set(this.intersects.x, this.intersects.y-0.01, this.intersects.z);
-                
+
             }
         });
     }
 
 
     anim() {
-       
+
     }
 
 
 
 
     setAction() {
-    
+
     }
 
     destroy() {

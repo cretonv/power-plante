@@ -1,4 +1,4 @@
-canvas {
+body {
     &::after {
       content: "";
       height: 100vh;
@@ -6,6 +6,8 @@ canvas {
       background-color: #000;
       transition: all 1s;
       transform-origin: right;
+      position: absolute;
+      top: 0;
     }
     &.active {
       &::after {
