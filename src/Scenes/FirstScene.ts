@@ -8,12 +8,10 @@ import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
 import {
     BlendFunction,
-    Effect,
     EffectComposer,
     EffectPass,
     OutlineEffect,
     RenderPass,
-    PixelationEffect,
     KawaseBlurPass
 } from "postprocessing";
 import {Mascot} from "../Mascot";
@@ -167,10 +165,9 @@ export class FirstScene extends ActivityScene {
                 }
             })
         },
-            '/models/cab/cab_flo_v-4.gltf',
             document.querySelector('.dye-desc'),
-            GlobalLoader.getInstance().getCanvas(),
-            this.renderer
+            this.renderer,
+            () => {console.log("Emmène moi à l'exp1")}
         )
 
         // Init ModalViewport
@@ -192,10 +189,9 @@ export class FirstScene extends ActivityScene {
                 }
             })
         },
-            '/models/cab/cab_flo_v-4.gltf',
             document.querySelector('.cab-desc'),
-            GlobalLoader.getInstance().getCanvas(),
-            this.renderer
+            this.renderer,
+            () => {console.log("Emmène moi à l'exp2")}
         )
 
         // Init mascot
