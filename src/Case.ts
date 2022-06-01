@@ -6,6 +6,7 @@ import { ModalViewport } from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
 import { Mascot } from "./Mascot";
 import { GlobalLoader,exp2Part1Name } from "./GlobalLoader";
+import {FirstScene} from "./Scenes/FirstScene";
 
 export class Case {
 
@@ -39,6 +40,7 @@ export class Case {
     // private modelFileName = 'case_flo_v-14.fbx';
 
     // Other scene elements
+    private scene: FirstScene
     private modalExp1: ModalViewport
     private modalExp1Open: boolean
     private modalExp2: ModalViewport
@@ -50,12 +52,12 @@ export class Case {
     private controls: THREE.OrbitControls
     private selectedObjectCallback: Function
 
-    //groups of objects 
+    //groups of objects
     private experience1ObjectsNames: Array<string> = ["Pipette", "ColorantBase", "ColorantBase_2", "ColorantBase_3", "Bouchon", "Bouchon_2", "Bouchon_3", "bouchon", "bouchon_2", "bouchon_3", "GLASS_tube", "GLASS_tube_2", "GLASS_tube_3", "GLASS_Alcoolbase", "BouchonAlcool"]
     private experience1Objects: Array<THREE.Mesh> = []
     private experience2ObjectsNames: Array<string> = ["Cloner", "bloc_cab", "base_top", "base_bottom", "dome_place", "plug_battery", "GLASS_dome", "GLASS_Boiteplexy", "battery", "GLASS_tube_4", "base_bottom", "ecroux_top"]
     private experience2Objects: Array<THREE.Mesh> = []
-    //status of hover 
+    //status of hover
     private selectedStatus: string = "none"
 
     constructor() {
@@ -73,7 +75,18 @@ export class Case {
         this.hasBeenOpened = false
     }
 
-    init(callback: Function, camera, controls, indications: Indication, modalExp1: ModalViewport, modalExp2: ModalViewport, mascot: Mascot, selectedObjectCallback: Function) {
+    init(
+        callback: Function,
+        camera,
+        controls,
+        indications: Indication,
+        modalExp1: ModalViewport,
+        modalExp2: ModalViewport,
+        mascot: Mascot,
+        selectedObjectCallback: Function,
+        scene: FirstScene
+    ) {
+        this.scene = scene
         this.controls = controls
         this.indications = indications
         this.modalExp1 = modalExp1
@@ -330,6 +343,7 @@ export class Case {
                         this.modalExp1.htmlDescriptionElement.classList.add('visible')
                         document.querySelector('.modal-border').classList.add('visible')
                         this.indications.points[3].element.classList.add('destroyed')
+                        this.scene.addBlurOnScene()
                         break;
                     case 'exp2':
 
@@ -340,6 +354,7 @@ export class Case {
                         this.modalExp2.htmlDescriptionElement.classList.add('visible')
                         document.querySelector('.modal-border').classList.add('visible')
                         this.indications.points[3].element.classList.add('destroyed')
+                        this.scene.addBlurOnScene()
                         // expected output: "Mangoes and papayas are $2.79 a pound."
                         break;
                     default:
