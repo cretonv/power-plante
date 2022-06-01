@@ -90,7 +90,7 @@ export var GlobalLoader = (function () {
       return canvas
     }
     this.getLoadState = function () {
-      if (numberLoaded == 8) {
+      if (numberLoaded == 10) {
         if (firstsceneloaded) {
           return true
         }
@@ -105,7 +105,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = landingName;
+  var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -162,6 +162,11 @@ export var GlobalLoader = (function () {
           console.log("charger")
 
         })
+        loadFBX(fbxLoader, FbxArray, "cab", "cab/cab_experience2_animation_sam_v3.fbx", () => {
+          numberLoaded += 1
+          console.log("charger")
+
+        })
         loadFBX(fbxLoader, FbxArray, "alcoolbottle", "alcoolbottle/alcohol_animation_sam_v-2.fbx", () => {
           numberLoaded += 1
           console.log("charger")
@@ -180,6 +185,14 @@ export var GlobalLoader = (function () {
           //console.log(GltfArray)
 
         })
+
+        loadGltf(gltfLoader, GltfArray, "support", "eyedropper-support/support-pipette_flo_v-1.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
 
         loadGltf(gltfLoader, GltfArray, "uranium", "uranium/uranium_flo_v-1.gltf", () => {
           numberLoaded += 1

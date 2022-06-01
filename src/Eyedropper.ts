@@ -10,13 +10,17 @@ import { TestTube } from "./TestTube";
 import { AlcoolBottle } from "./AlcoolBottle";
 import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
+import { EyedropperSupport } from "./EyedropperSupport";
+import { CAB } from "./CAB";
+import { CopyPass } from "postprocessing";
 export class EyeDropper {
     private stateEnum = Object.freeze({
         Empty:"empty",
         RedDye:"redDye",
         Alcool:"alcool",
         YellowDye:"yellowDye",
-        BlueDye:"blueDye"
+        BlueDye:"blueDye",
+        Violet:"violet"
     });
     private isMouseDownOnModel:boolean = false;
     private pointer  = new THREE.Vector2();
@@ -34,19 +38,23 @@ export class EyeDropper {
     private alcoolBottle:AlcoolBottle
     private tubeObject:TestTube
     private cameraControler:OrbitControls
-
+    private support:EyedropperSupport
+    private cab:CAB
+    private isPart3 =false
     constructor() {
         this.loader = new FBXLoader()
        
     }
 
-    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls) {
+    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls,support:EyedropperSupport,cab:CAB) {
         this.camera = camera
         this.cameraControler = cameraControler
         this.plane = plane
         this.alcoolBottle = alcoolBottle
         this.redDyeObject = redDyeObject
         this.tubeObject = tubeObject
+        this.support = support
+        this.cab = cab 
 
     
        
@@ -61,7 +69,7 @@ export class EyeDropper {
             //this.activeAction = animationAction
             object.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
-                    console.log(child)
+                    //console.log(child)
                     if (child.name == "Pipette") {
                         transformMeshToPlastic(child, 'test.hdr')
                     }
@@ -80,12 +88,14 @@ export class EyeDropper {
 
             object.scale.set(0.01, 0.01, 0.01)
 
-            object.position.set(0.1, 0.1, 0)
+            object.position.set(0.2, 0.0, 0)
+            
             callback()
         })
 
         window.addEventListener('mousedown', () => {
-            console.log(this.state)
+
+            console.log(            this.object.position.distanceTo(this.support.object.position)           )
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object);
             if(intersectsDownRed.length > 0 && this.redDyeObject.capacity>0 && this.state == this.stateEnum.Empty ){
@@ -107,46 +117,76 @@ export class EyeDropper {
                     this.colorContent(new THREE.MeshBasicMaterial( {color: 0x000088} ))
                 }
             }
+            this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
+            const intersectsCabPipe = this.raycaster.intersectObject(this.cab.object.getObjectByName("Valve"));
+            console.log(intersectsCabPipe)
+            if(intersectsCabPipe.length > 0  ){
+                //triggerranim 
+                
+               if( this.stateEnum.Violet == this.state){
 
+                //TODO higlight button
+                this.cab.enableButton()
+                this.removeAllContent()
+            
+               }
+            }
             
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownTube = this.raycaster.intersectObject(this.tubeObject.object);
             console.log(intersectsDownTube)
+            console.log("onéla")
             if(intersectsDownTube.length > 0  && this.tubeObject.object.position.distanceTo(this.object.position)<0.12){
-                //triggerranim 
-                
-                switch ( this.state) {
-                    case this.stateEnum.RedDye:
-                        this.tubeObject.addRed()
-                        this.removeAllContent()
-
-                        break
-                    case this.stateEnum.Alcool:
-                        this.tubeObject.addAlcool()
-                        this.removeAllContent()
-                        break
-
-                    default:
-                        console.log("pipette vide")
-                  }
-                  this.state = this.stateEnum.Empty
-                  
+                if (this.isPart3){
+                    console.log("onéla")
+                    this.state = this.stateEnum.Violet
+                    this.tubeObject.removeAllContent()
+                    this.colorContent(new THREE.MeshBasicMaterial({color: 0x880088}))
+                }
+                else{
+                    switch ( this.state) {
+                        case this.stateEnum.RedDye:
+                            this.tubeObject.addRed(()=>this.isPart3 = true)
+                            this.removeAllContent()
+    
+                            break
+                        case this.stateEnum.Alcool:
+                            this.tubeObject.addAlcool(()=>this.isPart3 = true)
+                            this.removeAllContent()
+                            break
+    
+                        default:
+                            console.log("pipette vide")
+                      }
+                      this.state = this.stateEnum.Empty
+                }
 
             }
-
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.object.children);
             if (intersects.length > 0 ){
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
+                this.tubeObject.isEnabled = false
       
             }
-            
         })
 
         window.addEventListener('mouseup', () => {
             this.isMouseDownOnModel =false
             this.cameraControler.enabled = true
+
+            this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
+            const intersectsSupport = this.raycaster.intersectObject(this.support.object);
+            if(intersectsSupport.length>0){
+                
+                this.object.position.set(0.2, 0.0, 0)
+
+                //TODO destroy drag & drop listener 
+                //Todo set 
+                this.tubeObject.isEnabled=true
+
+            }
         })
 
         window.addEventListener( 'pointermove', (e) => {

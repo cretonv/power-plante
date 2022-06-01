@@ -58,7 +58,7 @@ export class AlcoolBottle {
 
             object.scale.set(0.01, 0.01, 0.01)
 
-            object.position.set(0.2, 0.0, 0)
+            object.position.set(-0.150, 0, 0)
             callback()
         })
 
