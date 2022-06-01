@@ -20,6 +20,7 @@
     "locomotive-scroll": "^4.1.4",
     "postprocessing": "^6.26.4",
     "three": "^0.139.2",
-    "three-outlinepass": "^1.2.0"
+    "three-outlinepass": "^1.2.0",
+    "typewriter-effect": "^2.18.2"
   }
 }
