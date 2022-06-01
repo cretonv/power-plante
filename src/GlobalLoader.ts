@@ -90,7 +90,7 @@ export var GlobalLoader = (function () {
       return canvas
     }
     this.getLoadState = function () {
-      if (numberLoaded == 10) {
+      if (numberLoaded == 14) {
         if (firstsceneloaded) {
           return true
         }
@@ -105,7 +105,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = exp2Part1Name;
+  var sceneId = landingName;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -172,6 +172,11 @@ export var GlobalLoader = (function () {
           console.log("charger")
 
         })
+        loadFBX(fbxLoader, FbxArray, "cabAnim", "cab/exp1_flo_v-4.fbx", () => {
+          numberLoaded += 1
+          console.log("charger")
+
+        })
         loadGltf(gltfLoader, GltfArray, "cab", "cab/cab_flo_v-4.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
@@ -195,6 +200,27 @@ export var GlobalLoader = (function () {
 
 
         loadGltf(gltfLoader, GltfArray, "uranium", "uranium/uranium_flo_v-1.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+        loadGltf(gltfLoader, GltfArray, "battery", "battery/battery_sam_v-2.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+        loadGltf(gltfLoader, GltfArray, "exp2", "exp2/popup_exp2.gltf", () => {
+          numberLoaded += 1
+          console.log("charger gltf ")
+          //console.log(GltfArray)
+
+        })
+
+        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_sam_v-2.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)
