@@ -1,8 +1,5 @@
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
-import * as TWEEN from "@tweenjs/tween.js";
-import {Indication} from "./Indication";
-import {ObjectViewModal} from "./ObjectViewModal";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Dye } from "./Dye";
@@ -12,7 +9,6 @@ import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
 import { EyedropperSupport } from "./EyedropperSupport";
 import { CAB } from "./CAB";
-import { CopyPass } from "postprocessing";
 export class EyeDropper {
     private stateEnum = Object.freeze({
         Empty:"empty",

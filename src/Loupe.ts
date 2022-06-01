@@ -1,14 +1,5 @@
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
-import * as TWEEN from "@tweenjs/tween.js";
-import {Indication} from "./Indication";
-import {ObjectViewModal} from "./ObjectViewModal";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Dye } from "./Dye";
-import { TestTube } from "./TestTube";
-import { AlcoolBottle } from "./AlcoolBottle";
-import { transformMeshToGlass } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
 export class Loupe {
 
@@ -17,21 +8,20 @@ export class Loupe {
     private raycaster = new THREE.Raycaster();
     public object:THREE.Group
     private modelFileName: string = "magnifyingglass_sam_v-2.gltf";
-    private loader:GLTFLoader;
     private plane: THREE.Plane;
+    public isEnabled  = false 
     private intersects = new THREE.Vector3();
     private camera: THREE.Camera
     private cameraControler:OrbitControls
     constructor() {
-        this.loader = new GLTFLoader()
-       
+     
     }
     //true in initialarray stands for red otherwise blue
     init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,cameraControler:OrbitControls) {
         this.camera = camera
         this.cameraControler = cameraControler
         this.plane = plane
-        GlobalLoader.getInstance().getFBXLoaded("case", (object) => {
+        GlobalLoader.getInstance().getGLTFLoaded("loupe", (object) => {
             this.object = object
             this.object.scale.set(0.006, 0.006, 0.006)
             callback()
@@ -40,11 +30,12 @@ export class Loupe {
 
         window.addEventListener('mousedown', () => {
           
-
+            
             this.raycaster.setFromCamera( this.pointer, this.camera );
             console.log(this.object)
             const intersects = this.raycaster.intersectObjects(this.object.children);
-            if (intersects.length > 0 ){
+            if (intersects.length > 0){
+                GlobalLoader.getInstance().getCanvas().classList.add('active');
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
       
@@ -70,7 +61,7 @@ export class Loupe {
                 //console.log(this.pointer)
                 //console.log(this.object.scene.children[0].position)
                 // -0.4 is offset to grab on the 
-                this.object.position.set(this.intersects.x, this.intersects.y-0.07, this.intersects.z);
+                this.object.position.set(this.intersects.x, this.intersects.y-0.01, this.intersects.z);
                 
             }
         });

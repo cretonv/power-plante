@@ -1,0 +1,17 @@
+canvas {
+    &::after {
+      content: "";
+      height: 100vh;
+      width: 0;
+      background-color: #000;
+      transition: all 1s;
+      transform-origin: right;
+    }
+    &.active {
+      &::after {
+        width: 100vw;
+        transition: all 1s;
+        transform-origin: left;
+      }
+    }
+  }
