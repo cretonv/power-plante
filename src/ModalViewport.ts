@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import { GlobalLoader } from "./GlobalLoader";
 
@@ -20,15 +19,20 @@ export class ModalViewport {
         this.isVisible = false
     }
 
-    init(callback:Function ,filePath: String, htmlDescElement: HTMLDivElement, canvas: HTMLDivElement, renderer:THREE.WebGLRenderer) {
+    init(
+        callback:Function,
+        htmlDescElement: HTMLDivElement,
+        renderer:THREE.WebGLRenderer,
+        onModalBtnClick: Function,
+    ) {
 
         this.htmlDescriptionElement = htmlDescElement
 
         // Scenes
         this.rtScene = new THREE.Scene()
         this.rtRenderer = renderer
-        
-        //removed the renderer 
+
+        //removed the renderer
 
         // Renderer
         // this.rtRenderer = new THREE.WebGLRenderer({
@@ -76,12 +80,15 @@ export class ModalViewport {
             this.rtCameraLight.lookAt(this.object.position)
             this.rtWarmLight.lookAt(this.object.position)
             this.rtColdLight.target = this.object
+            this.htmlDescriptionElement.querySelector('a').addEventListener('click', () => {
+                onModalBtnClick()
+            })
             callback()
         })
         // this.loader.load(
         //     filePath,
         //     (gltf) => {
-               
+
         //     },
         //     (xhr) => {
         //         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
