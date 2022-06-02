@@ -317,6 +317,8 @@ export class Case {
                                         this.controls.maxAzimuthAngle = Infinity;
                                         this.indications.points[3].element.classList.remove('destroyed')
                                         this.mascot.makeVisible()
+                                        this.mascot.changeActiveQuote(0)
+
                                     }
                                 })
                                 .start();
