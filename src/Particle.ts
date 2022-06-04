@@ -30,7 +30,7 @@ export class Particle {
            this.object.children[0].position.set(0.0,0.0,0)
            this.object.position.set(0.0,0.0,5)
            callback()
-           console.log(this.object)
+           //console.log(this.object)
         })
         
 

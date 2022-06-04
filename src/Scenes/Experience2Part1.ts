@@ -63,6 +63,10 @@ export class Experience2Part1 extends ActivityScene {
         /**
          * Composer
          */
+        const parameters = { format: THREE.RGBAFormat };
+
+        const renderTarget = new THREE.WebGLRenderTarget( GlobalLoader.getInstance().getSizes().width,  GlobalLoader.getInstance().getSizes().height, parameters );
+         
         this.composer = new EffectComposer(this.renderer);
 
         /**
@@ -112,20 +116,22 @@ export class Experience2Part1 extends ActivityScene {
             this.scene.add(eyeDropperSupport.object)
         }, camera, controls)
 
-        // Init pipette
-        const eyeDropperElement = new EyeDropper()
-        eyeDropperElement.init(() => {
-            this.scene.add(eyeDropperElement.object)
-        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, testtubeElement, controls, eyeDropperSupport,cab)
-
-
 
         const loupe = new Loupe()
         loupe.init(() => {
             // loupe.object.position.set(0.7, 0.0, 0)
             loupe.object.rotation.set(Math.PI/2*0.80, 0, 0) 
             this.scene.add(loupe.object)
-        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls)
+        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls,cab.object.getObjectByName("GLASS_dome"))
+        // Init pipette
+        const eyeDropperElement = new EyeDropper()
+        eyeDropperElement.init(() => {
+            this.scene.add(eyeDropperElement.object)
+        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, testtubeElement, controls, eyeDropperSupport,cab,loupe)
+
+
+
+      
         
         GlobalLoader.getInstance().getGLTFLoaded('decor',(object)=>{
             object.scale.set(0.005,0.005,0.005)
@@ -178,7 +184,8 @@ export class Experience2Part1 extends ActivityScene {
 		//this.effect = outlineEffect;
         //this.composer.addPass(new EffectPass(this.camera,this.outlineEffect));
         //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
-        this.composer.addPass(new RenderPass(this.scene, this.camera));
+        const renderPass = new RenderPass(this.scene, this.camera)
+        this.composer.addPass(renderPass);
         this.composer.addPass(this.outlinePass);
         
 
@@ -230,6 +237,7 @@ export class Experience2Part1 extends ActivityScene {
     }
 
     destroy() {
+        //this.composer.removePass(this.outlinePass)
 
     }
 }

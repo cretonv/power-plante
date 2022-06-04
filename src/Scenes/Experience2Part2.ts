@@ -29,6 +29,7 @@ export class Experience2Part2 extends ActivityScene {
     private ParticleArray : Array<Particle> =[]
     private outlineEffect:OutlineEffect
     private composer:EffectComposer
+    private camGroup: THREE.Object3D
     //private selectedObject:Array<THREE.Object3D> = []
     private outlinePass:EffectPass
     private step:number
@@ -40,11 +41,12 @@ export class Experience2Part2 extends ActivityScene {
 
     constructor() {
         super()
-
-
+        
     }
 
     init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
+        console.log("nouvellescene")
+        this.controls =controls
         let is_intersecting = false
         let display_cube = true
         this.clock = clock
@@ -57,11 +59,11 @@ export class Experience2Part2 extends ActivityScene {
             transparent: true,
             opacity: 0.1
         });
-        var fadePlane = new THREE.PlaneBufferGeometry(1, 1);
+        var fadePlane = new THREE.PlaneBufferGeometry(100, 100);
         var fadeMesh = new THREE.Mesh(fadePlane, fadeMaterial);
 
         // Create Object3D to hold camera and transparent plane
-        var camGroup = new THREE.Object3D();
+        this.camGroup = new THREE.Object3D();
         const sizes = {
             width: 800,
             height: 600
@@ -69,18 +71,19 @@ export class Experience2Part2 extends ActivityScene {
          
             document.body.appendChild(this.renderer.domElement);
         
+
         this.camera =  camera
-        camGroup.add(this.camera);
-        camGroup.add(fadeMesh);
+        this.camGroup.add(this.camera);
+        this.camGroup.add(fadeMesh);
 
         // Put plane in front of camera
-        fadeMesh.position.z = -0.1;
+        fadeMesh.position.z = -9.1;
 
         // Make plane render before particles
         fadeMesh.renderOrder = -1;
 
         // Add camGroup to scene
-        this.scene.add(camGroup);
+        this.scene.add(this.camGroup);
 
         let targets: {[name: string]: THREE.Object3D} = {}
 
@@ -105,14 +108,12 @@ export class Experience2Part2 extends ActivityScene {
         this.uranium.init(()=>{
             this.scene.add(this.uranium.object)
             this.uranium.object.position.set(0.0,0.0,-5.0)
-            //console.log(this.uranium.object.children[0].material)
+
             this.uranium.object.children[0].material = new THREE.MeshStandardMaterial();
             this.uranium.object.children[0].material.color = new THREE.Color(0.293333333333334,1.0,0.15999999999999998)
                 this.uranium.object.children[0].material.roughnessFactor = 0.5
                 this.uranium.object.children[0].material.emissiveFactor = new THREE.Color(0.4179999999999997,1.0,0.030000000000000028)
 
-
-            //console.log(this.uranium.object.children[0].material)
 
         },this.clock)
 
@@ -129,11 +130,12 @@ export class Experience2Part2 extends ActivityScene {
            const light3 = new THREE.SpotLight(0xffffff, 0.4)
            light3.position.set(-0.8, -1, 4.0)
            this.scene.add(light3)
-           this.scene.add(new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), 1, 0xffff00));
+           //this.scene.add(new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), 1, 0xffff00));
            // Animate
            this.createParticle()
 
            window.addEventListener('mousedown', () => {
+             
 
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.ParticleArray.map(x=>x.object));
@@ -163,7 +165,7 @@ export class Experience2Part2 extends ActivityScene {
         // window.addEventListener('mouseup', () => {
         //     this.isMouseDownOnModel =false
         //     this.cameraControler.enabled = true
-        // })
+        // 
 
         window.addEventListener( 'pointermove', (e) => {
             // calculate pointer position in normalized device coordinates
@@ -178,12 +180,16 @@ export class Experience2Part2 extends ActivityScene {
 
     
     setup(){
+        this.camGroup.position.set(0,0,0)
+        this.camera.position.set(0,0,0)
+        this.controls.enabled = true
+        
         //this.renderer.resetState()
         this.renderer.setClearColor(new THREE.Color( 0x00000 ),1.0)
         //this.renderer.preserveDrawingBuffer = true;
-        this.renderer.setClearAlpha(0.0)
+       // this.renderer.setClearAlpha(0.0)
         //this.renderer.autoClearDepth = false;
-        this.renderer.autoClearColor = false;
+        //this.renderer.autoClearColor = false;
       
     }
 
@@ -205,7 +211,7 @@ export class Experience2Part2 extends ActivityScene {
 
         // Render
         this.render()
-
+        //console.log(this.renderer)
 
     }
 
@@ -213,6 +219,9 @@ export class Experience2Part2 extends ActivityScene {
         //console.log("onélà")
         //this.testtubeElement.anim(tick)
         //console.log(this.renderer)
+        this.renderer.clear()
+
+        this.controls.update()
         this.renderer.render(this.scene, this.camera)
        
        //this.composer.render();
@@ -235,7 +244,7 @@ export class Experience2Part2 extends ActivityScene {
         particle.init(()=>{
             particle.object.position.set(0.0,0.0,-12.0)
             var r = Math.floor(Math.random() * 3);
-            console.log( particle.object)
+            // console.log( particle.object)
             switch(r) {
                 case 0:
                     particle.object.children[0].material = this.particleColor1

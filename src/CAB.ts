@@ -70,6 +70,8 @@ export class CAB {
             // )
             //this.activeAction = animationAction
             object.traverse((child) => {
+            //console.log(child)
+
                 if (child instanceof THREE.Mesh) {
                     //console.log(child)
                     if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {

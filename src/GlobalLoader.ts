@@ -67,8 +67,15 @@ export var GlobalLoader = (function () {
       sceneId = nextSceneId
       nextSceneId="none";
       transitionRequested = false
+      // renderer = new THREE.WebGLRenderer({
+      //   canvas: canvas,
+      //   //powerPreference: "high-performance",
+      //     antialias: true,
+      //     //stencil: false,
+      //     preserveDrawingBuffer: true
+      // })
+      instance.getCurrentScene().setup()
       this.destroyScene(oldSceneId)
-
     }
 
     this.getCurrentBackground = function () {
@@ -105,6 +112,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
+  //var sceneId = exp2Part2Name;
   var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
@@ -238,6 +246,7 @@ export var GlobalLoader = (function () {
           canvas: canvas,
           //powerPreference: "high-performance",
             antialias: true,
+            outputEncoding: THREE.RGBAFormat,
             //stencil: false,
             preserveDrawingBuffer: true
         })

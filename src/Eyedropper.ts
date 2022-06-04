@@ -9,6 +9,7 @@ import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
 import { EyedropperSupport } from "./EyedropperSupport";
 import { CAB } from "./CAB";
+import { Loupe } from "./Loupe";
 export class EyeDropper {
     private stateEnum = Object.freeze({
         Empty:"empty",
@@ -22,8 +23,6 @@ export class EyeDropper {
     private pointer  = new THREE.Vector2();
     private raycaster = new THREE.Raycaster();
     public object:THREE.Group
-    private modelFileName = 'eyedropper_animation_sam_v-2.fbx';
-    private loader:GLTFLoader;
     private plane: THREE.Plane;
     private intersects = new THREE.Vector3();
     private camera: THREE.Camera
@@ -36,13 +35,14 @@ export class EyeDropper {
     private cameraControler:OrbitControls
     private support:EyedropperSupport
     private cab:CAB
+    private loupe:Loupe 
     private isPart3 =false
     constructor() {
-        this.loader = new FBXLoader()
+       
        
     }
 
-    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls,support:EyedropperSupport,cab:CAB) {
+    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls,support:EyedropperSupport,cab:CAB,loupe:Loupe) {
         this.camera = camera
         this.cameraControler = cameraControler
         this.plane = plane
@@ -51,6 +51,7 @@ export class EyeDropper {
         this.tubeObject = tubeObject
         this.support = support
         this.cab = cab 
+        this.loupe = loupe
 
     
        
@@ -134,7 +135,7 @@ export class EyeDropper {
             console.log("onéla")
             if(intersectsDownTube.length > 0  && this.tubeObject.object.position.distanceTo(this.object.position)<0.12){
                 if (this.isPart3){
-                    console.log("onéla")
+                    //console.log("onéla")
                     this.state = this.stateEnum.Violet
                     this.tubeObject.removeAllContent()
                     this.colorContent(new THREE.MeshBasicMaterial({color: 0x880088}))
@@ -142,12 +143,18 @@ export class EyeDropper {
                 else{
                     switch ( this.state) {
                         case this.stateEnum.RedDye:
-                            this.tubeObject.addRed(()=>this.isPart3 = true)
+                            this.tubeObject.addRed(()=>{ 
+                                this.isPart3 = true
+                                this.loupe.isEnabled = true 
+                            })
                             this.removeAllContent()
     
                             break
                         case this.stateEnum.Alcool:
-                            this.tubeObject.addAlcool(()=>this.isPart3 = true)
+                            this.tubeObject.addAlcool(()=>{ 
+                                this.isPart3 = true
+                                this.loupe.isEnabled = true 
+                            })
                             this.removeAllContent()
                             break
     
