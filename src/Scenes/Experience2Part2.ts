@@ -183,7 +183,7 @@ export class Experience2Part2 extends ActivityScene {
         this.camGroup.position.set(0,0,0)
         this.camera.position.set(0,0,0)
         this.controls.enabled = true
-        
+        document.querySelector('body').classList.remove('active');
         //this.renderer.resetState()
         this.renderer.setClearColor(new THREE.Color( 0x00000 ),1.0)
         //this.renderer.preserveDrawingBuffer = true;

@@ -55,8 +55,10 @@ export class Dye {
                     }
                     else if (child.name.includes("L")) {
                         this.liquidSample.push(child)
-                        child.material = new THREE.MeshBasicMaterial( {color: 0x880000} )
+                        child.material = new THREE.MeshBasicMaterial( {color: 0x880000,side:THREE.DoubleSide,polygonOffset :true,polygonOffsetFactor:-0.1} )
                         child.visible = true
+                          
+                        
                     }
                     else if (child.name.includes("bouchon")) {
                         

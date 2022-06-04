@@ -10,11 +10,11 @@ const defaultGlassParams = {
     roughness: 0.1,
     ior: 0.9,
     thickness: 0.9,
-    specularIntensity: 1,
+    specularIntensity: 0.9,
     specularColor: 0xff00ff,
-    envMapIntensity: 1,
-    lightIntensity: 1,
-    exposure: 1,
+    envMapIntensity: 0.9,
+    lightIntensity: 0.9,
+    exposure: 0.9,
     transparent: true
 };
 
@@ -80,7 +80,7 @@ export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string
         specularIntensity: defaultGlassParams.specularIntensity,
         specularColor: defaultGlassParams.specularColor,
         opacity: defaultGlassParams.opacity,
-        side: THREE.DoubleSide,
+        side: THREE.FrontSide,
         transparent: true
     } );
     meshToGlassify.material = material
@@ -116,7 +116,7 @@ export function transformMeshToPlastic( meshToGlassify: THREE.Mesh,hdrPath: stri
         specularIntensity: pipetteGlassParams.specularIntensity,
         specularColor: pipetteGlassParams.specularColor,
         opacity: pipetteGlassParams.opacity,
-        side: THREE.DoubleSide,
+        side: THREE.FrontSide,
         transparent: true
     } );
     meshToGlassify.material = material
@@ -153,7 +153,7 @@ export function transformMeshToLed( meshToGlassify: THREE.Mesh,hdrPath: string){
         specularIntensity: ledGlassParams.specularIntensity,
         specularColor: ledGlassParams.specularColor,
         opacity: ledGlassParams.opacity,
-        side: THREE.DoubleSide,
+        side: THREE.FrontSide,
         transparent: true
     } );
     meshToGlassify.material = material

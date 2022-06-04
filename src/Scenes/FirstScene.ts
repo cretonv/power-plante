@@ -15,7 +15,7 @@ import {
     KawaseBlurPass
 } from "postprocessing";
 import {Mascot} from "../Mascot";
-import { GlobalLoader } from "../GlobalLoader";
+import { exp2Part1Name, GlobalLoader } from "../GlobalLoader";
 import { ActivityScene } from "./ActivityScene";
 
 export class FirstScene extends ActivityScene {
@@ -167,7 +167,14 @@ export class FirstScene extends ActivityScene {
         },
             document.querySelector('.dye-desc'),
             this.renderer,
-            () => {console.log("Emmène moi à l'exp1")}
+            () => {
+                document.querySelector('body').classList.add('active');
+                //TODO change to exp1 
+                GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                setTimeout(() => { 
+                    this.controls.target.set(0,0,0)
+                    GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
+            }
         )
 
         // Init ModalViewport
@@ -191,7 +198,15 @@ export class FirstScene extends ActivityScene {
         },
             document.querySelector('.cab-desc'),
             this.renderer,
-            () => {console.log("Emmène moi à l'exp2")}
+            () => {
+                document.querySelector('body').classList.add('active');
+                //TODO change to exp1 
+                GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                setTimeout(() => { 
+                    this.controls.target.set(0,0,0)
+                    GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
+
+            }
         )
 
         // Init mascot
@@ -351,6 +366,10 @@ export class FirstScene extends ActivityScene {
     }
 
     destroy() {
+        this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
+        this.case.destroy()
+        this.modalExp1Viewport.closeHtml()
+        this.modalExp2Viewport.closeHtml()
 
     }
 }

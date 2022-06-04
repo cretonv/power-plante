@@ -113,7 +113,7 @@ export var GlobalLoader = (function () {
 
   // variables for scene state management
   //var sceneId = exp2Part2Name;
-  var sceneId = exp2Part1Name;
+  var sceneId = landingName;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -248,7 +248,8 @@ export var GlobalLoader = (function () {
             antialias: true,
             outputEncoding: THREE.RGBAFormat,
             //stencil: false,
-            preserveDrawingBuffer: true
+            preserveDrawingBuffer: true,
+            logarithmicDepthBuffer: true
         })
       
         renderer.setSize(sizes.width, sizes.height)

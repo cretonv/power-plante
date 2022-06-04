@@ -9,7 +9,6 @@ import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
 import { EyedropperSupport } from "./EyedropperSupport";
 import { CAB } from "./CAB";
-import { Loupe } from "./Loupe";
 export class EyeDropper {
     private stateEnum = Object.freeze({
         Empty:"empty",
@@ -35,64 +34,20 @@ export class EyeDropper {
     private cameraControler:OrbitControls
     private support:EyedropperSupport
     private cab:CAB
-    private loupe:Loupe 
     private isPart3 =false
+
+    private buttonMouseClickEvent:Function
+    private clickHandler
+    private buttonMouseReleaseEvent:Function
+    private clickReleaseHandler
+    private mouseMoveEvent:Function
+    private moveHandler
+
     constructor() {
-       
-       
-    }
 
-    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls,support:EyedropperSupport,cab:CAB,loupe:Loupe) {
-        this.camera = camera
-        this.cameraControler = cameraControler
-        this.plane = plane
-        this.alcoolBottle = alcoolBottle
-        this.redDyeObject = redDyeObject
-        this.tubeObject = tubeObject
-        this.support = support
-        this.cab = cab 
-        this.loupe = loupe
-
-    
-       
-        GlobalLoader.getInstance().getFBXLoaded("eyedropper", (object) => {
-  
-            this.object = object
-            this.mixer = new THREE.AnimationMixer(object)
-
-            // const animationAction = this.mixer.clipAction(
-            //     (object as THREE.Object3D).animations[0]
-            // )
-            //this.activeAction = animationAction
-            object.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                    //console.log(child)
-                    if (child.name == "Pipette") {
-                        transformMeshToPlastic(child, 'test.hdr')
-                    }
-                    else if (child.name.includes("L")) {
-                        //this.liquidSample.push(child)
-                        child.visible = false
-                    }
-                    else if (child.name.includes("bouchon")) {
-                        
-                        child.visible = false
-
-                    }
-                
-                }
-            })
-
-            object.scale.set(0.01, 0.01, 0.01)
-
-            object.position.set(0.2, 0.0, 0)
-            
-            callback()
-        })
-
-        window.addEventListener('mousedown', () => {
-
-            console.log(            this.object.position.distanceTo(this.support.object.position)           )
+         //mousedowxn
+         this.buttonMouseClickEvent = () => {
+            console.log( this.object.position.distanceTo(this.support.object.position)           )
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object);
             if(intersectsDownRed.length > 0 && this.redDyeObject.capacity>0 && this.state == this.stateEnum.Empty ){
@@ -132,9 +87,9 @@ export class EyeDropper {
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownTube = this.raycaster.intersectObject(this.tubeObject.object);
             console.log(intersectsDownTube)
-            console.log("onéla")
+           
             if(intersectsDownTube.length > 0  && this.tubeObject.object.position.distanceTo(this.object.position)<0.12){
-                if (this.isPart3){
+                if (this.isPart3 && this.tubeObject.shakeEnded){
                     //console.log("onéla")
                     this.state = this.stateEnum.Violet
                     this.tubeObject.removeAllContent()
@@ -145,7 +100,6 @@ export class EyeDropper {
                         case this.stateEnum.RedDye:
                             this.tubeObject.addRed(()=>{ 
                                 this.isPart3 = true
-                                this.loupe.isEnabled = true 
                             })
                             this.removeAllContent()
     
@@ -153,7 +107,6 @@ export class EyeDropper {
                         case this.stateEnum.Alcool:
                             this.tubeObject.addAlcool(()=>{ 
                                 this.isPart3 = true
-                                this.loupe.isEnabled = true 
                             })
                             this.removeAllContent()
                             break
@@ -173,9 +126,10 @@ export class EyeDropper {
                 this.tubeObject.isEnabled = false
       
             }
-        })
-
-        window.addEventListener('mouseup', () => {
+     
+        }
+        //mouseup
+        this.buttonMouseReleaseEvent = () => {
             this.isMouseDownOnModel =false
             this.cameraControler.enabled = true
 
@@ -190,10 +144,11 @@ export class EyeDropper {
                 this.tubeObject.isEnabled=true
 
             }
-        })
 
-        window.addEventListener( 'pointermove', (e) => {
-            // calculate pointer position in normalized device coordinates
+        }
+        //pointermove 
+        this.mouseMoveEvent = (e) => {
+                        // calculate pointer position in normalized device coordinates
             // (-1 to +1) for both components
             //console.log(this.camera)
             this.pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
@@ -211,7 +166,64 @@ export class EyeDropper {
                 }
 
             }
-        });
+          
+        }
+       
+       
+    }
+
+    init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls,support:EyedropperSupport,cab:CAB,) {
+        this.camera = camera
+        this.cameraControler = cameraControler
+        this.plane = plane
+        this.alcoolBottle = alcoolBottle
+        this.redDyeObject = redDyeObject
+        this.tubeObject = tubeObject
+        this.support = support
+        this.cab = cab 
+    
+       
+        GlobalLoader.getInstance().getFBXLoaded("eyedropper", (object) => {
+  
+            this.object = object
+            this.mixer = new THREE.AnimationMixer(object)
+
+            // const animationAction = this.mixer.clipAction(
+            //     (object as THREE.Object3D).animations[0]
+            // )
+            //this.activeAction = animationAction
+            object.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    //console.log(child)
+                    if (child.name == "Pipette") {
+                        transformMeshToPlastic(child, 'test.hdr')
+                    }
+                    else if (child.name.includes("L")) {
+                        //this.liquidSample.push(child)
+                        child.visible = false
+                    }
+                    else if (child.name.includes("bouchon")) {
+                        
+                        child.visible = false
+
+                    }
+                
+                }
+            })
+
+            object.scale.set(0.01, 0.01, 0.01)
+
+            object.position.set(0.2, 0.0, 0)
+            
+            callback()
+        })
+
+        this.clickHandler = this.buttonMouseClickEvent.bind(this);
+        window.addEventListener('mousedown', this.clickHandler)
+        this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
+        window.addEventListener('mouseup', this.clickReleaseHandler)
+        this.moveHandler = this.mouseMoveEvent.bind(this);
+        window.addEventListener( 'pointermove',this.moveHandler);
     }
 
 
@@ -251,6 +263,9 @@ export class EyeDropper {
     }
 
     destroy() {
+        window.removeEventListener('mousedown', this.clickHandler)
+        window.removeEventListener( 'pointermove',this.moveHandler)
+        window.removeEventListener('mouseup', this.clickReleaseHandler)
 
     }
 }
