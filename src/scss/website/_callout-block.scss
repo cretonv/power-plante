@@ -1,0 +1,83 @@
+.callout-block {
+  background-color: #09130B;
+  padding-top: 72px;
+  padding-bottom: 56px;
+  position: relative;
+  .on-title {
+    color: #FEFEFE;
+    font-family: $primary-fonts;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 22px;
+    text-align: center;
+    width: fit-content;
+    margin: 0 auto;
+  }
+  .title {
+    color: $color-1;
+    font-family: $secondary-fonts;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 38px;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    width: fit-content;
+    margin: 32px auto 48px;
+    img {
+      position: absolute;
+      width: 35px;
+      height: auto;
+      left: -40px;
+      top: -15px;
+    }
+    span {
+      text-transform: none;
+      font-size: 28px;
+    }
+  }
+  .logos {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: fit-content;
+    margin: 0 auto;
+    svg {
+      height: 32px;
+      width: 32px;
+    }
+    img {
+      height: 48px;
+      width: auto;
+      &.logo-tiktok {
+        height: 47px;
+      }
+    }
+  }
+  .rock {
+    position: absolute;
+    width: auto;
+    &.rock-1 {
+      top: 0;
+      height: 240px;
+      transform: translateY(-30%) translateX(-30%);
+    }
+    &.rock-2 {
+      bottom: 24px;
+      left: 8%;
+      height: 120px;
+    }
+    &.rock-3 {
+      bottom: 0;
+      right: 0;
+      height: 260px;
+      transform: translateY(30%) translateX(30%);
+    }
+    &.rock-4 {
+      top: 96px;
+      right: 18%;
+      height: 72px;
+    }
+  }
+}
