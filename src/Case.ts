@@ -95,15 +95,13 @@ export class Case {
 
         // bug
         this.buttonMouseClickEvent1 = (e) => {
-            console.log("event1")
             e.preventDefault()
             this.mouseDown = true
         }
-        this.buttonMouseClickEvent2 = (e) => {
-            console.log("event1")
-            e.preventDefault()
-            this.mouseDown = true
+        this.buttonMouseClickEvent2 = () => {
             if (!this.animEnded) {
+                console.log("onéiciaussi")
+                
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 const regex = /case_/g
@@ -124,7 +122,7 @@ export class Case {
                             )
                             .onComplete(() => {
                                 this.hasBeenOpened = true
-                                if ((!this.modalExp1Open && !this.modalExp2Open)) {
+                                if ((!this.modalExp1Open && !this.modalExp2Open) && !this.animEnded) {
                                     this.controls.enabled = true
                                     this.controls.minPolarAngle = this.controls.getPolarAngle();
                                     this.controls.maxPolarAngle = this.controls.getPolarAngle();
@@ -132,6 +130,10 @@ export class Case {
                                     this.controls.maxAzimuthAngle = Infinity;
                                     this.indications.points[3].element.classList.remove('destroyed')
                                     this.mascot.makeVisible()
+                                    this.animEnded = true
+                                    console.log('onéla')
+                                    this.mascot.changeActiveQuote(0)
+
                                 }
                             })
                             .start();
@@ -141,7 +143,6 @@ export class Case {
             }
         }
         this.buttonMouseClickEvent3 = (e) => {
-            console.log("event1")
             e.preventDefault()
             this.mouseDown = true
             switch (this.selectedStatus) {
@@ -176,13 +177,11 @@ export class Case {
         }
         // bug
         this.buttonMouseReleaseEvent = (e) => {
-            console.log("event1")
             e.preventDefault()
             this.mouseDown = false
         }
         // bug
         this.mouseMoveEvent = (event) => {
-            console.log("event1")
             if (!this.blockLoop) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
@@ -218,7 +217,6 @@ export class Case {
             }
         }
         this.buttonMouseClickEventDocument = () => {
-            console.log("event1")
             if (this.modelReady && !this.blockLoop) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
@@ -255,7 +253,6 @@ export class Case {
             }
         }
         this.mouseMoveEventDocument = (e) => {
-            console.log("event1")
             // calculate pointer position in normalized device coordinates
             // (-1 to +1) for both components
             const width = document.querySelector('#webgl')?.clientWidth
@@ -414,7 +411,6 @@ export class Case {
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('pointermove', this.moveHandler);
 
         }
-
     }
 
     triggerFinalAnimation() {
