@@ -100,8 +100,6 @@ export class Case {
         }
         this.buttonMouseClickEvent2 = () => {
             if (!this.animEnded) {
-                console.log("onéiciaussi")
-                
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
                 const regex = /case_/g
@@ -131,7 +129,6 @@ export class Case {
                                     this.indications.points[3].element.classList.remove('destroyed')
                                     this.mascot.makeVisible()
                                     this.animEnded = true
-                                    console.log('onéla')
                                     this.mascot.changeActiveQuote(0)
 
                                 }
