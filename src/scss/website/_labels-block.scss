@@ -1,0 +1,24 @@
+.labels-block {
+  padding-top: 64px;
+  padding-bottom: 96px;
+  > .title {
+    img {
+      height: 75px;
+      width: auto;
+      position: absolute;
+      left: 55%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  .content {
+    display: flex;
+    width: fit-content;
+    margin: 0 auto;
+    gap: 40px;
+    img {
+      height: 120px;
+      width: auto;
+    }
+  }
+}

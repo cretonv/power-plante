@@ -1,6 +1,5 @@
 .slider-block {
   >.title {
-    position: relative;
     img {
       position: absolute;
       width: 25%;
@@ -9,18 +8,6 @@
       top: 50%;
       transform: translateX(-50%) translateY(-50%);
       z-index: 0;
-    }
-    h2 {
-      position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-      font-family: $primary-fonts;
-      font-weight: 700;
-      font-size: 32px;
-      line-height: 77px;
-      text-align: center;
-      color: #09130B;
-      margin-bottom: 32px;
     }
   }
   .swiper {
