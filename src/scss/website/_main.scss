@@ -7,11 +7,20 @@
 @import "labels-block";
 @import "callout-block";
 @import "cta-block";
+@import "footer";
 
 body.website {
   background-color: #F5F4F0;
   margin: 0;
   overflow: hidden;
+}
+html.has-scroll-smooth {
+  overflow: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 .btn.default {
   padding: 15px 17px;

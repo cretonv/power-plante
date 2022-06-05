@@ -4,6 +4,7 @@
   padding-bottom: 56px;
   position: relative;
   z-index: 2;
+  opacity: 1 !important;
   .on-title {
     color: #FEFEFE;
     font-family: $primary-fonts;
@@ -60,9 +61,9 @@
     position: absolute;
     width: auto;
     &.rock-1 {
-      top: 0;
+      top: -75px;
+      left: -85px;
       height: 240px;
-      transform: translateY(-30%) translateX(-30%);
     }
     &.rock-2 {
       bottom: 24px;
@@ -70,10 +71,9 @@
       height: 120px;
     }
     &.rock-3 {
-      bottom: 0;
-      right: 0;
+      bottom: -78px;
+      right: -114px;
       height: 260px;
-      transform: translateY(30%) translateX(30%);
     }
     &.rock-4 {
       top: 96px;

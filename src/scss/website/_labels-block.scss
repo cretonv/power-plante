@@ -7,8 +7,7 @@
       width: auto;
       position: absolute;
       left: 55%;
-      top: 50%;
-      transform: translateY(-50%);
+      top: calc(50% - 37.5px);
     }
   }
   .content {

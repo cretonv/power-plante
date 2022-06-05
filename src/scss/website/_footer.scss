@@ -1,0 +1,24 @@
+footer {
+  height: 80px;
+  background-color: #09130B;
+  padding-left: 40px;
+  padding-right: 40px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  .logo-footer {
+    height: 50px;
+    width: auto;
+  }
+  .quote {
+    font-family: $secondary-fonts;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 17px;
+    color: #636363;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
