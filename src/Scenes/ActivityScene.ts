@@ -6,4 +6,5 @@ export class ActivityScene {
     anim(tick) {}
     //setup function will be used to put parameters in orbitcontrols and main camera 
     setup(){}
+    reloadSelectedLayer(){}
 }

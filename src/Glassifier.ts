@@ -49,6 +49,25 @@ const ledGlassParams = {
     exposure: 1,
     transparent: true
 };
+
+const ledLightGlassParams = {
+    color: 0x00dd00,
+    transmission: 0.6,
+    opacity: 1.0,
+    metalness: 0,
+    emissive: 0x00ff00,
+    emissiveIntensity:1,
+    roughness: 0.8,
+    ior: 1.0,
+    thickness: 1,
+    specularIntensity: 1,
+    specularColor: 0xff00ff,
+    envMapIntensity: 1,
+    lightIntensity: 1,
+    exposure: 1,
+    transparent: true
+};
+
 export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string){
     //console.log(meshToGlassify)
     let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
@@ -159,6 +178,46 @@ export function transformMeshToLed( meshToGlassify: THREE.Mesh,hdrPath: string){
     meshToGlassify.material = material
 
 }
+
+
+export function transformMeshToLedLight( meshToGlassify: THREE.Mesh,hdrPath: string){
+    //console.log(meshToGlassify)
+    let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
+	if ( hdrEquirect == null){
+         hdrEquirect = new RGBELoader()
+        .setPath( 'assets/textures/' )
+        .load( hdrPath, function () {
+
+            hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+           
+        } );
+	}
+    const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
+				texture.magFilter = THREE.NearestFilter;
+				texture.wrapT = THREE.RepeatWrapping;
+				texture.wrapS = THREE.RepeatWrapping;
+				texture.repeat.set( 1, 3.5 );
+    const material = new THREE.MeshPhysicalMaterial( {
+        color: ledLightGlassParams.color,
+        metalness: ledLightGlassParams.metalness,
+        roughness: ledLightGlassParams.roughness,
+        ior: ledLightGlassParams.ior,
+        alphaMap: texture,
+        envMap: hdrEquirect,
+        envMapIntensity: ledLightGlassParams.envMapIntensity,
+        transmission: ledLightGlassParams.transmission, // use material.transmission for glass materials
+        specularIntensity: ledLightGlassParams.specularIntensity,
+        specularColor: ledLightGlassParams.specularColor,
+        emissive:ledLightGlassParams.emissive,
+        emissiveIntensity:ledLightGlassParams.emissiveIntensity,
+        opacity: ledLightGlassParams.opacity,
+        side: THREE.FrontSide,
+        transparent: true
+    } );
+    meshToGlassify.material = material
+
+}
+
 
 
 function generateTextureForGlassTexture() {

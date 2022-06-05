@@ -6,7 +6,7 @@ export class ModalViewport {
     public object: THREE.Group
     public htmlDescriptionElement: HTMLDivElement
     public isVisible: boolean
-    private rtScene: THREE.Scene
+    public rtScene: THREE.Scene
     private rtCamera: THREE.Camera
     private rtCameraLight: THREE.DirectionalLight
     private rtWarmLight: THREE.DirectionalLight
@@ -24,6 +24,7 @@ export class ModalViewport {
         htmlDescElement: HTMLDivElement,
         renderer:THREE.WebGLRenderer,
         onModalBtnClick: Function,
+        gltfName:string
     ) {
 
         this.htmlDescriptionElement = htmlDescElement
@@ -72,11 +73,10 @@ export class ModalViewport {
         this.rtCamera.add(this.rtColdLight)
 
         // GLTF
-        GlobalLoader.getInstance().getGLTFLoaded("cab", (object) => {
+        GlobalLoader.getInstance().getGLTFLoaded(gltfName, (object) => {
+            console.log(object)
             this.object = object
             this.object.scale.set(0.05, 0.05, 0.05)
-            this.object.position.set(0, -0.5, 0)
-            this.rtScene.add(this.object)
             this.rtCameraLight.lookAt(this.object.position)
             this.rtWarmLight.lookAt(this.object.position)
             this.rtColdLight.target = this.object
