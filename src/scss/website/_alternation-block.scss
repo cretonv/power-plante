@@ -5,9 +5,11 @@
     width: 40%;
     position: relative;
     .case-model {
-      width: 100%;
+      width: 110%;
       height: auto;
-      transform: scale(1.1) translateX(-13%) translateY(-5%);
+      position: relative;
+      left: -18%;
+      top: -13%;
     }
     .back-fili {
       position: absolute;

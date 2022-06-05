@@ -68,15 +68,8 @@ export var GlobalLoader = (function () {
       sceneId = nextSceneId
       nextSceneId="none";
       transitionRequested = false
-      // renderer = new THREE.WebGLRenderer({
-      //   canvas: canvas,
-      //   //powerPreference: "high-performance",
-      //     antialias: true,
-      //     //stencil: false,
-      //     preserveDrawingBuffer: true
-      // })
-      instance.getCurrentScene().setup()
       this.destroyScene(oldSceneId)
+
     }
 
     this.getCurrentBackground = function () {
@@ -122,8 +115,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  //var sceneId = exp2Part2Name;
-  var sceneId = exp1Name;
+  var sceneId = landingName;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -132,7 +124,7 @@ export var GlobalLoader = (function () {
 
   var landingScene: FirstScene = null
   var exp2Part1Scene: Experience2Part1 = null
-  //TODO Change Scene When this will be imported 
+  //TODO Change Scene When this will be imported
   var exp2Part2Scene: Experience2Part2 = null
   var exp1Scene: Experience1 = null
   var transitionRequested = false;
@@ -143,6 +135,7 @@ export var GlobalLoader = (function () {
   var canvas
   var sizes 
   var selectedObjects
+
 
 
   var backgroundtexture = null;
@@ -162,7 +155,7 @@ export var GlobalLoader = (function () {
         exp2Part2Scene = new Experience2Part2()
         exp1Scene = new Experience1()
 
-        //Load all fbx and gltf in an array 
+        //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-14.fbx", () => {
           numberLoaded += 1
           console.log("charger")
@@ -257,12 +250,10 @@ export var GlobalLoader = (function () {
           canvas: canvas,
           //powerPreference: "high-performance",
             antialias: true,
-            outputEncoding: THREE.RGBAFormat,
             //stencil: false,
-            preserveDrawingBuffer: true,
-            logarithmicDepthBuffer: true
+            preserveDrawingBuffer: true
         })
-      
+
         renderer.setSize(sizes.width, sizes.height)
 
         camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
@@ -281,7 +272,7 @@ export var GlobalLoader = (function () {
   }
 })();
 
-//TODO add a statick callback 
+//TODO add a statick callback
 function loadFBX(loader: FBXLoader, array: { string: THREE.Group }, name: string, modelFilePath: string, callback: Function) {
   loader.load(
     `/models/${modelFilePath}`,

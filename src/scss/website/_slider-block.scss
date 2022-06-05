@@ -16,6 +16,7 @@
     transform: translateX(5vw);
     overflow: visible;
     position: relative;
+    margin-top: 48px;
     .swiper-wrapper {
       .swiper-slide {
         height: 240px;
@@ -28,11 +29,16 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    position: relative;
     .title {
       color: #000000;
       font-family: $primary-fonts;
       font-size: 17px;
       line-height: 20px;
+    }
+    img {
+      width: 13vw;
+      height: 13vw;
     }
   }
   .button-next,
