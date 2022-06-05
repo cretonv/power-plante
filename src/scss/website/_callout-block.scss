@@ -3,6 +3,7 @@
   padding-top: 72px;
   padding-bottom: 56px;
   position: relative;
+  z-index: 2;
   .on-title {
     color: #FEFEFE;
     font-family: $primary-fonts;
@@ -15,7 +16,7 @@
   }
   .title {
     color: $color-1;
-    font-family: $secondary-fonts;
+    font-family: $primary-fonts;
     font-style: normal;
     font-weight: 700;
     font-size: 40px;

@@ -6,6 +6,7 @@
 @import "slider-block";
 @import "labels-block";
 @import "callout-block";
+@import "cta-block";
 
 body.website {
   background-color: #F5F4F0;
@@ -22,6 +23,71 @@ body.website {
   font-weight: 700;
   font-size: 16px;
 }
+.btn.custom {
+  position: relative;
+  width: 239.37px;
+  height: 79.44px;
+  color: #FFFFFF;
+  font-family: $primary-fonts;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  text-align: center;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    z-index: 3;
+    background-color: $color-2;
+    transition: all 0.3s;
+    background-clip: content-box;
+  }
+  .text {
+    position: relative;
+    z-index: 4;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+  }
+  &:hover {
+    svg {
+      transition: all 0.3s;
+      background-color: #F5F4F0;
+      path {
+        stroke: $color-2;
+      }
+    }
+    .text {
+      color: $color-2;
+    }
+  }
+}
 .block {
   > .title {
     position: relative;
@@ -32,7 +98,7 @@ body.website {
       font-family: $primary-fonts;
       font-weight: 700;
       font-size: 32px;
-      line-height: 77px;
+      line-height: 36px;
       text-align: center;
       color: #09130B;
       margin-bottom: 32px;
