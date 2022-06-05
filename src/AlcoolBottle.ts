@@ -62,21 +62,6 @@ export class AlcoolBottle {
             callback()
         })
 
-
-
-
-        // window.addEventListener('mousedown', () => {
-        //     //console.log("down")
-
-        //     this.raycaster.setFromCamera( this.pointer, this.camera );
-        //     const intersects = this.raycaster.intersectObjects(this.object);
-
-
-        //     //Trigger first anim( bottle oppenning here)
-
-        // })
-
-
     }
 
     //Reverse ( empty instead of fill)

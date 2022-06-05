@@ -5,8 +5,8 @@ import { Indication } from "./Indication";
 import { ModalViewport } from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
 import { Mascot } from "./Mascot";
-import { GlobalLoader,exp2Part1Name } from "./GlobalLoader";
-import {FirstScene} from "./Scenes/FirstScene";
+import { GlobalLoader, exp2Part1Name } from "./GlobalLoader";
+import { FirstScene } from "./Scenes/FirstScene";
 
 export class Case {
 
@@ -15,6 +15,8 @@ export class Case {
     public object: THREE.Group
 
     private clock: THREE.Clock
+
+    private camera: THREE.Camera
 
     private indications: Indication
 
@@ -60,6 +62,23 @@ export class Case {
     //status of hover
     private selectedStatus: string = "none"
 
+
+    //eventlisteners 
+    private buttonMouseClickEventDocument: Function
+    private clickHandlerDocument
+    private mouseMoveEventDocument: Function
+    private moveHandlerDocument
+
+    private buttonMouseClickEvent1: Function
+    private buttonMouseClickEvent2: Function
+    private buttonMouseClickEvent3: Function
+    private clickHandler
+    private buttonMouseReleaseEvent: Function
+    private clickReleaseHandler
+    private mouseMoveEvent: Function
+    private moveHandler
+    private isSecondAnimationDone = false
+
     constructor() {
         this.animationActions = []
         this.modelReady = false
@@ -73,6 +92,205 @@ export class Case {
         this.modalExp1Open = false
         this.modalExp2Open = false
         this.hasBeenOpened = false
+
+        // bug
+        this.buttonMouseClickEvent1 = (e) => {
+            e.preventDefault()
+            this.mouseDown = true
+        }
+        this.buttonMouseClickEvent2 = () => {
+            if (!this.animEnded) {
+                this.raycaster.setFromCamera(this.pointer, this.camera);
+                const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                const regex = /case_/g
+                for (let i = 0; i < intersects.length; i++) {
+                    if (regex.test(intersects[i].object.name) && (!this.modalExp1Open && !this.modalExp2Open)) {
+                        this.runLastAnim = true
+                        this.indications.points[2].element.classList.add('destroyed')
+                        const targetCoords = {
+                            x: 0,
+                            y: 0.8343677459755188,
+                            z: 0.49586116341112374
+                        }
+                        const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z };
+                        new TWEEN.Tween(coords)
+                            .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
+                            .onUpdate(() =>
+                                this.camera.position.set(coords.x, coords.y, coords.z)
+                            )
+                            .onComplete(() => {
+                                this.hasBeenOpened = true
+                                if ((!this.modalExp1Open && !this.modalExp2Open) && !this.animEnded) {
+                                    this.controls.enabled = true
+                                    this.controls.minPolarAngle = this.controls.getPolarAngle();
+                                    this.controls.maxPolarAngle = this.controls.getPolarAngle();
+                                    this.controls.minAzimuthAngle = - Infinity;
+                                    this.controls.maxAzimuthAngle = Infinity;
+                                    this.indications.points[3].element.classList.remove('destroyed')
+                                    this.mascot.makeVisible()
+                                    this.animEnded = true
+                                    this.mascot.changeActiveQuote(0)
+
+                                }
+                            })
+                            .start();
+                        this.detectClickOnCaseElement()
+                    }
+                }
+            }
+        }
+        this.buttonMouseClickEvent3 = (e) => {
+            e.preventDefault()
+            this.mouseDown = true
+            switch (this.selectedStatus) {
+                case 'exp1':
+
+                    this.mascot.hide()
+                    this.controls.enabled = false
+                    this.modalExp1.isVisible = true
+                    this.modalExp1Open = true
+                    this.modalExp1.htmlDescriptionElement.classList.add('visible')
+                    document.querySelector('.modal-border').classList.add('visible')
+                    this.indications.points[3].element.classList.add('destroyed')
+                    this.scene.addBlurOnScene()
+                    break;
+                case 'exp2':
+
+                    this.mascot.hide()
+                    this.controls.enabled = false
+                    this.modalExp2.isVisible = true
+                    this.modalExp2Open = true
+                    this.modalExp2.htmlDescriptionElement.classList.add('visible')
+                    document.querySelector('.modal-border').classList.add('visible')
+                    this.indications.points[3].element.classList.add('destroyed')
+                    this.scene.addBlurOnScene()
+                    // expected output: "Mangoes and papayas are $2.79 a pound."
+                    break;
+                default:
+                //onfaitrien
+            }
+
+
+        }
+        // bug
+        this.buttonMouseReleaseEvent = (e) => {
+            e.preventDefault()
+            this.mouseDown = false
+        }
+        // bug
+        this.mouseMoveEvent = (event) => {
+            if (!this.blockLoop) {
+                this.raycaster.setFromCamera(this.pointer, this.camera);
+                const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                const regex = /packaging_/g
+                for (let i = 0; i < intersects.length; i++) {
+                    if (this.modelReady
+                        && this.activeAction.getClip().name == "Unboxing"
+                        && this.mouseDown
+                        && regex.test(intersects[i].object.name)) {
+                        if (this.x0 == undefined) {
+                            this.x0 = event.clientX
+                        }
+                        const completion =
+                            ((event.clientX - this.x0) *
+                                this.activeAction.getClip().duration) /
+                            ((event.target as HTMLCanvasElement).clientWidth / 3)
+                        intersects[i].object.material.transparent = true
+                        //intersects[i].object.material.opacity = completion / this.activeAction.getClip().duration
+                        this.mixer.setTime(completion)
+                        if (completion >= this.activeAction.getClip().duration - (5 * this.activeAction.getClip().duration) / 100) {
+                            this.object.getObjectByName("packaging").visible = false
+                            this.setAction(this.animationActions[2])
+                            this.activeAction.setLoop(THREE.LoopOnce)
+
+                            this.activeAction.clampWhenFinished = true
+                            this.indications.points[1].element.classList.add('destroyed')
+                            this.indications.points[2].element.classList.remove('destroyed')
+                            this.triggerFinalAnimation()
+                            this.blockLoop = true
+                        }
+                    }
+                }
+            }
+        }
+        this.buttonMouseClickEventDocument = () => {
+            if (this.modelReady && !this.blockLoop) {
+                this.raycaster.setFromCamera(this.pointer, this.camera);
+                const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
+                const regex = /packaging_/g
+                for (let i = 0; i < intersects.length; i++) {
+                    if (regex.test(intersects[i].object.name)) {
+                        const targetCoords = {
+                            x: 0.0021811573810216803,
+                            y: 0.30347417279793715,
+                            z: 1.3563360735759848
+                        }
+                        const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z };
+                        new TWEEN.Tween(coords)
+                            .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
+                            .onUpdate(() => {
+                                this.camera.position.set(coords.x, coords.y, coords.z)
+                            })
+                            .onComplete(() => {
+                                if (!this.blockLoop) {
+                                    this.indications.points[1].element.classList.remove('destroyed')
+                                }
+                            })
+                            .start();
+                        this.setAction(this.animationActions[1])
+                        this.activeAction.setLoop(THREE.LoopOnce)
+                        this.activeAction.clampWhenFinished = true
+                        this.controls.enabled = false
+                        this.indications.points[0].element.classList.add('destroyed')
+
+                        this.triggerSecondAnimation()
+
+                    }
+                }
+            }
+        }
+        this.mouseMoveEventDocument = (e) => {
+            // calculate pointer position in normalized device coordinates
+            // (-1 to +1) for both components
+            const width = document.querySelector('#webgl')?.clientWidth
+            const heigth = document.querySelector('#webgl')?.clientHeight
+            if (width && heigth) {
+                this.pointer.x = (e.clientX / width) * 2 - 1;
+                this.pointer.y = - (e.clientY / heigth) * 2 + 1;
+            }
+            if (this.modelReady && this.hasBeenOpened) {
+                this.raycaster.setFromCamera(this.pointer, this.camera);
+                const intersectsExp1 = this.raycaster.intersectObjects(this.experience1Objects);
+                const intersectsExp2 = this.raycaster.intersectObjects(this.experience2Objects);
+                if (intersectsExp1.length > 0) {
+                    if (this.selectedStatus != "exp1") {
+                        this.selectedStatus = "exp1"
+                        this.caseSelectedObject = this.experience1Objects
+                        this.selectedObjectCallback()
+                        // GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                        // GlobalLoader.getInstance().notifyTransitionDone()
+                    }
+
+                }
+                else if (intersectsExp2.length > 0) {
+                    if (this.selectedStatus != "exp2") {
+                        this.selectedStatus = "exp2"
+                        this.caseSelectedObject = this.experience2Objects
+                        this.selectedObjectCallback()
+
+                    }
+
+                }
+                else if (this.selectedStatus != "none") {
+                    this.selectedStatus = "none"
+                    this.caseSelectedObject = []
+                    this.selectedObjectCallback()
+
+                }
+
+            }
+        }
+
     }
 
     init(
@@ -86,6 +304,8 @@ export class Case {
         selectedObjectCallback: Function,
         scene: FirstScene
     ) {
+        console.log("initcase")
+        this.camera = camera
         this.scene = scene
         this.controls = controls
         this.indications = indications
@@ -119,7 +339,7 @@ export class Case {
             const tempArray: { [name: string]: THREE.Object3D } = {}
             object.traverse((child) => {
                 if ((child as THREE.Mesh).isMesh) {
-                   // console.log(child.name)
+                    // console.log(child.name)
                     tempArray[child.name] = child
                     if (child.name.includes("GLASS_" || child.name == "Pipette")) {
 
@@ -150,222 +370,67 @@ export class Case {
             object.position.set(0, 0, 0)
             callback()
         })
-        window.addEventListener('pointermove', (e) => {
-            // calculate pointer position in normalized device coordinates
-            // (-1 to +1) for both components
-            const width = document.querySelector('#webgl')?.clientWidth
-            const heigth = document.querySelector('#webgl')?.clientHeight
-            if (width && heigth) {
-                this.pointer.x = (e.clientX / width) * 2 - 1;
-                this.pointer.y = - (e.clientY / heigth) * 2 + 1;
-            }
-            if (this.modelReady && this.hasBeenOpened) {
-                this.raycaster.setFromCamera(this.pointer, camera);
-                const intersectsExp1 = this.raycaster.intersectObjects(this.experience1Objects);
-                const intersectsExp2 = this.raycaster.intersectObjects(this.experience2Objects);
-                if (intersectsExp1.length > 0) {
-                    if (this.selectedStatus != "exp1") {
-                        this.selectedStatus = "exp1"
-                        this.caseSelectedObject = this.experience1Objects
-                        this.selectedObjectCallback()
-                        // GlobalLoader.getInstance().setNextScene(exp2Part1Name)
-                        // GlobalLoader.getInstance().notifyTransitionDone()
-                    }
+        // window.addEventListener('pointermove', );
 
-                }
-                else if (intersectsExp2.length > 0) {
-                    if (this.selectedStatus != "exp2") {
-                        this.selectedStatus = "exp2"
-                        this.caseSelectedObject = this.experience2Objects
-                        this.selectedObjectCallback()
+        // window.addEventListener('mousedown',)
 
-                    }
-
-                }
-                else if (this.selectedStatus != "none") {
-                    this.selectedStatus = "none"
-                    this.caseSelectedObject = []
-                    this.selectedObjectCallback()
-
-                }
-
-            }
-        });
-
-        window.addEventListener('mousedown', () => {
-            if (this.modelReady && !this.blockLoop) {
-                this.raycaster.setFromCamera(this.pointer, camera);
-                const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
-                const regex = /packaging_/g
-                for (let i = 0; i < intersects.length; i++) {
-                    if (regex.test(intersects[i].object.name)) {
-                        const targetCoords = {
-                            x: 0.0021811573810216803,
-                            y: 0.30347417279793715,
-                            z: 1.3563360735759848
-                        }
-                        const coords = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
-                        new TWEEN.Tween(coords)
-                            .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
-                            .onUpdate(() => {
-                                camera.position.set(coords.x, coords.y, coords.z)
-                            })
-                            .onComplete(() => {
-                                if (!this.blockLoop) {
-                                    this.indications.points[1].element.classList.remove('destroyed')
-                                }
-                            })
-                            .start();
-                        this.setAction(this.animationActions[1])
-                        this.activeAction.setLoop(THREE.LoopOnce)
-                        this.activeAction.clampWhenFinished = true
-                        controls.enabled = false
-                        this.indications.points[0].element.classList.add('destroyed')
-                        this.triggerSecondAnimation(camera)
-                    }
-                }
-            }
-        })
+        this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this);
+        window.addEventListener('mousedown', this.clickHandlerDocument)
+        this.moveHandlerDocument = this.mouseMoveEventDocument.bind(this);
+        window.addEventListener('pointermove', this.moveHandlerDocument);
     }
 
-    triggerSecondAnimation(camera) {
-        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-            'mousedown',
-            (e) => {
-                e.preventDefault()
-                this.mouseDown = true
-            }
-        )
-        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-            'mouseup',
-            (e) => {
-                e.preventDefault()
-                this.mouseDown = false
-            }
-        )
-        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-            'mousemove',
-            (event) => {
-                if (!this.blockLoop) {
-                    this.raycaster.setFromCamera(this.pointer, camera);
-                    const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
-                    const regex = /packaging_/g
-                    for (let i = 0; i < intersects.length; i++) {
-                        if (this.modelReady
-                            && this.activeAction.getClip().name == "Unboxing"
-                            && this.mouseDown
-                            && regex.test(intersects[i].object.name)) {
-                            if (this.x0 == undefined) {
-                                this.x0 = event.clientX
-                            }
-                            const completion =
-                                ((event.clientX - this.x0) *
-                                    this.activeAction.getClip().duration) /
-                                ((event.target as HTMLCanvasElement).clientWidth / 3)
-                            intersects[i].object.material.transparent = true
-                            //intersects[i].object.material.opacity = completion / this.activeAction.getClip().duration
-                            this.mixer.setTime(completion)
-                            if (completion >= this.activeAction.getClip().duration - (5 * this.activeAction.getClip().duration) / 100) {
-                                this.object.getObjectByName("packaging").visible = false
-                                this.setAction(this.animationActions[2])
-                                this.activeAction.setLoop(THREE.LoopOnce)
+    triggerSecondAnimation() {
+        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
+        //     'mousedown',
 
-                                this.activeAction.clampWhenFinished = true
-                                this.indications.points[1].element.classList.add('destroyed')
-                                this.indications.points[2].element.classList.remove('destroyed')
-                                this.triggerFinalAnimation(camera)
-                                this.blockLoop = true
-                            }
-                        }
-                    }
-                }
-            }
-        )
+        // )
+        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
+        //     'mouseup',
+
+        // )
+        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
+        //     'mousemove',
+
+        // )
+        console.log("onapsseici")
+        if (!this.isSecondAnimationDone) {
+            this.isSecondAnimationDone = true
+
+            //bug 
+            this.clickHandler = this.buttonMouseClickEvent1.bind(this);
+            document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
+            // bug
+            this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
+            document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mouseup', this.clickReleaseHandler)
+            // bug
+            this.moveHandler = this.mouseMoveEvent.bind(this);
+            document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('pointermove', this.moveHandler);
+
+        }
     }
 
-    triggerFinalAnimation(camera) {
+    triggerFinalAnimation() {
 
-        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-            'mousedown',
-            () => {
-                if (!this.animEnded) {
-                    this.raycaster.setFromCamera(this.pointer, camera);
-                    const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
-                    const regex = /case_/g
-                    for (let i = 0; i < intersects.length; i++) {
-                        if (regex.test(intersects[i].object.name) && (!this.modalExp1Open && !this.modalExp2Open)) {
-                            this.runLastAnim = true
-                            this.indications.points[2].element.classList.add('destroyed')
-                            const targetCoords = {
-                                x: 0,
-                                y: 0.8343677459755188,
-                                z: 0.49586116341112374
-                            }
-                            const coords = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
-                            new TWEEN.Tween(coords)
-                                .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
-                                .onUpdate(() =>
-                                    camera.position.set(coords.x, coords.y, coords.z)
-                                )
-                                .onComplete(() => {
-                                    this.hasBeenOpened = true
-                                    if ((!this.modalExp1Open && !this.modalExp2Open)) {
-                                        this.controls.enabled = true
-                                        this.controls.minPolarAngle = this.controls.getPolarAngle();
-                                        this.controls.maxPolarAngle = this.controls.getPolarAngle();
-                                        this.controls.minAzimuthAngle = - Infinity;
-                                        this.controls.maxAzimuthAngle = Infinity;
-                                        this.indications.points[3].element.classList.remove('destroyed')
-                                        this.mascot.makeVisible()
-                                        this.mascot.changeActiveQuote(0)
+        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
+        //     'mousedown',
 
-                                    }
-                                })
-                                .start();
-                            this.detectClickOnCaseElement(camera)
-                        }
-                    }
-                }
-            }
-        )
+        // )
+        document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mousedown', this.clickHandler)
+        this.clickHandler = this.buttonMouseClickEvent2.bind(this);
+        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
+
     }
 
-    detectClickOnCaseElement(camera) {
-        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-            'mousedown',
-            () => {
+    detectClickOnCaseElement() {
+        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
+        //     'mousedown',
 
-                switch (this.selectedStatus) {
-                    case 'exp1':
+        // )
+        document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mousedown', this.clickHandler)
+        this.clickHandler = this.buttonMouseClickEvent3.bind(this);
+        document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
 
-                        this.mascot.hide()
-                        this.controls.enabled = false
-                        this.modalExp1.isVisible = true
-                        this.modalExp1Open = true
-                        this.modalExp1.htmlDescriptionElement.classList.add('visible')
-                        document.querySelector('.modal-border').classList.add('visible')
-                        this.indications.points[3].element.classList.add('destroyed')
-                        this.scene.addBlurOnScene()
-                        break;
-                    case 'exp2':
-
-                        this.mascot.hide()
-                        this.controls.enabled = false
-                        this.modalExp2.isVisible = true
-                        this.modalExp2Open = true
-                        this.modalExp2.htmlDescriptionElement.classList.add('visible')
-                        document.querySelector('.modal-border').classList.add('visible')
-                        this.indications.points[3].element.classList.add('destroyed')
-                        this.scene.addBlurOnScene()
-                        // expected output: "Mangoes and papayas are $2.79 a pound."
-                        break;
-                    default:
-                    //onfaitrien
-                }
-
-
-            }
-        )
     }
 
     anim(camera) {
@@ -391,6 +456,14 @@ export class Case {
     }
 
     destroy() {
+        console.log("destroyedmonreuf")
+        window.removeEventListener('mousedown', this.clickHandlerDocument)
+        window.removeEventListener('pointermove', this.moveHandlerDocument)
+        document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mousedown', this.clickHandler)
+        document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('pointermove', this.moveHandler);
+        document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mouseup', this.clickReleaseHandler)
+
+
 
     }
 }

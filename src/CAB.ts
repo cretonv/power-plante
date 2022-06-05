@@ -3,6 +3,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { Experience2Part2 } from "./Experience2Part2";
 import { transformMeshToGlass,transformMeshToLed } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
+import { Loupe } from "./Loupe";
 
 export class CAB {
 
@@ -24,20 +25,23 @@ export class CAB {
     private clickHandler
     private mouseMoveEvent:Function
     private moveHandler
+    private loupe:Loupe
     
 
     constructor() {
         this.buttonMouseClickEvent = () => {
+            console.log("a")
         
             if(this.isFilled == false){
                 this.raycaster.setFromCamera( this.pointer, this.camera );
                 //console.log(this.object.getObjectByName("uranium"))
                 const intersects = this.raycaster.intersectObjects(this.object.children);
+                console.log(intersects)
                 intersects.forEach(element => {
                     if(element.object.name == "button_2"){
                         this.filled()
                         this.isFilled = true 
-                      
+                        this.loupe.isEnabled = true 
                     }
             });
             //console.log('alo') // this line runs ..
@@ -55,8 +59,8 @@ export class CAB {
 
     }
 
-    init(callback: Function, camera: THREE.Camera) {
-
+    init(callback: Function, camera: THREE.Camera,loupe:Loupe) {
+        this.loupe = loupe
         this.camera = camera
         const textureLoader = new THREE.TextureLoader();
         const loader = new FBXLoader()
@@ -70,6 +74,8 @@ export class CAB {
             // )
             //this.activeAction = animationAction
             object.traverse((child) => {
+            //console.log(child)
+
                 if (child instanceof THREE.Mesh) {
                     //console.log(child)
                     if (child.name == "GLASS_tube" || child.name == "GLASS_dome") {
@@ -120,6 +126,9 @@ export class CAB {
         if(this.liquidIndex < 6){
             setTimeout(() => {this.filled()}, 800); 
         }
+        else{
+            this.loupe.isEnabled = true 
+        }
 
         
         
@@ -131,6 +140,7 @@ export class CAB {
         window.addEventListener('click', this.clickHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
         window.addEventListener( 'pointermove',this.moveHandler);
+        
     }
 
     setAction() {
@@ -139,7 +149,9 @@ export class CAB {
     }
 
     destroy() {
-
+        window.removeEventListener('click', this.clickHandler)
+        window.removeEventListener( 'pointermove',this.moveHandler);
+        //console.log("cab destroyed")
     }
     
 }

@@ -106,6 +106,10 @@ export class ModalViewport {
         this.plane.position.z = -10
         this.rtCamera.add( this.plane );
     }
+    closeHtml(){
+        this.htmlDescriptionElement.classList.remove('visible')
+        document.querySelector('.modal-border').classList.remove('visible')
+    }
 
     anim(canvas) {
         if(this.isVisible) {
@@ -122,6 +126,7 @@ export class ModalViewport {
     }
 
     destroy() {
+        
 
     }
 }
