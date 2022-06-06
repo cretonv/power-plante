@@ -201,7 +201,7 @@ export class Experience2Part2 extends ActivityScene {
        // this.renderer.setClearAlpha(0.0)
         //this.renderer.autoClearDepth = false;
         //this.renderer.autoClearColor = false;
-
+        document.querySelector('.tubes-line').classList.remove('hidden')
     }
 
     anim() {
