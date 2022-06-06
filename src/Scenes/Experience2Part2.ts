@@ -136,11 +136,10 @@ export class Experience2Part2 extends ActivityScene {
            this.createParticle()
 
            window.addEventListener('mousedown', () => {
-             
-
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.ParticleArray.map(x=>x.object));
             if(intersects.length > 0 ){
+                
                 intersects[0].object.visible =false
                 switch(intersects[0].object.material) {
                     case this.particleColor1:

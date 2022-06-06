@@ -134,7 +134,7 @@ export class Experience1 extends ActivityScene {
 		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
 
 		//this.effect = outlineEffect;
-        //this.composer.addPass(new EffectPass(this.camera,this.outlineEffect));
+        //this.composer.addPass(new EffectPass(this.camera,this.outlieEffect));
         //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
         const renderPass = new RenderPass(this.scene, this.camera)
         this.composer.addPass(renderPass);
@@ -160,8 +160,6 @@ export class Experience1 extends ActivityScene {
         this.controls.minAzimuthAngle =-0.4;
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
-        console.log(this.controls.position)
-        console.log("setupexp1")
         window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1000)
         
     }
@@ -198,6 +196,7 @@ export class Experience1 extends ActivityScene {
 
     destroy() {
         console.log("destroy")
+        
         //this.composer.removePass(this.outlinePass)
         // this.exp1assembly.destroy()
         // this.scene.traverse((child) => {

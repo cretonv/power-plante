@@ -93,12 +93,14 @@ export class Case {
         this.modalExp2Open = false
         this.hasBeenOpened = false
 
-        // bug
         this.buttonMouseClickEvent1 = (e) => {
+            console.log("buttonMouseClicked1")
+
             e.preventDefault()
             this.mouseDown = true
         }
         this.buttonMouseClickEvent2 = () => {
+            console.log("buttonMouseClicked2")
             if (!this.animEnded) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
@@ -139,7 +141,10 @@ export class Case {
                 }
             }
         }
+
         this.buttonMouseClickEvent3 = (e) => {
+            console.log("buttonMouseClicked3")
+
             e.preventDefault()
             this.mouseDown = true
             switch (this.selectedStatus) {
@@ -169,7 +174,6 @@ export class Case {
                     document.querySelector('.modal-border').classList.add('visible')
                     this.indications.points[3].element.classList.add('destroyed')
                     this.scene.addBlurOnScene()
-                    // expected output: "Mangoes and papayas are $2.79 a pound."
                     break;
                 default:
                 //onfaitrien
@@ -177,12 +181,12 @@ export class Case {
 
 
         }
-        // bug
         this.buttonMouseReleaseEvent = (e) => {
+            console.log("buttonMouserelease")
+
             e.preventDefault()
             this.mouseDown = false
         }
-        // bug
         this.mouseMoveEvent = (event) => {
             if (!this.blockLoop) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
@@ -213,6 +217,7 @@ export class Case {
                             this.indications.points[2].element.classList.remove('destroyed')
                             this.triggerFinalAnimation()
                             this.blockLoop = true
+
                         }
                     }
                 }
@@ -332,7 +337,7 @@ export class Case {
             const tempArray: { [name: string]: THREE.Object3D } = {}
             object.traverse((child) => {
                 if ((child as THREE.Mesh).isMesh) {
-                    // console.log(child.name)
+
                     tempArray[child.name] = child
                     if (child.name.includes("GLASS_" || child.name == "Pipette")) {
 
@@ -363,10 +368,32 @@ export class Case {
             object.position.set(0, 0, 0)
             callback()
         })
-        this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this);
-        window.addEventListener('mousedown', this.clickHandlerDocument)
-        this.moveHandlerDocument = this.mouseMoveEventDocument.bind(this);
-        window.addEventListener('pointermove', this.moveHandlerDocument);
+        if(!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()){
+            this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this)
+            window.addEventListener('mousedown', this.clickHandlerDocument)            
+            this.moveHandlerDocument = this.mouseMoveEventDocument.bind(this)
+            window.addEventListener('pointermove', this.moveHandlerDocument)
+        }
+        else
+        {
+            this.hasBeenOpened = true
+            this.blockLoop = false
+            // this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this)
+            // window.addEventListener('mousedown', this.clickHandlerDocument)     
+
+            this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
+            document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mouseup', this.clickReleaseHandler)
+
+            // this.moveHandler = this.mouseMoveEvent.bind(this);
+            // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('pointermove', this.moveHandler);
+
+            this.moveHandlerDocument = this.mouseMoveEventDocument.bind(this)
+            window.addEventListener('pointermove', this.moveHandlerDocument)
+
+            this.detectClickOnCaseElement()
+        }
+
+
     }
 
     triggerSecondAnimation() {
@@ -389,14 +416,10 @@ export class Case {
 
     triggerFinalAnimation() {
 
-        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-        //     'mousedown',
-
-        // )
         document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mousedown', this.clickHandler)
         this.clickHandler = this.buttonMouseClickEvent2.bind(this);
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
-
+    
     }
 
     detectClickOnCaseElement() {
@@ -424,16 +447,16 @@ export class Case {
         if (toAction != this.activeAction) {
             this.lastAction = this.activeAction
             this.activeAction = toAction
+
             this.lastAction.stop()
-            //lastAction.fadeOut(1)
+
             this.activeAction.reset()
-            //activeAction.fadeIn(1)
+ 
             this.activeAction.play()
         }
     }
 
     destroy() {
-        console.log("destroyedmonreuf")
         window.removeEventListener('mousedown', this.clickHandlerDocument)
         window.removeEventListener('pointermove', this.moveHandlerDocument)
         document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mousedown', this.clickHandler)

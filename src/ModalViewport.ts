@@ -9,7 +9,7 @@ export class ModalViewport {
     public isVisible: boolean
     public isFirstOpening: boolean
     private mainScene: FirstScene
-    private rtScene: THREE.Scene
+    public rtScene: THREE.Scene
     private rtCamera: THREE.Camera
     private rtCameraLight: THREE.DirectionalLight
     private rtWarmLight: THREE.DirectionalLight
@@ -17,10 +17,18 @@ export class ModalViewport {
     private controls: OrbitControls
     private rtRenderer: THREE.WebGLRenderer
     private plane: THREE.PlaneGeometry
+    private openModalEvent: Function
+    private openHandler
+    private closeModalEvent: Function
+    private closeHandler
+
+
 
     constructor() {
         this.isVisible = false
         this.isFirstOpening = true
+        this.closeModalEvent =  () => {this.closeModal() 
+        console.log("suppr")}
     }
 
     init(
@@ -31,7 +39,7 @@ export class ModalViewport {
         scene: FirstScene,
         gltfName:string
     ) {
-
+        this.openModalEvent = onModalBtnClick
         this.htmlDescriptionElement = htmlDescElement
         this.mainScene = scene
 
@@ -79,7 +87,7 @@ export class ModalViewport {
         this.rtCamera.add(this.rtColdLight)
 
         // GLTF
-        GlobalLoader.getInstance().getGLTFLoaded("cab", (object) => {
+        GlobalLoader.getInstance().getGLTFLoaded(gltfName, (object) => {
             this.object = object
             this.object.scale.set(0.05, 0.05, 0.05)
             this.object.position.set(0, -0.5, 0)
@@ -87,23 +95,11 @@ export class ModalViewport {
             this.rtCameraLight.lookAt(this.object.position)
             this.rtWarmLight.lookAt(this.object.position)
             this.rtColdLight.target = this.object
-            this.htmlDescriptionElement.querySelector('a').addEventListener('click', () => {
-                onModalBtnClick()
-            })
+            this.openHandler = this.openModalEvent.bind(this);
+            this.htmlDescriptionElement.querySelector('a').addEventListener('mousedown', this.openHandler)
+            
             callback()
         })
-        // this.loader.load(
-        //     filePath,
-        //     (gltf) => {
-
-        //     },
-        //     (xhr) => {
-        //         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-        //     },
-        //     (error) => {
-        //         console.log(error)
-        //     }
-        // )
 
         // Plane background
         const planeGeometry = new THREE.PlaneGeometry( 2.5, 1.875 );
@@ -113,6 +109,7 @@ export class ModalViewport {
         this.plane.position.z = -10
         this.rtCamera.add( this.plane );
     }
+
     closeHtml(){
         this.htmlDescriptionElement.classList.remove('visible')
         document.querySelector('.modal-border').classList.remove('visible')
@@ -129,10 +126,10 @@ export class ModalViewport {
             if (this.isFirstOpening) {
                 this.isFirstOpening = false
                 console.log(this.htmlDescriptionElement.querySelector('.close-cross'))
-                this.htmlDescriptionElement.querySelector('.close-cross').addEventListener('click', () => {
-                    console.log('CLICK')
-                    this.closeModal()
-                })
+                this.closeHandler = this.closeModalEvent.bind(this);
+                this.htmlDescriptionElement.querySelector('.close-cross').addEventListener('mousedown', this.closeHandler)
+                
+               
             }
             this.rtRenderer.setViewport(
                 canvas.clientWidth / 2 - ((canvas.clientWidth / 2) / 2),
@@ -148,6 +145,8 @@ export class ModalViewport {
 
     destroy() {
 
+        this.htmlDescriptionElement.querySelector('.close-cross').removeEventListener('mousedown', this.closeHandler)
+        this.htmlDescriptionElement.querySelector('a').removeEventListener('mousedown', this.openHandler)
 
     }
 }

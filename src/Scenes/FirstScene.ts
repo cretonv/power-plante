@@ -15,7 +15,7 @@ import {
     KawaseBlurPass
 } from "postprocessing";
 import {Mascot} from "../Mascot";
-import { exp2Part1Name, GlobalLoader } from "../GlobalLoader";
+import { exp1Name, exp2Part1Name, GlobalLoader } from "../GlobalLoader";
 import { ActivityScene } from "./ActivityScene";
 
 export class FirstScene extends ActivityScene {
@@ -74,7 +74,17 @@ export class FirstScene extends ActivityScene {
     }
 
     setup(): void {
-        this.camera.position.z = 1.3563360735759848
+        if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()){
+            this.camera.position.z = 1.3563360735759848
+        }
+        else{
+            this.camera.position.x = 0;
+            this.controls.enable = true
+
+            this.camera.position.y = 0.8343677459755188;
+            this.camera.position.z = 0.49586116341112374;
+        }
+        
         this.controls.enableDamping = true
         document.querySelector('body').classList.remove('active');
     }
@@ -175,6 +185,7 @@ export class FirstScene extends ActivityScene {
             () => {
                 document.querySelector('body').classList.add('active');
                 //TODO change to exp1
+                console.log()
                 GlobalLoader.getInstance().setNextScene(exp2Part1Name)
                 setTimeout(() => {
                     this.controls.target.set(0,0,0)
@@ -303,34 +314,7 @@ export class FirstScene extends ActivityScene {
         this.composer.removePass(this.blurPass)
     }
 
-    // tick = () => {
-    //     // const elapsedTime = clock.getElapsedTime()
-
-    //     // Check canvas size and resolution
-    //     if (this.resizeRendererToDisplaySize()) {
-    //         const aspect = GlobalLoader.getInstance().getCanvas().clientWidth / GlobalLoader.getInstance().getCanvas().clientHeight
-    //         if (this.camera.isPerspectiveCamera || this.camera.isOrthographicCamera || this.camera.isCamera) {
-    //             this.camera.aspect = aspect
-    //             this.camera.updateProjectionMatrix()
-    //         }
-    //     }
-
-    //     // Update controls
-    //     this.controls.update()
-
-    //     // if (modelReady) mixer.update(clock.getDelta())
-    //     this.case.anim(this.camera)
-    //     this.indications.anim(this.camera, this.sizes, this.scene)
-
-    //     // Render
-    //     this.render(this.tick)
-
-    //     this.modalExp1Viewport.anim(GlobalLoader.getInstance().getCanvas())
-    //     this.modalExp2Viewport.anim(GlobalLoader.getInstance().getCanvas())
-
-    //     // Call tick again on the next frame
-    //     window.requestAnimationFrame(this.tick)
-    // }
+   
 
     render = () => {
 
@@ -378,7 +362,9 @@ export class FirstScene extends ActivityScene {
         this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
         this.case.destroy()
         this.modalExp1Viewport.closeHtml()
+        this.modalExp1Viewport.destroy()
         this.modalExp2Viewport.closeHtml()
+        this.modalExp2Viewport.destroy()
 
     }
 }

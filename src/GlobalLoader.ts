@@ -16,10 +16,6 @@ export const exp1Name = "exp1Name"
 export var GlobalLoader = (function () {
   var constructeur = function () {
     this.getCurrentScene = function (thisSceneId = sceneId): ActivityScene {
-      //console.log(thisSceneId)
-      // console.log(thisSceneId)
-      // console.log(thisSceneId)
-      // console.log(thisSceneId)
 
       switch (thisSceneId) {
         case exp2Part1Name:
@@ -64,6 +60,7 @@ export var GlobalLoader = (function () {
       this.loadScene(renderer, controls, camera, clock,newId)
     }
     this.notifyTransitionDone = function() {
+      hasLandedBeenLoadedOnce = true
       oldSceneId = sceneId
       sceneId = nextSceneId
       instance.getCurrentScene().setup()
@@ -113,6 +110,9 @@ export var GlobalLoader = (function () {
       }
       return false
     }
+    this.getHasLandedBeenLoadedOnce= function () {
+      return hasLandedBeenLoadedOnce
+    }
   }
 
   // variables for scene state management
@@ -122,6 +122,8 @@ export var GlobalLoader = (function () {
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
   var firstsceneloaded = false
+  
+  let hasLandedBeenLoadedOnce = false
 
   var landingScene: FirstScene = null
   var exp2Part1Scene: Experience2Part1 = null
