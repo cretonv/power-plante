@@ -7,6 +7,7 @@ import { Experience1 } from "./Scenes/Experience1";
 import { Experience2Part2 } from "./Scenes/Experience2Part2";
 import { FirstScene } from "./Scenes/FirstScene";
 import { ActivityScene } from "./Scenes/ActivityScene";
+import {VisualLoader} from "./VisualLoader";
 
 export const landingName = "landingName"
 export const exp2Part1Name = "exp2Part1Name"
@@ -118,7 +119,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = landingName;
+  var sceneId = exp2Part2Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -139,7 +140,7 @@ export var GlobalLoader = (function () {
   var sizes
   var selectedObjects
 
-
+  let visualLoader: VisualLoader
 
   var backgroundtexture = null;
   var FbxArray: { string: THREE.Group } = {}
@@ -157,6 +158,7 @@ export var GlobalLoader = (function () {
         exp2Part1Scene = new Experience2Part1()
         exp2Part2Scene = new Experience2Part2()
         exp1Scene = new Experience1()
+        visualLoader = new VisualLoader()
 
         //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-14.fbx", () => {
