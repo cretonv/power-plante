@@ -28,7 +28,8 @@ export class ModalViewport {
         htmlDescElement: HTMLDivElement,
         renderer:THREE.WebGLRenderer,
         onModalBtnClick: Function,
-        scene: FirstScene
+        scene: FirstScene,
+        gltfName:string
     ) {
 
         this.htmlDescriptionElement = htmlDescElement

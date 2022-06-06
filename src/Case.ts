@@ -149,6 +149,8 @@ export class Case {
                     this.controls.enabled = false
                     this.modalExp1.isVisible = true
                     this.modalExp1Open = true
+                    this.modalExp1.object.position.set(0, 0.0, 0)
+                    this.modalExp1.rtScene.add(this.modalExp1.object)
                     this.modalExp1.htmlDescriptionElement.classList.add('visible')
                     document.querySelector('.modal-border').classList.add('visible')
                     this.indications.points[3].element.classList.add('destroyed')
@@ -160,6 +162,9 @@ export class Case {
                     this.controls.enabled = false
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
+                    this.modalExp2.object.position.set(0, -0.5, 0)
+
+                    this.modalExp2.rtScene.add(this.modalExp2.object)
                     this.modalExp2.htmlDescriptionElement.classList.add('visible')
                     document.querySelector('.modal-border').classList.add('visible')
                     this.indications.points[3].element.classList.add('destroyed')
@@ -267,8 +272,6 @@ export class Case {
                         this.selectedStatus = "exp1"
                         this.caseSelectedObject = this.experience1Objects
                         this.selectedObjectCallback()
-                        // GlobalLoader.getInstance().setNextScene(exp2Part1Name)
-                        // GlobalLoader.getInstance().notifyTransitionDone()
                     }
 
                 }
@@ -313,16 +316,6 @@ export class Case {
         this.modalExp2 = modalExp2
         this.mascot = mascot
         this.selectedObjectCallback = selectedObjectCallback
-        // this.loader.load(
-        //     `/models/case/${this.modelFileName}`,
-        //     (object: THREE.Group) => ,
-        //     (xhr) => {
-        //         //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-        //     },
-        //     (error) => {
-        //         console.log(error)
-        //     }
-        // )
         GlobalLoader.getInstance().getFBXLoaded("case", (object) => {
             this.object = object
             console.log(object)
@@ -370,10 +363,6 @@ export class Case {
             object.position.set(0, 0, 0)
             callback()
         })
-        // window.addEventListener('pointermove', );
-
-        // window.addEventListener('mousedown',)
-
         this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this);
         window.addEventListener('mousedown', this.clickHandlerDocument)
         this.moveHandlerDocument = this.mouseMoveEventDocument.bind(this);
@@ -381,29 +370,17 @@ export class Case {
     }
 
     triggerSecondAnimation() {
-        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-        //     'mousedown',
-
-        // )
-        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-        //     'mouseup',
-
-        // )
-        // document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener(
-        //     'mousemove',
-
-        // )
+     
         console.log("onapsseici")
         if (!this.isSecondAnimationDone) {
             this.isSecondAnimationDone = true
 
-            //bug 
             this.clickHandler = this.buttonMouseClickEvent1.bind(this);
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
-            // bug
+            
             this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mouseup', this.clickReleaseHandler)
-            // bug
+
             this.moveHandler = this.mouseMoveEvent.bind(this);
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('pointermove', this.moveHandler);
 

@@ -175,7 +175,8 @@ export class FirstScene extends ActivityScene {
                     this.controls.target.set(0,0,0)
                     GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
             },
-            this
+            this,
+            "exp2"
         )
 
         // Init ModalViewport
@@ -202,13 +203,14 @@ export class FirstScene extends ActivityScene {
             () => {
                 document.querySelector('body').classList.add('active');
                 //TODO change to exp1
-                GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                GlobalLoader.getInstance().setNextScene(exp1Name)
                 setTimeout(() => {
                     this.controls.target.set(0,0,0)
                     GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
 
             },
-            this
+            this,
+            "cab"
         )
 
         // Init mascot

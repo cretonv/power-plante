@@ -144,7 +144,7 @@ export class Experience2Part1 extends ActivityScene {
       
         
         GlobalLoader.getInstance().getGLTFLoaded('decor',(object)=>{
-            object.scale.set(0.005,0.005,0.005)
+            object.scale.set(0.01,0.01,0.01)
             object.position.set(0.00,0.00,-0.1)
             this.scene.add(object)
         })
@@ -231,6 +231,8 @@ export class Experience2Part1 extends ActivityScene {
 
         // Render
         this.render()
+
+        
 
         // Call tick again on the next frame
         //window.requestAnimationFrame(tick)

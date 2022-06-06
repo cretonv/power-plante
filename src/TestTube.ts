@@ -115,10 +115,6 @@ export class TestTube extends EventDispatcher {
                         .onUpdate(() => {
                             this.camera.position.set(coords.x, coords.y, coords.z)
                             //this.camera.lookAt(dirVector)
-                            let dirVector = new THREE.Vector3()
-                            this.camera.getWorldDirection(dirVector);
-                            //this.controls.target.set(dirVector.add(this.camera.position))
-                            console.log(dirVector)
                             // this.camera.lookAt(coords.x, coords.y, coords.z)
                             this.controls.target.set(coords.xf, coords.yf, coords.zf)
                             //console.log(this.controls.enabled)

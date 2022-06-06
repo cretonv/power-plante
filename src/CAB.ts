@@ -30,8 +30,7 @@ export class CAB {
 
     constructor() {
         this.buttonMouseClickEvent = () => {
-            console.log("a")
-        
+
             if(this.isFilled == false){
                 this.raycaster.setFromCamera( this.pointer, this.camera );
                 //console.log(this.object.getObjectByName("uranium"))
@@ -46,10 +45,7 @@ export class CAB {
             });
             //console.log('alo') // this line runs ..
 
-            }
-            
- 
-            
+            }          
         }
 
         this.mouseMoveEvent = (e) => {
@@ -86,6 +82,11 @@ export class CAB {
                     else if (child.name.includes("led")) {
 
                         transformMeshToLed(child, 'test.hdr')
+
+                    }
+                    else if (child.name.includes("battery")) {
+
+                        child.visible = false
 
                     }
                     else if (child.name.includes("GLASS_liquid")) {

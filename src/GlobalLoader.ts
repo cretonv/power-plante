@@ -3,6 +3,7 @@ import * as THREE from "three"
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Experience2Part1 } from "./Scenes/Experience2Part1";
+import { Experience1 } from "./Scenes/Experience1";
 import { Experience2Part2 } from "./Scenes/Experience2Part2";
 import { FirstScene } from "./Scenes/FirstScene";
 import { ActivityScene } from "./Scenes/ActivityScene";
@@ -10,7 +11,7 @@ import { ActivityScene } from "./Scenes/ActivityScene";
 export const landingName = "landingName"
 export const exp2Part1Name = "exp2Part1Name"
 export const exp2Part2Name = "exp2Part2Name"
-export const exp2Part3Name = "exp2Part3Name"
+export const exp1Name = "exp1Name"
 
 export var GlobalLoader = (function () {
   var constructeur = function () {
@@ -33,8 +34,8 @@ export var GlobalLoader = (function () {
           //console.log("part2")
           return exp2Part2Scene
           break;
-        case exp2Part3Name:
-          return exp2Part3Scene
+        case exp1Name:
+          return exp1Scene
           break;
         default:
           console.log(`on est peredu` + thisSceneId + "  " + landingName + (landingName == thisSceneId));
@@ -83,6 +84,15 @@ export var GlobalLoader = (function () {
     this.getGLTFLoaded = function (name: string, callback: Function) {
       return callback(GltfArray[name])
     }
+    this.getSelectedArray = function(){
+      
+      return selectedObjects
+    }
+    this.setSelectedArray = function(array){
+      selectedObjects = array
+      instance.getCurrentScene().reloadSelectedLayer()
+      
+    }
     this.getSizes = function ()  {
       return sizes
     }
@@ -116,14 +126,16 @@ export var GlobalLoader = (function () {
   var exp2Part1Scene: Experience2Part1 = null
   //TODO Change Scene When this will be imported
   var exp2Part2Scene: Experience2Part2 = null
-  var exp2Part3Scene: Experience2Part1 = null
+  var exp1Scene: Experience1 = null
   var transitionRequested = false;
   var renderer
   var controls
   var camera
   var clock
   var canvas
-  var sizes
+  var sizes 
+  var selectedObjects
+
 
 
   var backgroundtexture = null;
@@ -141,7 +153,7 @@ export var GlobalLoader = (function () {
         landingScene = new FirstScene()
         exp2Part1Scene = new Experience2Part1()
         exp2Part2Scene = new Experience2Part2()
-        exp2Part3Scene = new Experience2Part1()
+        exp1Scene = new Experience1()
 
         //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-14.fbx", () => {
@@ -172,7 +184,7 @@ export var GlobalLoader = (function () {
           console.log("charger")
 
         })
-        loadFBX(fbxLoader, FbxArray, "cabAnim", "cab/exp1_flo_v-4.fbx", () => {
+        loadFBX(fbxLoader, FbxArray, "cabAnim", "cab/exp1_flo_v-5.fbx", () => {
           numberLoaded += 1
           console.log("charger")
 
@@ -184,7 +196,7 @@ export var GlobalLoader = (function () {
 
         })
 
-        loadGltf(gltfLoader, GltfArray, "decor", "decor/decor_flo_v-3.gltf", () => {
+        loadGltf(gltfLoader, GltfArray, "decor", "decor/decor_flo_v-4.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)
