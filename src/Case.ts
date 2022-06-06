@@ -144,16 +144,16 @@ export class Case {
 
         this.buttonMouseClickEvent3 = (e) => {
             console.log("buttonMouseClicked3")
-
-            e.preventDefault()
+            if(!GlobalLoader.getInstance().getIsThereModalOpened()){
+                e.preventDefault()
             this.mouseDown = true
             switch (this.selectedStatus) {
                 case 'exp1':
-
                     this.mascot.hide()
                     this.controls.enabled = false
                     this.modalExp1.isVisible = true
                     this.modalExp1Open = true
+                    GlobalLoader.getInstance().setIsThereModalOpened(true)
                     this.modalExp1.object.position.set(0, 0.0, 0)
                     this.modalExp1.rtScene.add(this.modalExp1.object)
                     this.modalExp1.htmlDescriptionElement.classList.add('visible')
@@ -167,6 +167,8 @@ export class Case {
                     this.controls.enabled = false
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
+                    GlobalLoader.getInstance().setIsThereModalOpened(true)
+
                     this.modalExp2.object.position.set(0, -0.5, 0)
 
                     this.modalExp2.rtScene.add(this.modalExp2.object)
@@ -178,6 +180,8 @@ export class Case {
                 default:
                 //onfaitrien
             }
+            }
+            
 
 
         }

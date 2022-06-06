@@ -11,6 +11,11 @@
 
   <canvas id="webgl"></canvas>
 
+  <div class="loader hidden">
+    <img src="./assets/textures/loader-bg.jpeg" alt="Background">
+    <div class="value-loaded"><span class="value">0</span>%</div>
+  </div>
+
   <div class="indication indication-0 destroyed">
     <div class="content">
       <img src="./assets/billboard/360.png" alt="Aïe">
@@ -57,6 +62,24 @@
   <div class="mascot">
     <img src="./assets/mascot/mascot_1.png" alt="Mascot">
     <div class="quote">Dynamic</div>
+  </div>
+
+  <div class="tubes-line hidden">
+    <div class="tube tube-alpha">
+      <div class="tube__top"></div>
+      <div class="tube__contents"></div>
+      <div class="tube__outer-glass"></div>
+    </div>
+    <div class="tube tube-beta">
+      <div class="tube__top"></div>
+      <div class="tube__contents"></div>
+      <div class="tube__outer-glass"></div>
+    </div>
+    <div class="tube tube-gama">
+      <div class="tube__top"></div>
+      <div class="tube__contents"></div>
+      <div class="tube__outer-glass"></div>
+    </div>
   </div>
 
   <script type="module" src="./src/main.ts"></script>

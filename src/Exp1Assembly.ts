@@ -138,6 +138,8 @@ export class Exp1Assembly {
                                             this.controls.minAzimuthAngle = 0.9;
                                             this.controls.maxAzimuthAngle = 1.7;
                                             this.controls.enablePan = false;
+                                            GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("cache")])
+
                                         })
                                         .start();
                                 }, 1600)
@@ -160,6 +162,7 @@ export class Exp1Assembly {
                         case "button":
                             if (this.state == "pilecharged") {
                                 this.ledanim()
+                                GlobalLoader.getInstance().setSelectedArray([])
                                 this.rotateUranium = true
                             }
                             break
@@ -214,6 +217,7 @@ export class Exp1Assembly {
                     }
                     else {
                         this.object.getObjectByName("cache").position.z = -0.012989381115526565
+                        GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("button")])
                         this.state = "pilecharged"
                         console.log("onélà")
 
@@ -378,10 +382,11 @@ export class Exp1Assembly {
 
     setBatteryLessTransparent() {
         if (this.state = "rangelespilesfdp") {
+            GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("cache")])
             this.state = "closepile"
             this.object.getObjectByName("battery").material = this.batterymaterial
             this.object.getObjectByName("battery_sticker").material = this.batteryStickersMaterial
-            GlobalLoader.getInstance().setSelectedArray([])
+
         }
     }
     destroy() {

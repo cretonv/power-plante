@@ -7,6 +7,7 @@ import { Experience1 } from "./Scenes/Experience1";
 import { Experience2Part2 } from "./Scenes/Experience2Part2";
 import { FirstScene } from "./Scenes/FirstScene";
 import { ActivityScene } from "./Scenes/ActivityScene";
+import {VisualLoader} from "./VisualLoader";
 
 export const landingName = "landingName"
 export const exp2Part1Name = "exp2Part1Name"
@@ -73,9 +74,20 @@ export var GlobalLoader = (function () {
     this.getCurrentBackground = function () {
       return backgroundtexture
     }
+    this.getNumberLoaded = function () {
+      return numberLoaded * 100 / 14
+    }
     this.setCurrentBackground = function () {
       backgroundtexture
     }
+
+    this.getIsThereModalOpened = function () {
+      return isThereModalOpened
+    }
+    this.setIsThereModalOpened = function (bool) {
+      isThereModalOpened = bool
+    }
+
     this.getFBXLoaded = function (name: string, callback: Function) {
       return callback(FbxArray[name])
     }
@@ -83,13 +95,13 @@ export var GlobalLoader = (function () {
       return callback(GltfArray[name])
     }
     this.getSelectedArray = function(){
-      
+
       return selectedObjects
     }
     this.setSelectedArray = function(array){
       selectedObjects = array
       instance.getCurrentScene().reloadSelectedLayer()
-      
+
     }
     this.getSizes = function ()  {
       return sizes
@@ -116,12 +128,13 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = landingName;
+  var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
   var firstsceneloaded = false
+  var isThereModalOpened = false
   
   let hasLandedBeenLoadedOnce = false
 
@@ -136,10 +149,10 @@ export var GlobalLoader = (function () {
   var camera
   var clock
   var canvas
-  var sizes 
+  var sizes
   var selectedObjects
 
-
+  let visualLoader: VisualLoader
 
   var backgroundtexture = null;
   var FbxArray: { string: THREE.Group } = {}
@@ -157,9 +170,10 @@ export var GlobalLoader = (function () {
         exp2Part1Scene = new Experience2Part1()
         exp2Part2Scene = new Experience2Part2()
         exp1Scene = new Experience1()
+        visualLoader = new VisualLoader()
 
         //Load all fbx and gltf in an array
-        loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-14.fbx", () => {
+        loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-16.fbx", () => {
           numberLoaded += 1
           console.log("charger")
         })
@@ -235,7 +249,7 @@ export var GlobalLoader = (function () {
 
         })
 
-        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_sam_v-2.gltf", () => {
+        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_flo_v-3.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)

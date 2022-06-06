@@ -26,7 +26,7 @@
     transition: all 1s ease-in;
   }
   .quote {
-    font-family: 'DM Sans';
+    font-family: $secondary-fonts;
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -41,6 +41,29 @@
     img {
       transform: translateX(50px) translateY(50px);
       transition: all 1s ease-in;
+    }
+  }
+  &.alternative-version {
+    bottom: 10vh;
+    top: 10vh;
+    right: 15vw;
+    left: 15vw;
+    opacity: 0;
+    transform: none;
+    width: calc(100% - 30vw);
+    height: calc(100% - 30vh);
+    pointer-events: none;
+    &.visible {
+      transform: none;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .quote {
+      font-size: 22px;
+      line-height: 26px;
+      color: #09130B;
+      max-width: 80%;
+      text-align: center;
     }
   }
 }

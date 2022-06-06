@@ -12,6 +12,7 @@ import { ActivityScene } from './ActivityScene';
 import { Uranium } from '../Uranium';
 import { BlendFunction, BlendMode, EffectComposer, EffectMaterial, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
 import { Particle } from '../Particle';
+import {TestTube2D} from "../TestTube2D";
 
 
 
@@ -38,11 +39,14 @@ export class Experience2Part2 extends ActivityScene {
     private particleColor3 = new THREE.MeshStandardMaterial({color: 0xff58ee})
     private particuleClickedState =[0,0,0]
     private transiHasBeenDone = false
+    private alphaTestTube: TestTube2D
+    private betaTestTube: TestTube2D
+    private gamaTestTube: TestTube2D
 
 
     constructor() {
         super()
-        
+
     }
 
     init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
@@ -69,9 +73,9 @@ export class Experience2Part2 extends ActivityScene {
             width: 800,
             height: 600
           }
-         
+
             document.body.appendChild(this.renderer.domElement);
-        
+
 
         this.camera =  camera
         this.camGroup.add(this.camera);
@@ -91,6 +95,13 @@ export class Experience2Part2 extends ActivityScene {
         const raycaster = new THREE.Raycaster();
         const pointer = new THREE.Vector2();
 
+        // Init Test Tube 2D for each component
+        this.gamaTestTube = new TestTube2D()
+        this.gamaTestTube.init('tube-gama')
+        this.alphaTestTube = new TestTube2D()
+        this.alphaTestTube.init('tube-alpha')
+        this.betaTestTube = new TestTube2D()
+        this.betaTestTube.init('tube-beta')
 
         //renderer.autoClearColor = false;
 
@@ -127,7 +138,7 @@ export class Experience2Part2 extends ActivityScene {
             const light2 = new THREE.SpotLight(0xeeeeee, 0.8)
             light2.position.set(4, 4, 0.08)
            this.scene.add(light2)
-   
+
            const light3 = new THREE.SpotLight(0xffffff, 0.4)
            light3.position.set(-0.8, -1, 4.0)
            this.scene.add(light3)
@@ -136,6 +147,7 @@ export class Experience2Part2 extends ActivityScene {
            this.createParticle()
 
            window.addEventListener('mousedown', () => {
+
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.ParticleArray.map(x=>x.object));
             if(intersects.length > 0 ){
@@ -144,18 +156,19 @@ export class Experience2Part2 extends ActivityScene {
                 switch(intersects[0].object.material) {
                     case this.particleColor1:
                         this.particuleClickedState[0]+=1
+                        this.alphaTestTube.changeValue(this.particuleClickedState[0])
                         break;
-            
+
                     case this.particleColor2:
                         this.particuleClickedState[1]+=1
-    
+                        this.betaTestTube.changeValue(this.particuleClickedState[1])
                         break;
-            
+
                     case this.particleColor3:
                         this.particuleClickedState[2]+=1
-                        
+                        this.gamaTestTube.changeValue(this.particuleClickedState[2])
                         break;
-            
+
 
                 }
             }
@@ -164,6 +177,8 @@ export class Experience2Part2 extends ActivityScene {
                 window.setTimeout(() => {
                     document.querySelector('body').classList.add('active');
                     setTimeout(() => {
+                        
+                        document.querySelector('.tubes-line').classList.add('hidden')   
                         GlobalLoader.getInstance().setNextScene(landingName)
                         setTimeout(() => {
         
@@ -186,11 +201,11 @@ export class Experience2Part2 extends ActivityScene {
             }
             console.log(this.particuleClickedState)
         })
-        
+
         // window.addEventListener('mouseup', () => {
         //     this.isMouseDownOnModel =false
         //     this.cameraControler.enabled = true
-        // 
+        //
 
         window.addEventListener( 'pointermove', (e) => {
             // calculate pointer position in normalized device coordinates
@@ -198,12 +213,12 @@ export class Experience2Part2 extends ActivityScene {
             //console.log(this.camera)
             this.pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
             this.pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-            
+
 
         });
     }
 
-    
+
     setup(){
         this.camGroup.position.set(0,0,0)
         this.camera.position.set(0,0,0)
@@ -215,9 +230,12 @@ export class Experience2Part2 extends ActivityScene {
        // this.renderer.setClearAlpha(0.0)
         //this.renderer.autoClearDepth = false;
         //this.renderer.autoClearColor = false;
-        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1000)
 
-      
+        window.setTimeout(()=>{
+            document.querySelector('body').classList.remove('active');
+            document.querySelector('.tubes-line').classList.remove('hidden')
+        },1000)
+        
     }
 
     anim() {
@@ -231,9 +249,9 @@ export class Experience2Part2 extends ActivityScene {
                 const index = this.ParticleArray.indexOf(e, 0);
                 if (index > -1) {
                     this.ParticleArray.splice(index, 1);
-                } 
+                }
             }
-            
+
         })
 
         // Render
@@ -250,7 +268,7 @@ export class Experience2Part2 extends ActivityScene {
 
         this.controls.update()
         this.renderer.render(this.scene, this.camera)
-       
+
        //this.composer.render();
        //console.log(this.composer)
     }
@@ -260,13 +278,13 @@ export class Experience2Part2 extends ActivityScene {
     }
 
     destroy() {
-       
+
 
     }
 
     createParticle = () =>{
         //console.log("onélà")
-        
+
         let particle = new Particle()
         particle.init(()=>{
             particle.object.position.set(0.0,0.0,-12.0)
@@ -276,17 +294,17 @@ export class Experience2Part2 extends ActivityScene {
                 case 0:
                     particle.object.children[0].material = this.particleColor1
                     break;
-        
+
                 case 1:
                     particle.object.children[0].material = this.particleColor2
 
                     break;
-        
+
                 case 2:
                     particle.object.children[0].material = this.particleColor3
-                    
+
                     break;
-        
+
             }
             particle.MoveVector = new THREE.Vector2(Math.round((Math.random()-0.5)/10*100)/100,Math.round((Math.random()-0.5)/10*100)/100)
             this.scene.add(particle.object)

@@ -33,7 +33,6 @@ export class Loupe {
 
             if (intersects.length > 0) {
                 if (intersectsUranium.length > 0 && this.isEnabled) {
-                    console.log("alo?")
                     this.controls.enabled = false;
                     this.controls.minDistance = -Infinity;
                     this.controls.maxDistance = Infinity;
@@ -63,11 +62,11 @@ export class Loupe {
         this.mouseMoveEvent = (e) => {
             this.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
             this.pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
-            if (this.isMouseDownOnModel) {
+            if (this.isMouseDownOnModel && this.isEnabled) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 this.raycaster.ray.intersectPlane(this.plane, this.intersects);
                 this.object.position.set(this.intersects.x, this.intersects.y - 0.01, this.intersects.z);
-
+                GlobalLoader.getInstance().setSelectedArray([this.target])
             }
         }
 
@@ -82,12 +81,13 @@ export class Loupe {
         GlobalLoader.getInstance().getGLTFLoaded("loupe", (object) => {
 
             this.object = object
-            this.object.scale.set(0.006, 0.006, 0.006)
+            this.object.scale.set(0.01, 0.01, 0.01)
+            this.object.position.set(0.70,0.02,0)
             callback()
 
         })
         this.clickHandler = this.buttonMouseClickEvent.bind(this);
-        window.addEventListener('mousedown', this.clickHandler)
+        window.addEventListener('click', this.clickHandler)
         this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
         window.addEventListener('mouseup', this.clickReleaseHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
@@ -110,7 +110,7 @@ export class Loupe {
     }
 
     destroy() {
-        window.removeEventListener('mousedown', this.clickHandler)
+        window.removeEventListener('click ', this.clickHandler)
         window.removeEventListener( 'pointermove',this.moveHandler)
         window.removeEventListener('mouseup', this.clickReleaseHandler)
 

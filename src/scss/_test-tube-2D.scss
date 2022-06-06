@@ -1,0 +1,110 @@
+.tubes-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  display: flex;
+  padding-top: 16px;
+  padding-left: 16px;
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tube {
+    $rounding: 0px 0px 40px 40px / 0 0 50px 50px;
+    $width: 60px;
+    $height: 330px;
+    height: $height;
+    width: $width;
+    position: relative;
+    overflow: visible;
+    margin-right: 16px;
+    background: linear-gradient(
+                    90deg,
+                    rgba(228, 225, 222, 0.3) 0%,
+                    rgba(216, 212, 208, 0.3) 0%,
+                    rgba(203, 198, 193, 0.3) 0%,
+                    rgba(188, 184, 179, 0.3) 6.79%,
+                    rgba(166, 162, 159, 0.3) 14.61%,
+                    rgba(216, 217, 217, 0.3) 48.07%,
+                    rgba(223, 224, 225, 0.3) 52.25%,
+                    rgba(210, 210, 210, 0.3) 62.52%,
+                    rgba(176, 173, 171, 0.3) 82.19%,
+                    rgba(166, 162, 159, 0.3) 87.64%,
+                    rgba(208, 210, 211, 0.3) 100%,
+                    rgba(166, 168, 171, 0.3) 100%
+    );
+    border-radius: $rounding;
+    &:before,
+    &__outer-glass {
+      border-radius: $rounding;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      content: "";
+      background: linear-gradient(
+                      90deg,
+                      rgba(174, 208, 237, 0.3) 0%,
+                      rgba(166, 204, 235, 0.3) 50%,
+                      rgba(81, 168, 220, 0.3) 100%
+      );
+    }
+    &__top {
+      $offset: 3px;
+      border: $offset solid #d8ebf6;
+      background: linear-gradient(
+                      to bottom,
+                      #a7d3ec 50%,
+                      #98bcde 51%,
+                      #98bcde 100%
+      );
+      position: absolute;
+      top: -($offset * 2);
+      border-radius: 50% / 100%;
+      height: 5px;
+      width: $width;
+      left: -($offset);
+    }
+    &__contents {
+      border-radius: $rounding;
+      $margin: 3px;
+      background: #ffd147;
+      width: $width - ($margin * 2);
+      height: 10%;
+      left: $margin;
+      position: absolute;
+      bottom: $margin;
+      transition: all 0.4s;
+      &:before {
+        $offset: 2px;
+        content: "";
+        background: linear-gradient(
+                        to bottom,
+                        transparentize(#9c5216, 0.5) 50%,
+                        transparentize(#9c5216, 0.1) 51%,
+                        transparentize(#9c5216, 0.1) 100%
+        );
+        position: absolute;
+        top: -($offset / 2);
+        border-radius: 50% / 100%;
+        height: $offset;
+        width: $width - ($margin * 2);
+      }
+    }
+    &.tube-alpha {
+      .tube__contents {
+        background: #ffff58;
+      }
+    }
+    &.tube-beta {
+      .tube__contents {
+        background: #FF5858;
+      }
+    }
+    &.tube-gama {
+      .tube__contents {
+        background: #ff58ee;
+      }
+    }
+  }
+}

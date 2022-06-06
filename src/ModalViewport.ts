@@ -119,17 +119,18 @@ export class ModalViewport {
         this.isVisible = false
         this.mainScene.removeBlurOnScene()
         this.closeHtml()
+        GlobalLoader.getInstance().setIsThereModalOpened(false)
     }
 
     anim(canvas) {
         if(this.isVisible) {
             if (this.isFirstOpening) {
                 this.isFirstOpening = false
+
                 console.log(this.htmlDescriptionElement.querySelector('.close-cross'))
                 this.closeHandler = this.closeModalEvent.bind(this);
                 this.htmlDescriptionElement.querySelector('.close-cross').addEventListener('mousedown', this.closeHandler)
                 
-               
             }
             this.rtRenderer.setViewport(
                 canvas.clientWidth / 2 - ((canvas.clientWidth / 2) / 2),

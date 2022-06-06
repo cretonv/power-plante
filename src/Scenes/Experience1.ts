@@ -116,14 +116,11 @@ export class Experience1 extends ActivityScene {
     initPostProcessing  = () => {
         this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
             blendFunction: BlendFunction.ADD,
-            edgeStrength: 1000,
+            edgeStrength: 100,
             pulseSpeed: 0.64,
             visibleEdgeColor: 0xee00ee,
             hiddenEdgeColor: 0x550055,
-            blur: true,
-		
-			//blur: false,
-			//xRay: true
+            blur: true
 		});
         this.outlineEffect.resolution.width = GlobalLoader.getInstance().getSizes().width
         this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
@@ -160,7 +157,7 @@ export class Experience1 extends ActivityScene {
         this.controls.minAzimuthAngle =-0.4;
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
-        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1000)
+        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1100)
         
     }
 
