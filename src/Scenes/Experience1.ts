@@ -147,7 +147,7 @@ export class Experience1 extends ActivityScene {
         this.outlineEffect.selection.set(GlobalLoader.getInstance().getSelectedArray())
     }
     setup(){
-        document.querySelector('body').classList.remove('active');
+        
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;
@@ -161,6 +161,9 @@ export class Experience1 extends ActivityScene {
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
         console.log(this.controls.position)
+        console.log("setupexp1")
+        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1000)
+        
     }
 
     anim(tick) {
@@ -196,19 +199,19 @@ export class Experience1 extends ActivityScene {
     destroy() {
         console.log("destroy")
         //this.composer.removePass(this.outlinePass)
-      
-        this.scene.traverse((child) => {
-            if(child instanceof THREE.Mesh){
-                child.geometry.dispose()
+        // this.exp1assembly.destroy()
+        // this.scene.traverse((child) => {
+        //     if(child instanceof THREE.Mesh){
+        //         child.geometry.dispose()
 
-                for(const key in child.material){
-                    const value = child.material[key]
+        //         for(const key in child.material){
+        //             const value = child.material[key]
 
-                    if (value && typeof value.dispose === 'function'){
-                        value.dispose()
-                    }
-                }
-            }
-        })
+        //             if (value && typeof value.dispose === 'function'){
+        //                 value.dispose()
+        //             }
+        //         }
+        //     }
+        // })
     }
 }

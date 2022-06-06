@@ -66,6 +66,7 @@ export var GlobalLoader = (function () {
     this.notifyTransitionDone = function() {
       oldSceneId = sceneId
       sceneId = nextSceneId
+      instance.getCurrentScene().setup()
       nextSceneId="none";
       transitionRequested = false
       this.destroyScene(oldSceneId)
@@ -247,8 +248,8 @@ export var GlobalLoader = (function () {
         }
 
         renderer = new THREE.WebGLRenderer({
-          canvas: canvas,
-          //powerPreference: "high-performance",
+            canvas: canvas,
+            //powerPreference: "high-performance",
             antialias: true,
             //stencil: false,
             preserveDrawingBuffer: true

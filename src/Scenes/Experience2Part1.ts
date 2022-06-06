@@ -201,7 +201,7 @@ export class Experience2Part1 extends ActivityScene {
 
     }
     setup(){
-        document.querySelector('body').classList.remove('active');
+        //document.querySelector('body').classList.remove('active');
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;
@@ -215,6 +215,8 @@ export class Experience2Part1 extends ActivityScene {
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
         console.log(this.controls.position)
+        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1100)
+
     }
 
     anim(tick) {
@@ -256,18 +258,18 @@ export class Experience2Part1 extends ActivityScene {
         this.loupe.destroy()
         this.eyedropper.destroy()
         this.testtube.destroy()
-        this.scene.traverse((child) => {
-            if(child instanceof THREE.Mesh){
-                child.geometry.dispose()
+        // this.scene.traverse((child) => {
+        //     if(child instanceof THREE.Mesh){
+        //         child.geometry.dispose()
 
-                for(const key in child.material){
-                    const value = child.material[key]
+        //         for(const key in child.material){
+        //             const value = child.material[key]
 
-                    if (value && typeof value.dispose === 'function'){
-                        value.dispose()
-                    }
-                }
-            }
-        })
+        //             if (value && typeof value.dispose === 'function'){
+        //                 value.dispose()
+        //             }
+        //         }
+        //     }
+        // })
     }
 }

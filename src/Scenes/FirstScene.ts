@@ -73,6 +73,12 @@ export class FirstScene extends ActivityScene {
         loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr",this.scene)
     }
 
+    setup(): void {
+        this.camera.position.z = 1.3563360735759848
+        this.controls.enableDamping = true
+        document.querySelector('body').classList.remove('active');
+    }
+    
     initThreeElements = () => {
         /**
          * Renderer
@@ -92,20 +98,19 @@ export class FirstScene extends ActivityScene {
         /**
          * Composer
          */
-         this.composer = new EffectComposer(this.renderer);
+        this.composer = new EffectComposer(this.renderer);
        //console.log(this.composer)
         /**
          * Camera
         //  */
         // this.camera = new THREE.PerspectiveCamera(50, GlobalLoader.getInstance().getCanvas().clientWidth / GlobalLoader.getInstance().getCanvas().clientHeight, 0.1, 100)
-        this.camera.position.z = 1.3563360735759848
-        this.scene.add(this.camera)
+
 
         /**
          * Controls
          */
        // this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-        this.controls.enableDamping = true
+
 
         /**
          * Lights

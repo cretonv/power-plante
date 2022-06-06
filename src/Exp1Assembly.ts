@@ -15,7 +15,7 @@ export class Exp1Assembly {
     public object: THREE.Group
 
     private clock: THREE.Clock
-    private rotateUranium = false   
+    private rotateUranium = false
     private camera: THREE.Camera
     private indications: Indication
     private loader: FBXLoader;
@@ -57,7 +57,7 @@ export class Exp1Assembly {
     private batterymaterial: THREE.material
     private batteryStickersMaterial: THREE.material
 
-    private uranium : THREE.Mesh
+    private uranium: THREE.Mesh
 
 
 
@@ -77,7 +77,7 @@ export class Exp1Assembly {
                 intersects.forEach(element => {
                     //console.log(element)
                     switch (element.object.name) {
-                        
+
                         case "support_cab":
                             if (!this.animpart1) {
                                 this.activeAction = this.animationActions[1]
@@ -157,8 +157,8 @@ export class Exp1Assembly {
                                 console.log("wrong")
                             }
                             break;
-                        case  "button":
-                            if(this.state == "pilecharged"){
+                        case "button":
+                            if (this.state == "pilecharged") {
                                 this.ledanim()
                                 this.rotateUranium = true
                             }
@@ -207,7 +207,7 @@ export class Exp1Assembly {
 
                 }
                 else if (intersects.length > 0 && this.object.getObjectByName("cache").position.z > 0 && this.state == "closepile") {
-                    if (this.object.getObjectByName("cache").position.z - intersects[0].distance > -0.012989381115526565) {
+                    if (this.object.getObjectByName("cache").position.z - intersects[0].distance > 0.5) {
                         this.object.getObjectByName("cache").position.z = this.object.getObjectByName("cache").position.z - intersects[0].distance * 2
 
                     }
@@ -250,11 +250,11 @@ export class Exp1Assembly {
             this.activeAction = this.animationActions[0]
             this.activeAction.setLoop(THREE.LoopOnce)
             this.activeAction.clampWhenFinished = true
-          
+
 
             const tempArray: { [name: string]: THREE.Object3D } = {}
             object.traverse((child) => {
-                
+
                 if ((child as THREE.Mesh).isMesh) {
                     //console.log(child)
                     tempArray[child.name] = child
@@ -312,45 +312,49 @@ export class Exp1Assembly {
             window.addEventListener('pointermove', this.moveHandler);
         })
     }
-    ledanim(){
+    ledanim() {
         let count = 300
         this.object.traverse((child) => {
-            
-            if(child.name.includes("led")){
-                window.setTimeout(()=>{
+
+            if (child.name.includes("led")) {
+                window.setTimeout(() => {
                     transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
                 }, count)
-                count += 900 
-               
+                count += 900
+
 
             }
-        })  
-        window.setTimeout(()=>{
+        })
+        window.setTimeout(() => {
             document.querySelector('body').classList.add('active');
-            GlobalLoader.getInstance().setNextScene(landingName)
-            setTimeout(() => { 
-                this.controls.enabled = false
-                this.controls.minDistance = -Infinity;
-                this.controls.maxDistance = Infinity;
-                this.controls.enableDamping = true;
-                this.controls.minPolarAngle = -Infinity;
-                this.controls.maxPolarAngle = Infinity;
-                this.controls.minAzimuthAngle = -Infinity;
-                this.controls.maxAzimuthAngle = Infinity;
-                this.controls.enablePan = true;
-                this.controls.target.set(0,0,0)
-                GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
-        },14000)
+            setTimeout(() => {
+                GlobalLoader.getInstance().setNextScene(landingName)
+                setTimeout(() => {
+
+                    this.controls.enabled = false
+                    this.controls.minDistance = -Infinity;
+                    this.controls.maxDistance = Infinity;
+                    this.controls.enableDamping = true;
+                    this.controls.minPolarAngle = -Infinity;
+                    this.controls.maxPolarAngle = Infinity;
+                    this.controls.minAzimuthAngle = -Infinity;
+                    this.controls.maxAzimuthAngle = Infinity;
+                    this.controls.enablePan = true;
+                    this.controls.target.set(0, 0, 0)
+                    GlobalLoader.getInstance().notifyTransitionDone()
+                }, 400)
+            }, 1200)
+        }, 12000)
     }
 
     anim() {
-        if(this.rotateUranium && this.modelReady){
-            
+        if (this.rotateUranium && this.modelReady) {
+
             const speed = 4
-            const sizeFactor =40 
+            const sizeFactor = 40
             console.log(this.uranium)
-            this.uranium.rotation.set(this.uranium.rotation.x+0.001,this.uranium.rotation.y+0.008,this.uranium.rotation.z+0.025) 
-      
+            this.uranium.rotation.set(this.uranium.rotation.x + 0.001, this.uranium.rotation.y + 0.008, this.uranium.rotation.z + 0.025)
+
         }
         //console.log(this.object)
         if (this.modelReady && (this.animpart1 || this.animpart2 || this.animpart3 || true)) {
@@ -366,7 +370,7 @@ export class Exp1Assembly {
             this.lastAction.stop()
 
             this.activeAction.reset()
-            
+
             this.activeAction.play()
         }
     }
