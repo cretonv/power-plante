@@ -1,12 +1,15 @@
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import { GlobalLoader } from "./GlobalLoader";
+import {FirstScene} from "./Scenes/FirstScene";
 
 export class ModalViewport {
     public object: THREE.Group
     public htmlDescriptionElement: HTMLDivElement
     public isVisible: boolean
-    public rtScene: THREE.Scene
+    public isFirstOpening: boolean
+    private mainScene: FirstScene
+    private rtScene: THREE.Scene
     private rtCamera: THREE.Camera
     private rtCameraLight: THREE.DirectionalLight
     private rtWarmLight: THREE.DirectionalLight
@@ -17,6 +20,7 @@ export class ModalViewport {
 
     constructor() {
         this.isVisible = false
+        this.isFirstOpening = true
     }
 
     init(
@@ -24,10 +28,12 @@ export class ModalViewport {
         htmlDescElement: HTMLDivElement,
         renderer:THREE.WebGLRenderer,
         onModalBtnClick: Function,
+        scene: FirstScene,
         gltfName:string
     ) {
 
         this.htmlDescriptionElement = htmlDescElement
+        this.mainScene = scene
 
         // Scenes
         this.rtScene = new THREE.Scene()
@@ -73,10 +79,11 @@ export class ModalViewport {
         this.rtCamera.add(this.rtColdLight)
 
         // GLTF
-        GlobalLoader.getInstance().getGLTFLoaded(gltfName, (object) => {
-            console.log(object)
+        GlobalLoader.getInstance().getGLTFLoaded("cab", (object) => {
             this.object = object
             this.object.scale.set(0.05, 0.05, 0.05)
+            this.object.position.set(0, -0.5, 0)
+            this.rtScene.add(this.object)
             this.rtCameraLight.lookAt(this.object.position)
             this.rtWarmLight.lookAt(this.object.position)
             this.rtColdLight.target = this.object
@@ -111,8 +118,22 @@ export class ModalViewport {
         document.querySelector('.modal-border').classList.remove('visible')
     }
 
+    closeModal() {
+        this.isVisible = false
+        this.mainScene.removeBlurOnScene()
+        this.closeHtml()
+    }
+
     anim(canvas) {
         if(this.isVisible) {
+            if (this.isFirstOpening) {
+                this.isFirstOpening = false
+                console.log(this.htmlDescriptionElement.querySelector('.close-cross'))
+                this.htmlDescriptionElement.querySelector('.close-cross').addEventListener('click', () => {
+                    console.log('CLICK')
+                    this.closeModal()
+                })
+            }
             this.rtRenderer.setViewport(
                 canvas.clientWidth / 2 - ((canvas.clientWidth / 2) / 2),
                 canvas.clientHeight - 40 - 0.57 * canvas.clientHeight,
@@ -126,7 +147,7 @@ export class ModalViewport {
     }
 
     destroy() {
-        
+
 
     }
 }
