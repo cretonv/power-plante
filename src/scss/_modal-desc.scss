@@ -34,6 +34,17 @@
     background-color: forestgreen;
     color: #FFF;
   }
+  .close-cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    img {
+      height: 40px;
+      width: auto;
+    }
+  }
 }
 .modal-desc.visible {
   transition: all 0.5s;
