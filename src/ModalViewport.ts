@@ -128,7 +128,9 @@ export class ModalViewport {
         if(this.isVisible) {
             if (this.isFirstOpening) {
                 this.isFirstOpening = false
+                console.log(this.htmlDescriptionElement.querySelector('.close-cross'))
                 this.htmlDescriptionElement.querySelector('.close-cross').addEventListener('click', () => {
+                    console.log('CLICK')
                     this.closeModal()
                 })
             }

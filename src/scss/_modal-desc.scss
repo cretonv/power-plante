@@ -38,7 +38,6 @@
     position: absolute;
     top: 0;
     right: 0;
-    pointer-events: auto;
     cursor: pointer;
     img {
       height: 40px;
@@ -49,6 +48,9 @@
 .modal-desc.visible {
   transition: all 0.5s;
   opacity: 1;
+  .close-cross {
+    pointer-events: auto;
+  }
 }
 .modal-desc.visible a {
   pointer-events: auto;
