@@ -75,6 +75,9 @@ export var GlobalLoader = (function () {
     this.getCurrentBackground = function () {
       return backgroundtexture
     }
+    this.getNumberLoaded = function () {
+      return numberLoaded * 100 / 14
+    }
     this.setCurrentBackground = function () {
       backgroundtexture
     }
@@ -85,13 +88,13 @@ export var GlobalLoader = (function () {
       return callback(GltfArray[name])
     }
     this.getSelectedArray = function(){
-      
+
       return selectedObjects
     }
     this.setSelectedArray = function(array){
       selectedObjects = array
       instance.getCurrentScene().reloadSelectedLayer()
-      
+
     }
     this.getSizes = function ()  {
       return sizes
@@ -133,7 +136,7 @@ export var GlobalLoader = (function () {
   var camera
   var clock
   var canvas
-  var sizes 
+  var sizes
   var selectedObjects
 
 
