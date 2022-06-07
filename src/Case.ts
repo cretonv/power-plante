@@ -154,6 +154,7 @@ export class Case {
                     this.modalExp1.isVisible = true
                     this.modalExp1Open = true
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
+                    GlobalLoader.getInstance().playSound("click")
                     this.modalExp1.object.position.set(0, 0.0, 0)
                     this.modalExp1.rtScene.add(this.modalExp1.object)
                     this.modalExp1.htmlDescriptionElement.classList.add('visible')
@@ -168,6 +169,7 @@ export class Case {
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
+                    GlobalLoader.getInstance().playSound("click")
 
                     this.modalExp2.object.position.set(0, -0.5, 0)
 

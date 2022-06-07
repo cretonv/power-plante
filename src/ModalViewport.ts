@@ -116,6 +116,7 @@ export class ModalViewport {
     }
 
     closeModal() {
+        GlobalLoader.getInstance().playSound("click")
         this.isVisible = false
         this.mainScene.removeBlurOnScene()
         this.closeHtml()

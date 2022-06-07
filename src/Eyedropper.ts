@@ -57,6 +57,8 @@ export class EyeDropper {
                 if(this.redDyeObject.object.position.distanceTo(this.object.position)<0.12){
                 this.state = this.stateEnum.RedDye
                 this.redDyeObject.removeLiquid()
+                GlobalLoader.getInstance().playSound("bloup")
+
                 this.colorContent(new THREE.MeshBasicMaterial( {color: 0x880000} ))
                 }
                 if(!this.tubeObject.hasBeenHiglightedOnce){
@@ -72,6 +74,8 @@ export class EyeDropper {
                 if(this.alcoolBottle.object.position.distanceTo(this.object.position)<0.12){
                     this.state = this.stateEnum.Alcool
                     this.alcoolBottle.removeLiquid()
+                GlobalLoader.getInstance().playSound("bloup")
+
                     this.colorContent(new THREE.MeshBasicMaterial( {color: 0x000088} ))
                 }
                 if(!this.tubeObject.hasBeenHiglightedOnce){
@@ -91,6 +95,8 @@ export class EyeDropper {
 
                 //TODO higlight button
                 this.cab.enableButton()
+                GlobalLoader.getInstance().playSound("bloup")
+
                 this.removeAllContent()
                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                }
@@ -107,6 +113,8 @@ export class EyeDropper {
                     //console.log("onéla")
                     this.state = this.stateEnum.Violet
                     this.tubeObject.removeAllContent()
+                GlobalLoader.getInstance().playSound("bloup")
+
                     this.colorContent(new THREE.MeshBasicMaterial({color: 0x880088}))
                     GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("Valve")])
                 }
@@ -118,7 +126,8 @@ export class EyeDropper {
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                             })
                             this.removeAllContent()
-    
+                            GlobalLoader.getInstance().playSound("bloup")
+                            
                             break
                         case this.stateEnum.Alcool:
                             this.tubeObject.addAlcool(()=>{ 
@@ -126,6 +135,8 @@ export class EyeDropper {
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                             })
                             this.removeAllContent()
+                             GlobalLoader.getInstance().playSound("bloup")
+
                             break
     
                         default:

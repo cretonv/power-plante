@@ -144,6 +144,7 @@ export class Experience2Part2 extends ActivityScene {
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.ParticleArray.map(x=>x.object));
             if(intersects.length > 0 ){
+                GlobalLoader.getInstance().playSound("click")
 
                 intersects[0].object.visible =false
                 switch(intersects[0].object.material) {

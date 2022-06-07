@@ -84,7 +84,8 @@ export class Exp1Assembly {
                                 this.animpart1 = true
                             }
                             else {
-                                console.log("wrong")
+                                GlobalLoader.getInstance().playSound("wrong")
+
                             }
                             break;
                         case "GLASS_dome":
@@ -145,7 +146,9 @@ export class Exp1Assembly {
                                 }, 1600)
                             }
                             else {
-                                console.log("wrong")
+                                if(!this.animpart3){
+                                GlobalLoader.getInstance().playSound("wrong")
+                                }
                             }
                             break;
                         case "GLASS_Boiteplexy":
@@ -156,12 +159,18 @@ export class Exp1Assembly {
                                 this.state = "opencase"
                             }
                             else {
-                                console.log("wrong")
+                                if(!this.animpart2){
+                                GlobalLoader.getInstance().playSound("wrong")
+
+                                }
+
                             }
                             break;
                         case "button":
                             if (this.state == "pilecharged") {
                                 this.ledanim()
+                                GlobalLoader.getInstance().playSound("turn")
+
                                 GlobalLoader.getInstance().setSelectedArray([])
                                 this.rotateUranium = true
                             }
@@ -322,9 +331,18 @@ export class Exp1Assembly {
         this.object.traverse((child) => {
 
             if (child.name.includes("led")) {
-                window.setTimeout(() => {
-                    transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
-                }, count)
+                if (count < 6000){
+                    window.setTimeout(() => {
+                        transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
+                        GlobalLoader.getInstance().playSound("led")
+
+                    }, count) 
+                }else{
+                    window.setTimeout(() => {
+                        transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
+                    }, count)
+                }
+
                 count += 900
 
 

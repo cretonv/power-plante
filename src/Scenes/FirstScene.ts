@@ -1,9 +1,9 @@
 import * as THREE from "three"
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {Case} from "../Case";
-import {Indication} from "../Indication";
-import {ObjectViewModal} from "../ObjectViewModal";
-import {ModalViewport} from "../ModalViewport";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { Case } from "../Case";
+import { Indication } from "../Indication";
+import { ObjectViewModal } from "../ObjectViewModal";
+import { ModalViewport } from "../ModalViewport";
 import { loadSceneBackgroundFromHDR } from "../SceneBackgroundLoader";
 import { transformMeshToGlass, transformMeshToLed } from "../Glassifier";
 import {
@@ -14,13 +14,13 @@ import {
     RenderPass,
     KawaseBlurPass
 } from "postprocessing";
-import {Mascot} from "../Mascot";
+import { Mascot } from "../Mascot";
 import { exp1Name, exp2Part1Name, GlobalLoader } from "../GlobalLoader";
 import { ActivityScene } from "./ActivityScene";
 
 export class FirstScene extends ActivityScene {
-    private sizes: {[name: string]: Number}
-   // private canvas: HTMLDivElement
+    private sizes: { [name: string]: Number }
+    // private canvas: HTMLDivElement
     // Three JS elements
     public scene: THREE.Scene
     public renderer: THREE.WebGLRenderer
@@ -40,17 +40,17 @@ export class FirstScene extends ActivityScene {
     // 2D elements
     public mascot: Mascot
     //Postprocessing
-    private outlineEffect:OutlineEffect
-    private composer:EffectComposer
+    private outlineEffect: OutlineEffect
+    private composer: EffectComposer
     //private selectedObject:Array<THREE.Object3D> = []
-    private outlinePass:EffectPass
-    private blurPass:KawaseBlurPass
+    private outlinePass: EffectPass
+    private blurPass: KawaseBlurPass
 
 
     /**
      * Test
      */
-     //private testCube
+    //private testCube
     constructor() {
         super()
         this.scene = new THREE.Scene()
@@ -70,14 +70,15 @@ export class FirstScene extends ActivityScene {
 
         this.initSceneObjects()
         //this.tick()
-        loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr",this.scene)
+        loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr", this.scene)
     }
 
     setup(): void {
-        if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()){
+        if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()) {
             this.camera.position.z = 1.3563360735759848
+            this.case.animCameraOnAppear()
         }
-        else{
+        else {
             this.camera.position.x = 0;
             this.controls.enable = true
 
@@ -109,7 +110,7 @@ export class FirstScene extends ActivityScene {
          * Composer
          */
         this.composer = new EffectComposer(this.renderer);
-       //console.log(this.composer)
+        //console.log(this.composer)
         /**
          * Camera
         //  */
@@ -121,7 +122,7 @@ export class FirstScene extends ActivityScene {
         /**
          * Controls
          */
-       // this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+        // this.controls = new OrbitControls(this.camera, this.renderer.domElement)
 
 
         /**
@@ -135,14 +136,14 @@ export class FirstScene extends ActivityScene {
         this.scene.add(this.directionalLight)
         this.backLight = new THREE.DirectionalLight(0xFFFFFF, 0.4)
         this.backLight.position.set(0, -0.43, -0.3)
-        this.warmLight = new THREE.SpotLight( 0xFFFFFF, 1, 2.19 );
+        this.warmLight = new THREE.SpotLight(0xFFFFFF, 1, 2.19);
         this.warmLight.position.set(0, -1.09, 0)
         this.warmLight.lookAt(0, 0, 0)
     }
 
     initSceneObjects = () => {
         // Init 2D indications
-        const points =  [
+        const points = [
             {
                 position: new THREE.Vector3(-0.1, 0.05, 0.5),
                 element: document.querySelector('.indication-0')
@@ -165,7 +166,7 @@ export class FirstScene extends ActivityScene {
 
         // Init ModalViewport
         this.modalExp1Viewport = new ModalViewport()
-        this.modalExp1Viewport.init(()=>{
+        this.modalExp1Viewport.init(() => {
             this.modalExp1Viewport.object.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
                     //console.log(child)
@@ -186,12 +187,16 @@ export class FirstScene extends ActivityScene {
             this.renderer,
             () => {
                 document.querySelector('body').classList.add('active');
+                GlobalLoader.getInstance().playSound("click")
                 //TODO change to exp1
-                console.log()
-                GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+
                 setTimeout(() => {
-                    this.controls.target.set(0,0,0)
-                    GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
+                    GlobalLoader.getInstance().setNextScene(exp2Part1Name)
+                    setTimeout(() => {
+                        this.controls.target.set(0, 0, 0)
+                        GlobalLoader.getInstance().notifyTransitionDone()
+                    }, 1100)
+                }, 1100)
             },
             this,
             "exp2"
@@ -199,7 +204,7 @@ export class FirstScene extends ActivityScene {
 
         // Init ModalViewport
         this.modalExp2Viewport = new ModalViewport()
-        this.modalExp2Viewport.init(()=>{
+        this.modalExp2Viewport.init(() => {
             this.modalExp2Viewport.object.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
                     //console.log(child)
@@ -219,12 +224,16 @@ export class FirstScene extends ActivityScene {
             document.querySelector('.cab-desc'),
             this.renderer,
             () => {
-                document.querySelector('body').classList.add('active');
+                                GlobalLoader.getInstance().playSound("click")
                 //TODO change to exp1
-                GlobalLoader.getInstance().setNextScene(exp1Name)
+                
                 setTimeout(() => {
-                    this.controls.target.set(0,0,0)
-                    GlobalLoader.getInstance().notifyTransitionDone() }, 1100)
+                    GlobalLoader.getInstance().setNextScene(exp1Name)
+                    setTimeout(() => {
+                        this.controls.target.set(0, 0, 0)
+                        GlobalLoader.getInstance().notifyTransitionDone()
+                    }, 1100)
+                }, 1100)
 
             },
             this,
@@ -250,15 +259,15 @@ export class FirstScene extends ActivityScene {
             this.scene.add(this.case.object)
             this.backLight.target = this.case.object
             // this.directionalLight.target = this.case.object
-        }, this.camera, this.controls, this.indications, this.modalExp1Viewport,this.modalExp2Viewport, this.mascot,
-        ()=>{
-            //console.log("yaaa")
-            //console.log(this.case.caseSelectedObject)
-            this.outlineEffect.selection.set(this.case.caseSelectedObject);
-            //this.outlinePass.recompile()
-            //this.composer.addPass(this.outlinePass);
+        }, this.camera, this.controls, this.indications, this.modalExp1Viewport, this.modalExp2Viewport, this.mascot,
+            () => {
+                //console.log("yaaa")
+                //console.log(this.case.caseSelectedObject)
+                this.outlineEffect.selection.set(this.case.caseSelectedObject);
+                //this.outlinePass.recompile()
+                //this.composer.addPass(this.outlinePass);
 
-        }, this)
+            }, this)
         // const geometry = new THREE.BoxGeometry( 0.01, 1, 1 );
         // const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         // this.testCube = new THREE.Mesh( geometry, material );
@@ -266,7 +275,7 @@ export class FirstScene extends ActivityScene {
 
 
     }
-    initPostProcessing  = () => {
+    initPostProcessing = () => {
         this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
             blendFunction: BlendFunction.ADD,
             edgeStrength: 1000,
@@ -275,20 +284,20 @@ export class FirstScene extends ActivityScene {
             hiddenEdgeColor: 0x550055,
             blur: true,
 
-			//blur: false,
-			//xRay: true
-		});
+            //blur: false,
+            //xRay: true
+        });
         this.outlineEffect.resolution.width = GlobalLoader.getInstance().getSizes().width
         this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
 
-		// this.outlineEffect.selection.add(this.testCube);
+        // this.outlineEffect.selection.add(this.testCube);
 
         this.blurPass = new KawaseBlurPass()
 
-		//const smaaPass = new EffectPass(this.camera, this.smaaEffect);
-		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
+        //const smaaPass = new EffectPass(this.camera, this.smaaEffect);
+        this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
 
-		//this.effect = outlineEffect;
+        //this.effect = outlineEffect;
         //this.composer.addPass(new EffectPass(this.camera,this.outlineEffect));
         //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
         this.composer.addPass(new RenderPass(this.scene, this.camera));
@@ -320,7 +329,7 @@ export class FirstScene extends ActivityScene {
 
     render = () => {
 
-        this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
+        this.renderer.setViewport(0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight);
         //this.renderer.render(this.scene, this.camera)
         //this.outlineEffect.selection.set(this.selectedObject);
 
@@ -361,7 +370,7 @@ export class FirstScene extends ActivityScene {
     }
 
     destroy() {
-        this.renderer.setViewport( 0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight );
+        this.renderer.setViewport(0, 0, GlobalLoader.getInstance().getCanvas().clientWidth, GlobalLoader.getInstance().getCanvas().clientHeight);
         this.case.destroy()
         this.modalExp1Viewport.closeHtml()
         this.modalExp1Viewport.destroy()
