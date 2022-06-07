@@ -15,7 +15,6 @@ export class Mascot {
         this.quoteElement = quoteElement
         this.typeWriter = new Typewriter('.mascot .quote', {
             autoStart: false,
-            devMode: false,
             cursor: "",
             delay: 25
         });

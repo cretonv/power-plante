@@ -63,7 +63,7 @@ export class Case {
     private selectedStatus: string = "none"
 
 
-    //eventlisteners 
+    //eventlisteners
     private buttonMouseClickEventDocument: Function
     private clickHandlerDocument
     private mouseMoveEventDocument: Function
@@ -219,6 +219,7 @@ export class Case {
             }
         }
         this.buttonMouseClickEventDocument = () => {
+            document.querySelector('.canvas-title').classList.add('hidden')
             if (this.modelReady && !this.blockLoop) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 const intersects = this.raycaster.intersectObjects(Object.values(this.targets));
@@ -228,7 +229,7 @@ export class Case {
                         const targetCoords = {
                             x: 0.0021811573810216803,
                             y: 0.30347417279793715,
-                            z: 1.3563360735759848
+                            z: 1
                         }
                         const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z };
                         new TWEEN.Tween(coords)
@@ -361,6 +362,7 @@ export class Case {
             object.scale.set(0.01, 0.01, 0.01)
 
             object.position.set(0, 0, 0)
+
             callback()
         })
         this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this);
@@ -370,14 +372,14 @@ export class Case {
     }
 
     triggerSecondAnimation() {
-     
+
         console.log("onapsseici")
         if (!this.isSecondAnimationDone) {
             this.isSecondAnimationDone = true
 
             this.clickHandler = this.buttonMouseClickEvent1.bind(this);
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
-            
+
             this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mouseup', this.clickReleaseHandler)
 
@@ -408,6 +410,18 @@ export class Case {
         this.clickHandler = this.buttonMouseClickEvent3.bind(this);
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
 
+    }
+
+    animCameraOnAppear() {
+        const v = {value: 0}
+        new TWEEN.Tween(v)
+            .to({ value: 2 * Math.PI}, 4000)
+            .easing(TWEEN.Easing.Cubic.InOut)
+            .onUpdate(() => {
+                const distance = this.camera.position.distanceTo(this.object.position)
+                this.camera.position.set(distance * Math.sin(v.value), this.camera.position.y, distance * Math.cos(v.value))
+            })
+            .start();
     }
 
     anim(camera) {

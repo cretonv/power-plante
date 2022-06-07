@@ -1,19 +1,11 @@
 import '../style.css'
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-import { EyeDropper } from '../Eyedropper';
-import { Dye, dyeColorEnum } from '../Dye';
-import { loadSceneBackgroundFromHDR } from '../SceneBackgroundLoader';
-import { TestTube } from '../TestTube';
-import { AlcoolBottle } from '../AlcoolBottle';
-import { GlobalLoader } from '../GlobalLoader';
-import { ActivityScene } from './ActivityScene';
-import { Uranium } from '../Uranium';
-import { BlendFunction, BlendMode, EffectComposer, EffectMaterial, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
-import { Particle } from '../Particle';
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {ActivityScene} from './ActivityScene';
+import {Uranium} from '../Uranium';
+import {EffectComposer, EffectPass, OutlineEffect} from 'postprocessing';
+import {Particle} from '../Particle';
 import {TestTube2D} from "../TestTube2D";
-
 
 
 export class Experience2Part2 extends ActivityScene {
