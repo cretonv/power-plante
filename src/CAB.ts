@@ -41,6 +41,7 @@ export class CAB {
                         this.filled()
                         this.isFilled = true 
                         this.loupe.isEnabled = true 
+                        GlobalLoader.getInstance().setSelectedArray(this.loupe.object.children)
                     }
             });
             //console.log('alo') // this line runs ..
@@ -138,6 +139,7 @@ export class CAB {
 
     enableButton(){
         this.clickHandler = this.buttonMouseClickEvent.bind(this);
+        
         window.addEventListener('click', this.clickHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
         window.addEventListener( 'pointermove',this.moveHandler);

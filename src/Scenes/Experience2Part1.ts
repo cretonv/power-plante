@@ -32,7 +32,7 @@ export class Experience2Part1 extends ActivityScene {
      private loupe:Loupe
      private eyedropper:EyeDropper
      private testtube:TestTube
-  
+     private eyeDropperSupport:EyedropperSupport
 
 
     constructor() {
@@ -96,7 +96,8 @@ export class Experience2Part1 extends ActivityScene {
       
 
         const geometry = new THREE.BoxGeometry( 0.04, 0.1, 0.0001 );
-        const material = new THREE.MeshBasicMaterial( { color: 0x000000,
+        const material = new THREE.MeshBasicMaterial( {
+            color: 0x000000,
             transparent: true,
             opacity: 0.0
         } );
@@ -110,9 +111,9 @@ export class Experience2Part1 extends ActivityScene {
             this.scene.add(this.testtube.object)
         }, camera,controls,new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),controls,testube_drop_zone)
 
-        const eyeDropperSupport= new EyedropperSupport()
-        eyeDropperSupport.init(() => {
-            this.scene.add(eyeDropperSupport.object)
+        this.eyeDropperSupport= new EyedropperSupport()
+        this.eyeDropperSupport.init(() => {
+            this.scene.add(this.eyeDropperSupport.object)
         }, camera, controls)
 
 
@@ -128,7 +129,7 @@ export class Experience2Part1 extends ActivityScene {
 
         this.loupe.init(() => {
             // loupe.object.position.set(0.7, 0.0, 0)
-            this.loupe.object.rotation.set(Math.PI/2*0.80, 0, 0) 
+            this.loupe.object.rotation.set(0, 0, 0) 
             this.scene.add(this.loupe.object)
         }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls,this.cab.object.getObjectByName("GLASS_dome"))
 
@@ -137,12 +138,8 @@ export class Experience2Part1 extends ActivityScene {
         this.eyedropper = new EyeDropper()
         this.eyedropper.init(() => {
             this.scene.add(this.eyedropper.object)
-        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, this.testtube, controls, eyeDropperSupport,this.cab)
+        }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), redDyeElement, alcoolBottle, this.testtube, controls, this.eyeDropperSupport,this.cab)
 
-
-
-      
-        
         GlobalLoader.getInstance().getGLTFLoaded('decor',(object)=>{
             object.scale.set(0.01,0.01,0.01)
             object.position.set(0.00,0.00,-0.1)
@@ -151,6 +148,7 @@ export class Experience2Part1 extends ActivityScene {
 
 
       
+        
        
         
 
@@ -170,6 +168,8 @@ export class Experience2Part1 extends ActivityScene {
         // Animate
         this.initPostProcessing()
         this.outlineEffect.selection.add(testube_drop_zone);
+        
+        
     }
     initPostProcessing  = () => {
         this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
@@ -197,11 +197,12 @@ export class Experience2Part1 extends ActivityScene {
         const renderPass = new RenderPass(this.scene, this.camera)
         this.composer.addPass(renderPass);
         this.composer.addPass(this.outlinePass);
+
         
 
     }
     setup(){
-        document.querySelector('body').classList.remove('active');
+        //document.querySelector('body').classList.remove('active');
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;
@@ -215,6 +216,12 @@ export class Experience2Part1 extends ActivityScene {
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
         console.log(this.controls.position)
+        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');
+        GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
+       
+    },1100)
+        
+
     }
 
     anim(tick) {
@@ -248,7 +255,12 @@ export class Experience2Part1 extends ActivityScene {
     setAction() {
 
     }
-
+    reloadSelectedLayer(){
+        console.log("reload")
+        this.outlineEffect.selection.set(GlobalLoader.getInstance().getSelectedArray())
+        console.log(GlobalLoader.getInstance().getSelectedArray())
+        console.log(this.outlineEffect.selection)
+    }
     destroy() {
         console.log("destroy")
         //this.composer.removePass(this.outlinePass)
@@ -256,18 +268,18 @@ export class Experience2Part1 extends ActivityScene {
         this.loupe.destroy()
         this.eyedropper.destroy()
         this.testtube.destroy()
-        this.scene.traverse((child) => {
-            if(child instanceof THREE.Mesh){
-                child.geometry.dispose()
+        // this.scene.traverse((child) => {
+        //     if(child instanceof THREE.Mesh){
+        //         child.geometry.dispose()
 
-                for(const key in child.material){
-                    const value = child.material[key]
+        //         for(const key in child.material){
+        //             const value = child.material[key]
 
-                    if (value && typeof value.dispose === 'function'){
-                        value.dispose()
-                    }
-                }
-            }
-        })
+        //             if (value && typeof value.dispose === 'function'){
+        //                 value.dispose()
+        //             }
+        //         }
+        //     }
+        // })
     }
 }

@@ -17,10 +17,6 @@ export const exp1Name = "exp1Name"
 export var GlobalLoader = (function () {
   var constructeur = function () {
     this.getCurrentScene = function (thisSceneId = sceneId): ActivityScene {
-      //console.log(thisSceneId)
-      // console.log(thisSceneId)
-      // console.log(thisSceneId)
-      // console.log(thisSceneId)
 
       switch (thisSceneId) {
         case exp2Part1Name:
@@ -65,8 +61,10 @@ export var GlobalLoader = (function () {
       this.loadScene(renderer, controls, camera, clock,newId)
     }
     this.notifyTransitionDone = function() {
+      hasLandedBeenLoadedOnce = true
       oldSceneId = sceneId
       sceneId = nextSceneId
+      instance.getCurrentScene().setup()
       nextSceneId="none";
       transitionRequested = false
       this.destroyScene(oldSceneId)
@@ -82,6 +80,14 @@ export var GlobalLoader = (function () {
     this.setCurrentBackground = function () {
       backgroundtexture
     }
+
+    this.getIsThereModalOpened = function () {
+      return isThereModalOpened
+    }
+    this.setIsThereModalOpened = function (bool) {
+      isThereModalOpened = bool
+    }
+
     this.getFBXLoaded = function (name: string, callback: Function) {
       return callback(FbxArray[name])
     }
@@ -116,15 +122,21 @@ export var GlobalLoader = (function () {
       }
       return false
     }
+    this.getHasLandedBeenLoadedOnce= function () {
+      return hasLandedBeenLoadedOnce
+    }
   }
 
   // variables for scene state management
-  var sceneId = landingName;
+  var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
   var firstsceneloaded = false
+  var isThereModalOpened = false
+  
+  let hasLandedBeenLoadedOnce = false
 
   var landingScene: FirstScene = null
   var exp2Part1Scene: Experience2Part1 = null
@@ -161,7 +173,7 @@ export var GlobalLoader = (function () {
         visualLoader = new VisualLoader()
 
         //Load all fbx and gltf in an array
-        loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-14.fbx", () => {
+        loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-16.fbx", () => {
           numberLoaded += 1
           console.log("charger")
         })
@@ -237,7 +249,7 @@ export var GlobalLoader = (function () {
 
         })
 
-        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_sam_v-2.gltf", () => {
+        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_flo_v-3.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)
@@ -252,8 +264,8 @@ export var GlobalLoader = (function () {
         }
 
         renderer = new THREE.WebGLRenderer({
-          canvas: canvas,
-          //powerPreference: "high-performance",
+            canvas: canvas,
+            //powerPreference: "high-performance",
             antialias: true,
             //stencil: false,
             preserveDrawingBuffer: true

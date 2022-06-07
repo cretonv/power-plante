@@ -48,6 +48,7 @@ export class TestTube extends EventDispatcher {
     private clickReleaseHandler
     private mouseMoveEvent:Function
     private moveHandler
+    public hasBeenHiglightedOnce = false
 
     constructor() {
         super()
@@ -141,6 +142,7 @@ export class TestTube extends EventDispatcher {
                                     if (child.name.includes("bouchon")) {
                 
                                         child.visible = false
+                                        
                 
                                     }
                 
@@ -180,6 +182,7 @@ export class TestTube extends EventDispatcher {
                     // -0.4 is offset to grab on the 
                     if (this.intersects.y > 0.065) {
                         this.object.position.set(this.intersects.x, this.intersects.y - 0.065, this.intersects.z);
+                        GlobalLoader.getInstance().setSelectedArray([this.dropzone])
                     }
 
                 }

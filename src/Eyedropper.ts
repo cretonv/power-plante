@@ -35,6 +35,7 @@ export class EyeDropper {
     private support:EyedropperSupport
     private cab:CAB
     private isPart3 =false
+    private isFirstClick = true
 
     private buttonMouseClickEvent:Function
     private clickHandler
@@ -43,11 +44,12 @@ export class EyeDropper {
     private mouseMoveEvent:Function
     private moveHandler
 
+
     constructor() {
 
          //mousedowxn
          this.buttonMouseClickEvent = () => {
-            console.log( this.object.position.distanceTo(this.support.object.position)           )
+            
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object);
             if(intersectsDownRed.length > 0 && this.redDyeObject.capacity>0 && this.state == this.stateEnum.Empty ){
@@ -56,6 +58,10 @@ export class EyeDropper {
                 this.state = this.stateEnum.RedDye
                 this.redDyeObject.removeLiquid()
                 this.colorContent(new THREE.MeshBasicMaterial( {color: 0x880000} ))
+                }
+                if(!this.tubeObject.hasBeenHiglightedOnce){
+                    GlobalLoader.getInstance().setSelectedArray([this.tubeObject.object.children[1].children[1]])
+                    this.tubeObject.hasBeenHiglightedOnce = true
                 }
             }
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
@@ -68,6 +74,12 @@ export class EyeDropper {
                     this.alcoolBottle.removeLiquid()
                     this.colorContent(new THREE.MeshBasicMaterial( {color: 0x000088} ))
                 }
+                if(!this.tubeObject.hasBeenHiglightedOnce){
+                    GlobalLoader.getInstance().setSelectedArray([this.tubeObject.object.children[1].children[1]])
+                    this.tubeObject.hasBeenHiglightedOnce = true
+                }
+
+                
             }
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsCabPipe = this.raycaster.intersectObject(this.cab.object.getObjectByName("Valve"));
@@ -80,7 +92,7 @@ export class EyeDropper {
                 //TODO higlight button
                 this.cab.enableButton()
                 this.removeAllContent()
-            
+                GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                }
             }
             
@@ -89,17 +101,21 @@ export class EyeDropper {
             console.log(intersectsDownTube)
            
             if(intersectsDownTube.length > 0  && this.tubeObject.object.position.distanceTo(this.object.position)<0.12){
+                GlobalLoader.getInstance().setSelectedArray([])
+
                 if (this.isPart3 && this.tubeObject.shakeEnded){
                     //console.log("onéla")
                     this.state = this.stateEnum.Violet
                     this.tubeObject.removeAllContent()
                     this.colorContent(new THREE.MeshBasicMaterial({color: 0x880088}))
+                    GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("Valve")])
                 }
                 else{
                     switch ( this.state) {
                         case this.stateEnum.RedDye:
                             this.tubeObject.addRed(()=>{ 
                                 this.isPart3 = true
+                                GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                             })
                             this.removeAllContent()
     
@@ -107,6 +123,7 @@ export class EyeDropper {
                         case this.stateEnum.Alcool:
                             this.tubeObject.addAlcool(()=>{ 
                                 this.isPart3 = true
+                                GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                             })
                             this.removeAllContent()
                             break
@@ -121,6 +138,11 @@ export class EyeDropper {
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.object.children);
             if (intersects.length > 0 ){
+                if(this.isFirstClick){
+                 GlobalLoader.getInstance().setSelectedArray([this.alcoolBottle.object.children[1].children[1],this.redDyeObject.object.children[1].children[0]])
+                 this.isFirstClick = false
+                }
+
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
                 this.tubeObject.isEnabled = false
@@ -138,7 +160,14 @@ export class EyeDropper {
             if(intersectsSupport.length>0){
                 
                 this.object.position.set(0.2, 0.0, 0)
-
+                if(this.isPart3){
+                    GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("button_2")])
+                }
+                else
+                {
+                    GlobalLoader.getInstance().setSelectedArray([])
+                }
+                
                 //TODO destroy drag & drop listener 
                 //Todo set 
                 this.tubeObject.isEnabled=true

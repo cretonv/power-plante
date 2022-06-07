@@ -71,7 +71,6 @@ export class Battery {
         this.controls = controls
         this.plane = plane
         GlobalLoader.getInstance().getGLTFLoaded("battery", (object) => {
-
             this.object = object
             this.object.scale.set(0.01, 0.01, 0.01)
             callback()
@@ -83,9 +82,7 @@ export class Battery {
         window.addEventListener('mouseup', this.clickReleaseHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
         window.addEventListener( 'pointermove',this.moveHandler);
-
-
-       
+        
     }
 
 

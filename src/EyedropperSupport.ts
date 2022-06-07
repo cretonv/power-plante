@@ -79,6 +79,6 @@ export class EyedropperSupport {
     }
 
     destroy() {
-
+        
     }
 }
