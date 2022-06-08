@@ -5,8 +5,11 @@
   top: 0;
   left: 0;
   display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+  transition: all 1.5s;
+  z-index: 20;
   &.hidden {
     opacity: 0;
     pointer-events: none;
@@ -28,5 +31,20 @@
     z-index: 1;
     width: fit-content;
     margin: 0 auto;
+  }
+  .load-bar {
+    width: 300px;
+    background-color: #FEFEFE;
+    border-radius: 34px;
+    padding: 3px;
+    height: 16px;
+    z-index: 1;
+    .level {
+      width: 0;
+      height: 100%;
+      background-color: $color-1;
+      border-radius: 34px;
+      transition: all 1s;
+    }
   }
 }

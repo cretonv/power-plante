@@ -183,7 +183,7 @@ export class Case {
                 //onfaitrien
             }
             }
-            
+
 
 
         }
@@ -378,7 +378,7 @@ export class Case {
         })
         if(!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()){
             this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this)
-            window.addEventListener('mousedown', this.clickHandlerDocument)            
+            window.addEventListener('mousedown', this.clickHandlerDocument)
             this.moveHandlerDocument = this.mouseMoveEventDocument.bind(this)
             window.addEventListener('pointermove', this.moveHandlerDocument)
         }
@@ -387,7 +387,7 @@ export class Case {
             this.hasBeenOpened = true
             this.blockLoop = false
             // this.clickHandlerDocument = this.buttonMouseClickEventDocument.bind(this)
-            // window.addEventListener('mousedown', this.clickHandlerDocument)     
+            // window.addEventListener('mousedown', this.clickHandlerDocument)
 
             this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
             document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mouseup', this.clickReleaseHandler)
@@ -427,7 +427,7 @@ export class Case {
         document.querySelector<HTMLCanvasElement>('#webgl')?.removeEventListener('mousedown', this.clickHandler)
         this.clickHandler = this.buttonMouseClickEvent2.bind(this);
         document.querySelector<HTMLCanvasElement>('#webgl')?.addEventListener('mousedown', this.clickHandler)
-    
+
     }
 
     detectClickOnCaseElement() {
@@ -443,11 +443,11 @@ export class Case {
 
     animCameraOnAppear() {
         const v = {value: 0}
+        const distance = this.camera.position.distanceTo(this.object.position)
         new TWEEN.Tween(v)
             .to({ value: 2 * Math.PI}, 4000)
             .easing(TWEEN.Easing.Cubic.InOut)
             .onUpdate(() => {
-                const distance = this.camera.position.distanceTo(this.object.position)
                 this.camera.position.set(distance * Math.sin(v.value), this.camera.position.y, distance * Math.cos(v.value))
             })
             .start();
@@ -471,7 +471,7 @@ export class Case {
             this.lastAction.stop()
 
             this.activeAction.reset()
- 
+
             this.activeAction.play()
         }
     }

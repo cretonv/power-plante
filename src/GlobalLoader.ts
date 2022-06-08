@@ -70,7 +70,7 @@ export var GlobalLoader = (function () {
       return backgroundtexture
     }
     this.getNumberLoaded = function () {
-      return numberLoaded * 100 / 23
+      return Math.round(numberLoaded * 100 / 23)
     }
     this.setCurrentBackground = function () {
       backgroundtexture
@@ -171,47 +171,55 @@ export var GlobalLoader = (function () {
         landingScene = new FirstScene()
         exp2Part1Scene = new Experience2Part1()
         exp2Part2Scene = new Experience2Part2()
-      
+
         exp1Scene = new Experience1()
         visualLoader = new VisualLoader()
         listener = new THREE.AudioListener();
-        
+
         //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-16.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
         })
         loadFBX(fbxLoader, FbxArray, "dye", "dye/dyeRed_animation_sam_v-2.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
         })
         loadFBX(fbxLoader, FbxArray, "eyedropper", "eyedropper/eyedropper_animation_sam_v-2.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
 
         })
         loadFBX(fbxLoader, FbxArray, "testtube", "testtube/testtube_animation_v-2.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
 
         })
         loadFBX(fbxLoader, FbxArray, "cab", "cab/cab_experience2_animation_sam_v3.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
 
         })
         loadFBX(fbxLoader, FbxArray, "alcoolbottle", "alcoolbottle/alcohol_animation_sam_v-2.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
 
         })
         loadFBX(fbxLoader, FbxArray, "cabAnim", "cab/exp1_flo_v-5.fbx", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger")
 
         })
         loadGltf(gltfLoader, GltfArray, "cab", "cab/cab_flo_v-4.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
@@ -219,6 +227,7 @@ export var GlobalLoader = (function () {
 
         loadGltf(gltfLoader, GltfArray, "decor", "decor/decor_flo_v-4.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
@@ -226,6 +235,7 @@ export var GlobalLoader = (function () {
 
         loadGltf(gltfLoader, GltfArray, "support", "eyedropper-support/support-pipette_flo_v-1.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
@@ -234,6 +244,7 @@ export var GlobalLoader = (function () {
 
         loadGltf(gltfLoader, GltfArray, "uranium", "uranium/uranium_flo_v-1.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
@@ -241,6 +252,7 @@ export var GlobalLoader = (function () {
 
         loadGltf(gltfLoader, GltfArray, "battery", "battery/battery_sam_v-2.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
@@ -248,6 +260,7 @@ export var GlobalLoader = (function () {
 
         loadGltf(gltfLoader, GltfArray, "exp2", "exp2/popup_exp2.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
@@ -255,45 +268,55 @@ export var GlobalLoader = (function () {
 
         loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_sam_v-2.gltf", () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger gltf ")
           //console.log(GltfArray)
 
         })
         loadSound(audioLoader,listener, AudioArray , 'turn','Cab_qui_tourne.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         })
         loadSound(audioLoader,listener, AudioArray , 'metal','Click_metal_Glowy.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
-        })  
+        })
         loadSound(audioLoader,listener, AudioArray , 'click','Click3.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         } )
         loadSound(audioLoader,listener, AudioArray , 'led','Click.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         },false,0.25)
         loadSound(audioLoader,listener, AudioArray , 'musique','musique.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
           GlobalLoader.getInstance().playSound("musique")
         },true,0.2)
         loadSound(audioLoader,listener, AudioArray , 'wrong','erreur_interdiction.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         },false,6)
         loadSound(audioLoader,listener, AudioArray , 'end','experiencefinis.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         })
         loadSound(audioLoader,listener, AudioArray , 'bloup','Liquide.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         })
         loadSound(audioLoader,listener, AudioArray , 'blink','Scintillement_ondes.mp3', () => {
           numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
         })
 
@@ -395,7 +418,7 @@ function loadSound(loader: THREE.AudioLoader, listener : THREE.AudioListener, ar
       sound.setVolume(volume);
       array[name] = sound
       callback()
-},   
+},
             // onProgress callback
             function ( xhr ) {
                 console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
