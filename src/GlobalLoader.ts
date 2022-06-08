@@ -124,6 +124,8 @@ export var GlobalLoader = (function () {
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
+  var audioLoader = new THREE.AudioLoader();
+  var listener = new THREE.AudioListener();
   var firstsceneloaded = false
 
   var landingScene: FirstScene = null
@@ -145,8 +147,11 @@ export var GlobalLoader = (function () {
   var backgroundtexture = null;
   var FbxArray: { string: THREE.Group } = {}
   var GltfArray: { string: THREE.Group } = {}
+  var AudioArray: { string: THREE.Audio } = {}
   var numberLoaded = 0
   var instance = null;
+
+
   return new function () {
     this.getInstance = function () {
       if (instance == null) {
@@ -159,6 +164,8 @@ export var GlobalLoader = (function () {
         exp2Part2Scene = new Experience2Part2()
         exp1Scene = new Experience1()
         visualLoader = new VisualLoader()
+        
+        var audioLoader = new THREE.AudioLoader();
 
         //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-14.fbx", () => {
@@ -262,7 +269,7 @@ export var GlobalLoader = (function () {
         renderer.setSize(sizes.width, sizes.height)
 
         camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
-
+        camera.add(listener)
         controls = new OrbitControls(camera, renderer.domElement)
         controls.enableDamping = false
         controls.enabled = true
@@ -313,7 +320,28 @@ function loadGltf(loader: GLTFLoader, array: { string: THREE.Group }, name: stri
   )
 }
 
-function loadHdri(loader: GLTFLoader, array: { string: THREE.Group }, name: string, modelFilePath: string, callback: Function) {
+function loadSound(loader: THREE.AudioLoader, listener : THREE.AudioListener, array , name: string, audioFilePath: string, callback: Function) {
+  loader.load( `/sounds/${audioFilePath}`, function( buffer ) {
+      let sound = new THREE.Audio( listener );
+      sound.setBuffer( buffer );
+      sound.setLoop(true);
+      sound.setVolume(0.1);
+      array[name] = sound
+},   
+            // onProgress callback
+            function ( xhr ) {
+                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            },
+
+            // onError callback
+            function ( err ) {
+                console.log( 'Un error ha ocurrido' );
+            }
+
+);
+}
+
+function loadHdri(loader , array: { string: THREE.Group }, name: string, modelFilePath: string, callback: Function) {
   loader.load(
     `/models/${modelFilePath}`,
     (gltf) => {
@@ -330,3 +358,4 @@ function loadHdri(loader: GLTFLoader, array: { string: THREE.Group }, name: stri
     }
   )
 }
+

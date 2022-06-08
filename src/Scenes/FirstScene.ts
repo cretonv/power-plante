@@ -15,7 +15,7 @@ import {
     KawaseBlurPass
 } from "postprocessing";
 import {Mascot} from "../Mascot";
-import { exp2Part1Name, GlobalLoader } from "../GlobalLoader";
+import { exp1Name, exp2Part1Name, GlobalLoader } from "../GlobalLoader";
 import { ActivityScene } from "./ActivityScene";
 
 export class FirstScene extends ActivityScene {
