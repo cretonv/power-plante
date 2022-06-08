@@ -25,12 +25,42 @@ html.has-scroll-smooth {
 .btn.default {
   padding: 15px 17px;
   border-radius: 50px;
-  background-color: green;
+  background-color: $color-2;
   font-family: $secondary-fonts;
   text-decoration: none;
   color: #FFFFFF;
   font-weight: 700;
   font-size: 16px;
+  position: relative;
+  z-index: 1;
+  &:not(:last-of-type) {
+    margin-right: 32px;
+  }
+  &.shadow {
+    &:hover {
+      transition: all 0.3s;
+      bottom: -4px;
+      right: -4px;
+      &::before {
+        transition: all 0.3s;
+        transform: translateX(0) translateY(0);
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color-2, 0.5);
+      transform: translateX(4px) translateY(4px);
+      border-radius: 50px;
+      z-index: -1;
+    }
+  }
 }
 .btn.custom {
   position: relative;
@@ -51,11 +81,14 @@ html.has-scroll-smooth {
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 4px;
+    right: 1px;
     bottom: 0;
-    left: 0;
+    left: 1px;
     z-index: -1;
+    background-color: $color-2;
+    clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+    transition: all 0.3s;
   }
   svg {
     position: absolute;
@@ -66,7 +99,6 @@ html.has-scroll-smooth {
     width: 100%;
     height: auto;
     z-index: 3;
-    background-color: $color-2;
     transition: all 0.3s;
     background-clip: content-box;
   }
@@ -87,13 +119,16 @@ html.has-scroll-smooth {
   &:hover {
     svg {
       transition: all 0.3s;
-      background-color: #F5F4F0;
       path {
         stroke: $color-2;
       }
     }
     .text {
       color: $color-2;
+    }
+    &::after {
+      transition: all 0.3s;
+      background-color: transparent;
     }
   }
 }

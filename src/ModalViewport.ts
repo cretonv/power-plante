@@ -103,11 +103,17 @@ export class ModalViewport {
 
         // Plane background
         const planeGeometry = new THREE.PlaneGeometry( 2.5, 1.875 );
-        const planeTexture = new THREE.TextureLoader().load( '/public/assets/textures/gridModal.png' );
+        const planeTexture = new THREE.TextureLoader().load( '/images/textures/gridModal.png' );
         const planeMaterial = new THREE.MeshBasicMaterial( {map: planeTexture, side: THREE.DoubleSide} );
         this.plane = new THREE.Mesh( planeGeometry, planeMaterial );
         this.plane.position.z = -10
         this.rtCamera.add( this.plane );
+    }
+
+    setCameraPosition(x: Number, y: Number, z: Number) {
+        this.rtCamera.position.x = x
+        this.rtCamera.position.y = y
+        this.rtCamera.position.z = z
     }
 
     closeHtml(){

@@ -27,12 +27,26 @@
     position: relative;
     width: fit-content;
     margin: 32px auto 48px;
-    img {
+    img.text-draw {
       position: absolute;
       width: 35px;
       height: auto;
       left: -40px;
       top: -15px;
+    }
+    img.text-arrow {
+      position: absolute;
+      width: 85px;
+      height: auto;
+      right: 0;
+      bottom: -100%;
+    }
+    img.text-hashtag {
+      position: absolute;
+      width: 200px;
+      height: auto;
+      right: -150px;
+      top: -150%;
     }
     span {
       text-transform: none;

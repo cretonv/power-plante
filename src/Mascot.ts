@@ -4,6 +4,7 @@ export class Mascot {
     private quotesArray: [string]
     private activeQuote: string
     private mascotContainer: HTMLDivElement
+    // @ts-ignore
     private typeWriter: Typewriter
     private buttonHandler
 
@@ -36,7 +37,7 @@ export class Mascot {
         this.mascotContainer.classList.add('visible')
         this.mascotContainer.classList.add('alternative-remove')
     }
-    makeVisibleAlternative() {  
+    makeVisibleAlternative() {
         this.mascotContainer.classList.add('alternative-version')
         window.setTimeout(()=>{
         this.mascotContainer.classList.add('visible')
