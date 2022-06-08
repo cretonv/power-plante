@@ -160,7 +160,7 @@ export class Case {
                     this.scene.addBlurOnScene()
                     break;
                 case 'exp2':
-
+                    
                     GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
                     this.modalExp2.setCameraPosition(0, 0, 2)

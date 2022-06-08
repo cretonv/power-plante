@@ -69,6 +69,8 @@ export class TestTube extends EventDispatcher {
             console.log(intersectsObject)
             if (intersectsSupport.length > 0 && intersectsObject.length > 0) {
 
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(10)
                 this.object.position.set(this.dropzone.position.x, 0, 0)
                 console.log("onélà")
                 if (!this.shakeEnded) {

@@ -158,31 +158,44 @@ export class Experience2Part2 extends ActivityScene {
                 }
             }
             if (this.particuleClickedState[0]>9 && this.particuleClickedState[1]>9 && this.particuleClickedState[2]>9 && !this.transiHasBeenDone){
+               
                 this.transiHasBeenDone = true
-                window.setTimeout(() => {
+                GlobalLoader.getInstance().setMascotAlternateVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(4)
+                GlobalLoader.getInstance().setMascotCallback(()=>{
                     document.querySelector('body').classList.add('active');
+                    console.log("onélà")
                     setTimeout(() => {
-
-                        document.querySelector('.tubes-line').classList.add('hidden')
                         GlobalLoader.getInstance().setNextScene(landingName)
                         setTimeout(() => {
+                            
 
-                            this.controls.enabled = false
-                            this.controls.minDistance = -Infinity;
-                            this.controls.maxDistance = Infinity;
-                            this.controls.enableDamping = true;
-                            this.controls.minPolarAngle = -Infinity;
-                            this.controls.maxPolarAngle = Infinity;
-                            this.controls.minAzimuthAngle = -Infinity;
-                            this.controls.maxAzimuthAngle = Infinity;
-                            this.controls.enablePan = true;
-                            this.controls.target.set(0, 0, 0)
-                            GlobalLoader.getInstance().notifyTransitionDone()
-                            console.log("ontransi")
+                            document.querySelector('body').classList.add('active');
+                            setTimeout(() => {
+        
+                                document.querySelector('.tubes-line').classList.add('hidden')
+                                GlobalLoader.getInstance().setNextScene(landingName)
+                                setTimeout(() => {
+                                    this.controls.enabled = false
+                                    this.controls.minDistance = -Infinity;
+                                    this.controls.maxDistance = Infinity;
+                                    this.controls.enableDamping = true;
+                                    this.controls.minPolarAngle = -Infinity;
+                                    this.controls.maxPolarAngle = Infinity;
+                                    this.controls.minAzimuthAngle = -Infinity;
+                                    this.controls.maxAzimuthAngle = Infinity;
+                                    this.controls.enablePan = true;
+                                    this.controls.target.set(0, 0, 0)
+                                    GlobalLoader.getInstance().notifyTransitionDone()
+                                }, 700)
+                            }, 700)
+                        }, 400)
+                    }, 1200)
+                    
+    
+                },"Retour à la malette")
+                
 
-                        }, 700)
-                    }, 700)
-                }, 10000)
             }
             console.log(this.particuleClickedState)
         })
@@ -219,6 +232,8 @@ export class Experience2Part2 extends ActivityScene {
         window.setTimeout(()=>{
             document.querySelector('body').classList.remove('active');
             document.querySelector('.tubes-line').classList.remove('hidden')
+            GlobalLoader.getInstance().setMascotVisible()
+            GlobalLoader.getInstance().setMascotChangeQuote(7)
         },1000)
 
     }
