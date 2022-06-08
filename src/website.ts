@@ -21,11 +21,13 @@ new Swiper('.swiper', {
     },
 });
 
-let scroll = new LocomotiveScroll({
+let locoScroll = new LocomotiveScroll({
     el: document.querySelector('[data-scroll-container]'),
     smooth: true
 });
 
-document.addEventListener('scroll', () =>{
-    scroll.update()
-})
+document.addEventListener("DOMContentLoaded", function() {
+    window.setTimeout(() => {
+        locoScroll.update()
+    }, 500)
+});
