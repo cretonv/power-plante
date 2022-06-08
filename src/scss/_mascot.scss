@@ -7,16 +7,17 @@
   height: fit-content;
   border-top: solid 6px #15CD8B;
   background-image: url('./public/assets/textures/gridModal.png');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
   padding-top: 16px;
   padding-bottom: 16px;
   transform: translateY(100%);
   transition: all 1s ease-in;
-  img {
+  img.mascot-illu {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -25,14 +26,18 @@
     transform: translateX(calc(100% + 50px)) translateY(50px);
     transition: all 1s ease-in;
   }
+  img.mark-logo {
+    display: none;
+  }
   .btn {
     display: none;
+    top: 32px;
   }
   .quote {
     font-family: $secondary-fonts;
     font-style: normal;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 31px;
     color: #028153;
     max-width: 50%;
@@ -56,8 +61,9 @@
     width: calc(100% - 30vw);
     height: calc(100% - 30vh);
     pointer-events: none;
+    border-top: none;
     .btn {
-      display: block;
+      display: flex;
       &.hidden {
         display: none;
       }
@@ -67,9 +73,22 @@
       opacity: 1;
       pointer-events: auto;
     }
+    img.mascot-illu {
+      right: -25%;
+      bottom: -39%;
+    }
+    img.mark-logo {
+      display: block;
+      position: absolute;
+      top: -10%;
+      right: 7%;
+      width: 96px;
+      height: auto;
+      z-index: 1;
+    }
     .quote {
-      font-size: 22px;
-      line-height: 26px;
+      font-size: 24px;
+      line-height: 28px;
       color: #09130B;
       max-width: 80%;
       text-align: center;

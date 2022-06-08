@@ -262,7 +262,7 @@ export class FirstScene extends ActivityScene {
             // this.directionalLight.target = this.case.object
         }, this.camera, this.controls, this.indications, this.modalExp1Viewport, this.modalExp2Viewport, this.mascot,
             () => {
-                //console.log("yaaa")
+                console.log("yaaa")
                 //console.log(this.case.caseSelectedObject)
                 this.outlineEffect.selection.set(this.case.caseSelectedObject);
                 //this.outlinePass.recompile()
