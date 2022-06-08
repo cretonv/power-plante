@@ -8,6 +8,7 @@ import { Experience2Part2 } from "./Scenes/Experience2Part2";
 import { FirstScene } from "./Scenes/FirstScene";
 import { ActivityScene } from "./Scenes/ActivityScene";
 import {VisualLoader} from "./VisualLoader";
+import { Mascot } from "./Mascot";
 
 export const landingName = "landingName"
 export const exp2Part1Name = "exp2Part1Name"
@@ -75,6 +76,26 @@ export var GlobalLoader = (function () {
     this.setCurrentBackground = function () {
       backgroundtexture
     }
+
+    this.setMascotVisible = function () {
+      mascot.makeVisible()
+
+    }
+
+    this.setMascotHidden = function () {
+      mascot.hide()
+
+    }
+
+    this.setMascotAlternateVisible = function () {
+      mascot.makeVisibleAlternative()
+
+    }
+
+    this.setMascotChangeQuote = function (index) {
+      mascot.changeActiveQuote(index)
+    }
+
 
     this.getIsThereModalOpened = function () {
       return isThereModalOpened
@@ -155,7 +176,12 @@ export var GlobalLoader = (function () {
   var selectedObjects
 
   let visualLoader: VisualLoader
-
+  let mascot = new Mascot()
+  const quotes = [
+      "Salut ! Je suis Glowy, un physicien, et j’ai besoin de ton aide pour refaire fonctionner ma centrale nucléaire à l’uranium recyclé ! Est-tu prêt à aider la planète dans cette “Green Adventure” avec moi ? ",
+      "Je te présente le Kit du Petit Physicien ! Comme tu peux le voir il faut recomposer mon kit recyclé d’energie autonome pour qu’il puisse de nouveau purifier l’air et recharger nos appareils sans élécricités pour sauver la planète !"
+  ]
+ 
   var backgroundtexture = null;
   var FbxArray: { string: THREE.Group } = {}
   var GltfArray: { string: THREE.Group } = {}
@@ -179,6 +205,11 @@ export var GlobalLoader = (function () {
         visualLoader = new VisualLoader()
 
         listener = new THREE.AudioListener();
+        mascot.init(
+            quotes,
+            document.querySelector('.mascot'),
+            document.querySelector('.mascot .quote')
+        )
 
         //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-16.fbx", () => {

@@ -16,18 +16,25 @@ export class Mascot {
         this.typeWriter = new Typewriter('.mascot .quote', {
             autoStart: false,
             cursor: "",
-            delay: 25
+            delay: 18
         });
     }
     changeActiveQuote(index) {
         this.activeQuote = this.quotesArray[index]
         // this.quoteElement.innerHTML = this.activeQuote
         console.log(this.activeQuote)
-        this.typeWriter
-            .typeString(this.activeQuote)
+        new Typewriter('.mascot .quote', {
+            autoStart: false,
+            cursor: "",
+            delay: 18
+        }).typeString(this.activeQuote)
             .start()
     }
     makeVisible() {
+        this.mascotContainer.classList.add('visible')
+    }
+    makeVisibleAlternative() {  
+        this.mascotContainer.classList.add('alternative-version')
         this.mascotContainer.classList.add('visible')
     }
     hide() {

@@ -348,6 +348,9 @@ export class Exp1Assembly {
 
             }
         })
+       
+        GlobalLoader.getInstance().setMascotAlternateVisible()
+        GlobalLoader.getInstance().setMascotChangeQuote(2)
         window.setTimeout(() => {
             document.querySelector('body').classList.add('active');
             setTimeout(() => {
