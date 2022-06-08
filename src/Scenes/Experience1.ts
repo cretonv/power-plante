@@ -34,6 +34,7 @@ export class Experience1 extends ActivityScene {
 
     constructor() {
         super()
+    
 
 
     }
@@ -144,7 +145,7 @@ export class Experience1 extends ActivityScene {
         this.outlineEffect.selection.set(GlobalLoader.getInstance().getSelectedArray())
     }
     setup(){
-        
+       
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;

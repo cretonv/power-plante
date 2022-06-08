@@ -20,15 +20,12 @@ export var GlobalLoader = (function () {
 
       switch (thisSceneId) {
         case exp2Part1Name:
-          //console.log("part1")
           return exp2Part1Scene
           break;
         case landingName:
-          //console.log("landing")
           return landingScene
           break;
         case exp2Part2Name:
-          //console.log("part2")
           return exp2Part2Scene
           break;
         case exp1Name:
@@ -39,17 +36,11 @@ export var GlobalLoader = (function () {
       }
     }
     this.loadScene = function (renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock, thisSceneId = sceneId) {
-      // console.log("chargement")
-      // console.log(thisSceneId)
-      // console.log("chargement")
       console.log(   this.getCurrentScene(thisSceneId))
       this.getCurrentScene(thisSceneId).init(renderer, controls, camera, clock)
     }
 
     this.destroyScene = function (sceneToDestroy) {
-      // console.log("destroy")
-      // console.log(sceneToDestroy)
-      // console.log("destroy")
 
       this.getCurrentScene(sceneToDestroy).destroy()
 
@@ -64,18 +55,22 @@ export var GlobalLoader = (function () {
       hasLandedBeenLoadedOnce = true
       oldSceneId = sceneId
       sceneId = nextSceneId
+      isThereModalOpened = false
       instance.getCurrentScene().setup()
       nextSceneId="none";
       transitionRequested = false
       this.destroyScene(oldSceneId)
 
     }
+    this.playSound = function(soundName){
+        AudioArray[soundName].play()
+    }
 
     this.getCurrentBackground = function () {
       return backgroundtexture
     }
     this.getNumberLoaded = function () {
-      return numberLoaded * 100 / 14
+      return numberLoaded * 100 / 23
     }
     this.setCurrentBackground = function () {
       backgroundtexture
@@ -110,13 +105,17 @@ export var GlobalLoader = (function () {
       return canvas
     }
     this.getLoadState = function () {
-      if (numberLoaded == 14) {
+      if (numberLoaded == 23) {
         if (firstsceneloaded) {
           return true
         }
         console.log("onload")
         instance.loadScene(renderer, controls, camera, clock)
-        instance.getCurrentScene().setup()
+        window.setTimeout(()=>{
+          instance.getCurrentScene().setup()
+          console.log("remove loader here ")
+          //TODO remove loader here
+        },6000)
         firstsceneloaded = true
         return true
       }
@@ -133,6 +132,8 @@ export var GlobalLoader = (function () {
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
+  var audioLoader = new THREE.AudioLoader();
+  var listener:THREE.AudioListener
   var firstsceneloaded = false
   var isThereModalOpened = false
 
@@ -157,6 +158,7 @@ export var GlobalLoader = (function () {
   var backgroundtexture = null;
   var FbxArray: { string: THREE.Group } = {}
   var GltfArray: { string: THREE.Group } = {}
+  var AudioArray: { string: THREE.Audio } = {}
   var numberLoaded = 0
   var instance = null;
   return new function () {
@@ -169,9 +171,11 @@ export var GlobalLoader = (function () {
         landingScene = new FirstScene()
         exp2Part1Scene = new Experience2Part1()
         exp2Part2Scene = new Experience2Part2()
+      
         exp1Scene = new Experience1()
         visualLoader = new VisualLoader()
-
+        listener = new THREE.AudioListener();
+        
         //Load all fbx and gltf in an array
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-16.fbx", () => {
           numberLoaded += 1
@@ -249,12 +253,50 @@ export var GlobalLoader = (function () {
 
         })
 
-        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_flo_v-3.gltf", () => {
+        loadGltf(gltfLoader, GltfArray, "loupe", "loupe/magnifyingglass_sam_v-2.gltf", () => {
           numberLoaded += 1
           console.log("charger gltf ")
           //console.log(GltfArray)
 
         })
+        loadSound(audioLoader,listener, AudioArray , 'turn','Cab_qui_tourne.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        })
+        loadSound(audioLoader,listener, AudioArray , 'metal','Click_metal_Glowy.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        })  
+        loadSound(audioLoader,listener, AudioArray , 'click','Click3.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        } )
+        loadSound(audioLoader,listener, AudioArray , 'led','Click.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        },false,0.25)
+        loadSound(audioLoader,listener, AudioArray , 'musique','musique.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+          GlobalLoader.getInstance().playSound("musique")
+        },true,0.2)
+        loadSound(audioLoader,listener, AudioArray , 'wrong','erreur_interdiction.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        },false,6)
+        loadSound(audioLoader,listener, AudioArray , 'end','experiencefinis.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        })
+        loadSound(audioLoader,listener, AudioArray , 'bloup','Liquide.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        })
+        loadSound(audioLoader,listener, AudioArray , 'blink','Scintillement_ondes.mp3', () => {
+          numberLoaded += 1
+          console.log("charger son")
+        })
+
 
 
         canvas = document.querySelector<HTMLDivElement>('canvas#webgl')!
@@ -274,6 +316,7 @@ export var GlobalLoader = (function () {
         renderer.setSize(sizes.width, sizes.height)
 
         camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
+        camera.add(listener)
 
         controls = new OrbitControls(camera, renderer.domElement)
         controls.enableDamping = false
@@ -341,4 +384,27 @@ function loadHdri(loader: GLTFLoader, array: { string: THREE.Group }, name: stri
       console.log(error)
     }
   )
+}
+
+
+function loadSound(loader: THREE.AudioLoader, listener : THREE.AudioListener, array , name: string, audioFilePath: string, callback: Function,loop:boolean = false,volume:number = 0.5) {
+  loader.load( `/sounds/${audioFilePath}`, function( buffer ) {
+      let sound = new THREE.Audio( listener );
+      sound.setBuffer( buffer );
+      sound.setLoop(loop);
+      sound.setVolume(volume);
+      array[name] = sound
+      callback()
+},   
+            // onProgress callback
+            function ( xhr ) {
+                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            },
+
+            // onError callback
+            function ( err ) {
+                console.log( 'Un error ha ocurrido' );
+            }
+
+);
 }
