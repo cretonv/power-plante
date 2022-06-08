@@ -78,12 +78,8 @@ export class FirstScene extends ActivityScene {
         if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()) {
             this.camera.position.z = 0.5
             this.case.animCameraOnAppear()
-<<<<<<< HEAD
-            
-=======
             document.querySelector('.loader').classList.add('hidden')
             document.querySelector('.canvas-title').classList.remove('hidden')
->>>>>>> 1da800f0761affb43a21cb6e11b3dd1d894b3c1f
         }
         else {
             this.camera.position.x = 0;
@@ -247,31 +243,7 @@ export class FirstScene extends ActivityScene {
             "cab"
         )
 
-        // Init mascot
-        this.mascot = new Mascot()
-        const quotes = [
-            "Salut ! Je suis Glowy, un physicien, et j’ai besoin de ton aide pour refaire fonctionner ma centrale nucléaire à l’uranium recyclé ! Est-tu prêt à aider la planète dans cette “Green Adventure” avec moi ? ",
-            "Je te présente le Kit du Petit Physicien ! Comme tu peux le voir il faut recomposer mon kit recyclé d’energie autonome pour qu’il puisse de nouveau purifier l’air et recharger nos appareils sans élécricités pour sauver la planète !",
-            "Grâce à tes talents d’apprentis physicien, tu as créer une mini-fission nucléaire naturelle avec ta centrale et ton uranium recyclé ! Cette énergie verte a permis de recharger ta batterie, d’économiser de l’énergie et préserver notre chère planète !",
-            "Maintenant que tu as ta mini-centrale retourne vite à la malette pour tester plein d’autres expériences bonnes pour l’environnement !",
-            "Bravo ! Tu as pu observer les différentes ondes, le morceau d’uranium produit 3 types d’ondes qui sont présentes partout et qui aident l’écosystème, les animaux et la croissance de tes légumes : les ondes Gamma, Alpha, Beta C est grâce à elles que tu as des frites croustillantes !",
-            "Grâce à tes expériences tu as obtenu ton certificat du futur grand physicien nucléaire qui te donne une réduction de 10% sur le kit POWER PLANTE pour continuer tes expériences.  Tu pourras fabriquer des bonbons avec les déchets nucléaires,  faire fonctionner ta lampe sans éléctricité et bien plus encore ! Montre vite ça à tes parents pour continuer !",
-            "Si tu veux continuer, achète notre super kit POWER PLANTE en magasin ! Tu pourras avoir accès à plus de 1000 expériences.",
-            "Ce que tu vois ici, ce sont les ondes invisibles qui nettoient l’environnement. Clique sur les ondes Gamma, ce sont les plus grosses ondes qui s’occupent du carbone.",
-            "Prend ta loupe et observe les particules purificatrice !",
-            "Actionne l’interrupteur pour diffuser ton mélange !",
-            "Verse le dans le reservoir et actionne l’interrupteur !",
-            "Maintenant que tout est rassemblé, secoue vite ta mixture avant les gaz verts ne s’échappe !",
-            "Tu es de retour dans ton laboratoire ! Cette fois tu vas pouvoir observer les ondes qui purifient l’air de ta maison chaque jour avec ton kit ! Utilise les différents colorants alimentaires et l’alcool de bambou recyclé avec ton uranium naturel pour les voir !",
-            "Impressionant ! Regarde, les leds indiquent que l’uranium naturel a rechargé ta batterie propremment et sans consommer d’éléctricité !",
-            "La pile est en place ! Tourne le bouton pour activer la recharge par énergie verte !"
-        ]
-        console.log(document.querySelector('.mascot .quote'))
-        this.mascot.init(
-            quotes,
-            document.querySelector('.mascot'),
-            document.querySelector('.mascot .quote')
-        )
+        
 
         // Init case
         this.case = new Case()

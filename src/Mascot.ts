@@ -35,7 +35,10 @@ export class Mascot {
     }
     makeVisibleAlternative() {  
         this.mascotContainer.classList.add('alternative-version')
+        window.setTimeout(()=>{
         this.mascotContainer.classList.add('visible')
+        },1000
+        )
     }
     hide() {
         this.mascotContainer.classList.remove('visible')

@@ -116,6 +116,7 @@ export class Exp1Assembly {
                                     this.controls.minAzimuthAngle = -Infinity;
                                     this.controls.maxAzimuthAngle = Infinity;
                                     this.controls.enablePan = true;
+                                    GlobalLoader.getInstance().setMascotHidden()
                                     new TWEEN.Tween(coords)
                                         .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z, xf: targetCoords.xf, yf: targetCoords.yf, zf: targetCoords.zf })
                                         .onUpdate(() => {
@@ -140,7 +141,8 @@ export class Exp1Assembly {
                                             this.controls.maxAzimuthAngle = 1.7;
                                             this.controls.enablePan = false;
                                             GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("cache")])
-
+                                            GlobalLoader.getInstance().setMascotVisible()
+                                            GlobalLoader.getInstance().setMascotChangeQuote(16)
                                         })
                                         .start();
                                 }, 1600)
@@ -214,6 +216,8 @@ export class Exp1Assembly {
                     else {
                         this.object.getObjectByName("cache").position.z = 14
                         this.state = "rangelespilesfdp"
+                        GlobalLoader.getInstance().setMascotVisible()
+                        GlobalLoader.getInstance().setMascotChangeQuote(17)
                         //this.setBatteryLessTransparent()
                         GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("battery")])
                     }
@@ -228,7 +232,9 @@ export class Exp1Assembly {
                         this.object.getObjectByName("cache").position.z = -0.012989381115526565
                         GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("button")])
                         this.state = "pilecharged"
-                        console.log("onélà")
+                        GlobalLoader.getInstance().setMascotVisible()
+                        GlobalLoader.getInstance().setMascotChangeQuote(14)
+
 
                     }
                 }
@@ -327,7 +333,13 @@ export class Exp1Assembly {
         })
     }
     ledanim() {
+
         let count = 300
+        window.setTimeout(() => {
+            GlobalLoader.getInstance().setMascotAlternateVisible()
+            GlobalLoader.getInstance().setMascotChangeQuote(2)
+
+        }, 6500) 
         this.object.traverse((child) => {
 
             if (child.name.includes("led")) {
@@ -349,8 +361,7 @@ export class Exp1Assembly {
             }
         })
        
-        GlobalLoader.getInstance().setMascotAlternateVisible()
-        GlobalLoader.getInstance().setMascotChangeQuote(2)
+
         window.setTimeout(() => {
             document.querySelector('body').classList.add('active');
             setTimeout(() => {
@@ -407,6 +418,7 @@ export class Exp1Assembly {
             this.state = "closepile"
             this.object.getObjectByName("battery").material = this.batterymaterial
             this.object.getObjectByName("battery_sticker").material = this.batteryStickersMaterial
+
 
         }
     }

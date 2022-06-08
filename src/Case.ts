@@ -130,7 +130,7 @@ export class Case {
                                     this.indications.points[3].element.classList.remove('destroyed')
                                    GlobalLoader.getInstance().setMascotVisible()
                                     this.animEnded = true
-                                    GlobalLoader.getInstance().setMascotChangeQuote(0)
+                                    GlobalLoader.getInstance().setMascotChangeQuote(1)
 
                                 }
                             })
@@ -446,6 +446,10 @@ export class Case {
             .easing(TWEEN.Easing.Cubic.InOut)
             .onUpdate(() => {
                 this.camera.position.set(distance * Math.sin(v.value), this.camera.position.y, distance * Math.cos(v.value))
+            })
+            .onComplete(()=>{
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(0)
             })
             .start();
     }
