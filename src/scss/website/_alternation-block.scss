@@ -1,11 +1,15 @@
 .alternation-block {
-  display: flex;
-  flex-flow: row nowrap;
+  .container {
+    display: flex;
+    flex-flow: row nowrap;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
   .left {
     width: 40%;
     position: relative;
     .case-model {
-      width: 110%;
+      width: 120%;
       height: auto;
       position: relative;
       left: -18%;
@@ -22,6 +26,13 @@
   .right {
     width: 60%;
     padding-top: 72px;
+    position: relative;
+    > img {
+      position: absolute;
+      bottom: 10%;
+      right: 35%;
+      width: 80px;
+    }
     h2 {
       font-family: $primary-fonts;
       font-style: normal;
@@ -36,7 +47,7 @@
         &.mark-logo {
           height: 96px;
           width: 96px;
-          right: 0;
+          right: -48px;
           top: -32px;
         }
         &.underline {

@@ -1,4 +1,5 @@
 .slider-block {
+  position: relative;
   >.title {
     img {
       position: absolute;
@@ -10,13 +11,20 @@
       z-index: 0;
     }
   }
+  .bg {
+    position: absolute;
+    width: 95vw;
+    height: auto;
+    right: 0;
+    top: 50%;
+  }
   .swiper {
     width: 100%;
     height: 100%;
     transform: translateX(5vw);
     overflow: visible;
     position: relative;
-    margin-top: 48px;
+    margin-top: 80px;
     .swiper-wrapper {
       .swiper-slide {
         height: 240px;
@@ -35,10 +43,15 @@
       font-family: $primary-fonts;
       font-size: 17px;
       line-height: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      text-align: center;
     }
     img {
-      width: 13vw;
-      height: 13vw;
+      width: auto;
+      height: 11vw;
     }
   }
   .button-next,
