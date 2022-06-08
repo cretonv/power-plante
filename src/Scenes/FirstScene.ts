@@ -148,11 +148,11 @@ export class FirstScene extends ActivityScene {
         // Init 2D indications
         const points = [
             {
-                position: new THREE.Vector3(-0.1, 0.05, 0.5),
+                position: new THREE.Vector3(-0.1, 0.11, 0.1),
                 element: document.querySelector('.indication-0')
             },
             {
-                position: new THREE.Vector3(-0.1, 0.11, 0.5),
+                position: new THREE.Vector3(-0.1, 0.16, 0.5),
                 element: document.querySelector('.indication-1')
             },
             {
@@ -160,7 +160,7 @@ export class FirstScene extends ActivityScene {
                 element: document.querySelector('.indication-2')
             },
             {
-                position: new THREE.Vector3(-0.025, 0.30, 0.20),
+                position: new THREE.Vector3(-0.01, 0.1, 0.1),
                 element: document.querySelector('.indication-3')
             },
         ]

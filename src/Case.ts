@@ -449,6 +449,9 @@ export class Case {
                 GlobalLoader.getInstance().setMascotVisible()
                 GlobalLoader.getInstance().setMascotChangeQuote(0)
             })
+            .onComplete(() => {
+                this.indications.points[0].element.classList.remove('destroyed')
+            })
             .start();
     }
 
