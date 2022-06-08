@@ -143,9 +143,16 @@ export class Experience1 extends ActivityScene {
         this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4;
         this.controls.maxPolarAngle = Math.PI/2-0.1;
         this.controls.minAzimuthAngle =-0.4;
-        this.controls.maxAzimuthAngle = 0.4;
-        this.controls.enablePan = false;
-        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1100)
+        this.controls.maxAzimuthAngle = 0.4; 
+        this.controls.enablePan = false;    
+        window.setTimeout(()=>{
+            document.querySelector('body').classList.remove('active');
+            window.setTimeout(()=>{
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(15)
+            },1200)
+        },1200)
+
 
     }
 

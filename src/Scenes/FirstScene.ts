@@ -14,6 +14,7 @@ import {
     RenderPass,
     KawaseBlurPass
 } from "postprocessing";
+
 import { Mascot } from "../Mascot";
 import { exp1Name, exp2Part1Name, GlobalLoader } from "../GlobalLoader";
 import { ActivityScene } from "./ActivityScene";
@@ -242,17 +243,7 @@ export class FirstScene extends ActivityScene {
             "cab"
         )
 
-        // Init mascot
-        this.mascot = new Mascot()
-        const quotes = [
-            "Salut ! Je suis Glowy, un physicien, et j’ai besoin de ton aide pour refaire fonctionner ma centrale nucléaire à l’uranium recyclé ! Est-tu prêt à aider la planète dans cette “Green Adventure” avec moi ? ",
-            "Je te présente le Kit du Petit Physicien ! Comme tu peux le voir il faut recomposer mon kit recyclé d’energie autonome pour qu’il puisse de nouveau purifier l’air et recharger nos appareils sans élécricités pour sauver la planète !"
-        ]
-        console.log(document.querySelector('.mascot .quote'))
-        this.mascot.init(
-            quotes,
-            document.querySelector('.mascot'),
-        )
+
 
         // Init case
         this.case = new Case()
@@ -260,7 +251,7 @@ export class FirstScene extends ActivityScene {
             this.scene.add(this.case.object)
             this.backLight.target = this.case.object
             // this.directionalLight.target = this.case.object
-        }, this.camera, this.controls, this.indications, this.modalExp1Viewport, this.modalExp2Viewport, this.mascot,
+        }, this.camera, this.controls, this.indications, this.modalExp1Viewport, this.modalExp2Viewport, 
             () => {
                 console.log("yaaa")
                 //console.log(this.case.caseSelectedObject)

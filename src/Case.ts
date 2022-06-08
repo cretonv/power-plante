@@ -45,7 +45,6 @@ export class Case {
     private modalExp1Open: boolean
     private modalExp2: ModalViewport
     private modalExp2Open: boolean
-    private mascot: Mascot
     public caseSelectedObject: Array<THREE.Object3D> = []
 
     // Temporary attributes waiting refacto of main.ts
@@ -127,9 +126,9 @@ export class Case {
                                     this.controls.minAzimuthAngle = - Infinity;
                                     this.controls.maxAzimuthAngle = Infinity;
                                     this.indications.points[3].element.classList.remove('destroyed')
-                                    this.mascot.makeVisible()
+                                   GlobalLoader.getInstance().setMascotVisible()
                                     this.animEnded = true
-                                    this.mascot.changeActiveQuote(0)
+                                    GlobalLoader.getInstance().setMascotChangeQuote(1)
 
                                 }
                             })
@@ -147,7 +146,7 @@ export class Case {
             this.mouseDown = true
             switch (this.selectedStatus) {
                 case 'exp1':
-                    this.mascot.hide()
+                    GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
                     this.modalExp1.isVisible = true
                     this.modalExp1Open = true
@@ -162,7 +161,7 @@ export class Case {
                     break;
                 case 'exp2':
 
-                    this.mascot.hide()
+                    GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
@@ -313,7 +312,6 @@ export class Case {
         indications: Indication,
         modalExp1: ModalViewport,
         modalExp2: ModalViewport,
-        mascot: Mascot,
         selectedObjectCallback: Function,
         scene: FirstScene
     ) {
@@ -324,7 +322,6 @@ export class Case {
         this.indications = indications
         this.modalExp1 = modalExp1
         this.modalExp2 = modalExp2
-        this.mascot = mascot
         this.selectedObjectCallback = selectedObjectCallback
         GlobalLoader.getInstance().getFBXLoaded("case", (object) => {
             this.object = object
@@ -447,6 +444,10 @@ export class Case {
             .easing(TWEEN.Easing.Cubic.InOut)
             .onUpdate(() => {
                 this.camera.position.set(distance * Math.sin(v.value), this.camera.position.y, distance * Math.cos(v.value))
+            })
+            .onComplete(()=>{
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(0)
             })
             .start();
     }

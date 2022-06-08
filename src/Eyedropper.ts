@@ -26,6 +26,7 @@ export class EyeDropper {
     private camera: THREE.Camera
     private state = this.stateEnum.Empty
     private redDyeObject:Dye
+
     private alcoolBottle:AlcoolBottle
     private tubeObject:TestTube
     private cameraControler:OrbitControls
