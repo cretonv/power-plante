@@ -25,6 +25,9 @@
     transform: translateX(calc(100% + 50px)) translateY(50px);
     transition: all 1s ease-in;
   }
+  a {
+    display: none;
+  }
   .quote {
     font-family: $secondary-fonts;
     font-style: normal;
@@ -53,6 +56,12 @@
     width: calc(100% - 30vw);
     height: calc(100% - 30vh);
     pointer-events: none;
+    a {
+      display: block;
+      &.hidden {
+        display: none;
+      }
+    }
     &.visible {
       transform: none;
       opacity: 1;
