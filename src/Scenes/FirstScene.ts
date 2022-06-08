@@ -114,7 +114,7 @@ export class FirstScene extends ActivityScene {
          * Camera
         //  */
         // this.camera = new THREE.PerspectiveCamera(50, GlobalLoader.getInstance().getCanvas().clientWidth / GlobalLoader.getInstance().getCanvas().clientHeight, 0.1, 100)
-        this.camera.position.z = 1
+        this.camera.position.z = 0.1
         this.camera.position.y = 0.7
         this.scene.add(this.camera)
 

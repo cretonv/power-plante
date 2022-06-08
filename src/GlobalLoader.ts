@@ -128,14 +128,14 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = exp2Part1Name;
+  var sceneId = landingName;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
   var firstsceneloaded = false
   var isThereModalOpened = false
-  
+
   let hasLandedBeenLoadedOnce = false
 
   var landingScene: FirstScene = null
