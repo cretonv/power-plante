@@ -57,7 +57,7 @@ export class FirstScene extends ActivityScene {
         this.scene = new THREE.Scene()
     }
 
-    init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
+    init(renderer, controls: OrbitControls, camera: THREE.Camera) {
         this.renderer = renderer
         this.camera = camera
         this.controls = controls
@@ -243,7 +243,7 @@ export class FirstScene extends ActivityScene {
             "cab"
         )
 
-        
+
 
         // Init case
         this.case = new Case()

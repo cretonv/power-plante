@@ -4,15 +4,13 @@ export class Mascot {
     private quotesArray: [string]
     private activeQuote: string
     private mascotContainer: HTMLDivElement
-    private quoteElement: HTMLDivElement
     private typeWriter: Typewriter
     constructor() {
         this.quotesArray = null
     }
-    init(quotes, container, quoteElement) {
+    init(quotes, container) {
         this.quotesArray = quotes
         this.mascotContainer = container
-        this.quoteElement = quoteElement
         this.typeWriter = new Typewriter('.mascot .quote', {
             autoStart: false,
             cursor: "",

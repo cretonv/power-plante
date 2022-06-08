@@ -1,11 +1,10 @@
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
 import { Indication } from "./Indication";
 import { ModalViewport } from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
 import { Mascot } from "./Mascot";
-import { GlobalLoader, exp2Part1Name } from "./GlobalLoader";
+import { GlobalLoader} from "./GlobalLoader";
 import { FirstScene } from "./Scenes/FirstScene";
 
 export class Case {
@@ -20,7 +19,6 @@ export class Case {
 
     private indications: Indication
 
-    private loader: FBXLoader;
     private activeAction: THREE.AnimationAction;
     private lastAction: THREE.AnimationAction;
     private animationActions: THREE.AnimationAction[];

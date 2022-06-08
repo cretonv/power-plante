@@ -17,6 +17,7 @@ export const exp1Name = "exp1Name"
 
 export var GlobalLoader = (function () {
   var constructeur = function () {
+    // @ts-ignore
     this.getCurrentScene = function (thisSceneId = sceneId): ActivityScene {
 
       switch (thisSceneId) {
@@ -49,9 +50,10 @@ export var GlobalLoader = (function () {
 
     this.setNextScene = function(newId:string) {
       nextSceneId = newId
-      transitionRequested = true
-      this.loadScene(renderer, controls, camera, clock,newId)
+      this.loadScene(renderer, controls, camera, clock, newId)
     }
+
+
     this.notifyTransitionDone = function() {
       mascot.hide()
       hasLandedBeenLoadedOnce = true
@@ -59,13 +61,12 @@ export var GlobalLoader = (function () {
       sceneId = nextSceneId
       isThereModalOpened = false
       instance.getCurrentScene().setup()
-      nextSceneId="none";
-      transitionRequested = false
+      nextSceneId = "none";
       this.destroyScene(oldSceneId)
 
     }
-    this.playSound = function(soundName){
-        AudioArray[soundName].play()
+    this.playSound = function (soundName) {
+      AudioArray[soundName].play()
     }
 
     this.getCurrentBackground = function () {
@@ -111,19 +112,19 @@ export var GlobalLoader = (function () {
     this.getGLTFLoaded = function (name: string, callback: Function) {
       return callback(GltfArray[name])
     }
-    this.getSelectedArray = function(){
+    this.getSelectedArray = function () {
 
       return selectedObjects
     }
-    this.setSelectedArray = function(array){
+    this.setSelectedArray = function (array) {
       selectedObjects = array
       instance.getCurrentScene().reloadSelectedLayer()
 
     }
-    this.getSizes = function ()  {
+    this.getSizes = function () {
       return sizes
     }
-    this.getCanvas = function () :HTMLCanvasElement {
+    this.getCanvas = function (): HTMLCanvasElement {
       return canvas
     }
     this.getLoadState = function () {
@@ -133,17 +134,17 @@ export var GlobalLoader = (function () {
         }
         console.log("onload")
         instance.loadScene(renderer, controls, camera, clock)
-        window.setTimeout(()=>{
+        window.setTimeout(() => {
           instance.getCurrentScene().setup()
           console.log("remove loader here ")
           //TODO remove loader here
-        },6000)
+        }, 6000)
         firstsceneloaded = true
         return true
       }
       return false
     }
-    this.getHasLandedBeenLoadedOnce= function () {
+    this.getHasLandedBeenLoadedOnce = function () {
       return hasLandedBeenLoadedOnce
     }
   }
@@ -155,7 +156,6 @@ export var GlobalLoader = (function () {
   var fbxLoader = new FBXLoader()
   var gltfLoader = new GLTFLoader()
   var audioLoader = new THREE.AudioLoader();
-
   var listener:THREE.AudioListener
   var firstsceneloaded = false
   var isThereModalOpened = false
@@ -167,7 +167,6 @@ export var GlobalLoader = (function () {
   //TODO Change Scene When this will be imported
   var exp2Part2Scene: Experience2Part2 = null
   var exp1Scene: Experience1 = null
-  var transitionRequested = false;
   var renderer
   var controls
   var camera
@@ -200,9 +199,15 @@ export var GlobalLoader = (function () {
   ]
  
   var backgroundtexture = null;
-  var FbxArray: { string: THREE.Group } = {}
-  var GltfArray: { string: THREE.Group } = {}
-  var AudioArray: { string: THREE.Audio } = {}
+  var FbxArray: { string: THREE.Group } = {
+    string: undefined
+  }
+  var GltfArray: { string: THREE.Group } = {
+    string: undefined
+  }
+  var AudioArray: { string: THREE.Audio } = {
+    string: undefined
+  }
   var numberLoaded = 0
   var instance = null;
 
@@ -225,8 +230,7 @@ export var GlobalLoader = (function () {
 
         mascot.init(
             quotes,
-            document.querySelector('.mascot'),
-            document.querySelector('.mascot .quote')
+            document.querySelector('.mascot')
         )
 
         loadFBX(fbxLoader, FbxArray, "case", "case/case_flo_v-16.fbx", () => {
@@ -416,7 +420,7 @@ function loadFBX(loader: FBXLoader, array: { string: THREE.Group }, name: string
       callback()
       //console.log("chargé")
     },
-    (xhr) => {
+    () => {
       //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
     },
     (error) => {
@@ -434,7 +438,7 @@ function loadGltf(loader: GLTFLoader, array: { string: THREE.Group }, name: stri
       callback()
 
     },
-    (xhr) => {
+    () => {
       //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
     },
     (error) => {
@@ -445,7 +449,8 @@ function loadGltf(loader: GLTFLoader, array: { string: THREE.Group }, name: stri
 
 
 
-function loadHdri(loader , array: { string: THREE.Group }, name: string, modelFilePath: string, callback: Function) {
+/* function loadHdri(loader: GLTFLoader, array: { string: THREE.Group }, name: string, modelFilePath: string, callback: Function) {
+
   loader.load(
     `/models/${modelFilePath}`,
     (gltf) => {
@@ -454,14 +459,14 @@ function loadHdri(loader , array: { string: THREE.Group }, name: string, modelFi
       callback()
 
     },
-    (xhr) => {
+    () => {
       //console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
     },
     (error) => {
       console.log(error)
     }
   )
-}
+} */
 
 
 
@@ -481,7 +486,7 @@ function loadSound(loader: THREE.AudioLoader, listener : THREE.AudioListener, ar
 
             // onError callback
             function ( err ) {
-                console.log( 'Un error ha ocurrido' );
+                console.log( 'Un error ha ocurrido' + err );
             }
 
 );

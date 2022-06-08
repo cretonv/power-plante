@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Exp1Assembly } from "./Exp1Assembly";
-import { exp2Part2Name, GlobalLoader } from "./GlobalLoader";
+import { GlobalLoader } from "./GlobalLoader";
 export class Battery {
 
     private isMouseDownOnModel: boolean = false;
@@ -24,14 +24,14 @@ export class Battery {
 
         //mousedowxn
         this.buttonMouseClickEvent = () => {
-          
+
             this.raycaster.setFromCamera(this.pointer, this.camera);
             //console.log(this.target)
             const intersects = this.raycaster.intersectObjects(this.object.children);
             //console.log(intersectsUranium.length)
 
             if (intersects.length > 0) {
-            
+
                 this.controls.enabled = false
                 this.isMouseDownOnModel = true
             }
@@ -46,10 +46,10 @@ export class Battery {
             if (intersectsPile.length > 0 && intersects.length > 0) {
                 this.target.setBatteryLessTransparent()
                 this.object.visible = false
-                
+
             }
         }
-        //pointermove 
+        //pointermove
         this.mouseMoveEvent = (e) => {
             this.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
             this.pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
@@ -57,7 +57,7 @@ export class Battery {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 this.raycaster.ray.intersectPlane(this.plane, this.intersects);
                 this.object.position.set(this.intersects.x, this.intersects.y  - 0.025, this.intersects.z);
-                
+
             }
         }
 
@@ -82,7 +82,7 @@ export class Battery {
         window.addEventListener('mouseup', this.clickReleaseHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
         window.addEventListener( 'pointermove',this.moveHandler);
-        
+
     }
 
 

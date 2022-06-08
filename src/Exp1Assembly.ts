@@ -1,12 +1,7 @@
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
-import { Indication } from "./Indication";
-import { ModalViewport } from "./ModalViewport";
-import { transformMeshToGlass, transformMeshToLed, transformMeshToLedLight } from "./Glassifier";
-import { Mascot } from "./Mascot";
-import { GlobalLoader, exp2Part1Name, landingName } from "./GlobalLoader";
-import { FirstScene } from "./Scenes/FirstScene";
+import {transformMeshToGlass, transformMeshToLed, transformMeshToLedLight} from "./Glassifier";
+import {GlobalLoader, landingName} from "./GlobalLoader";
 
 export class Exp1Assembly {
 
@@ -17,8 +12,6 @@ export class Exp1Assembly {
     private clock: THREE.Clock
     private rotateUranium = false
     private camera: THREE.Camera
-    private indications: Indication
-    private loader: FBXLoader;
     private activeAction: THREE.AnimationAction;
     private lastAction: THREE.AnimationAction;
     private animationActions: THREE.AnimationAction[];
@@ -26,7 +19,6 @@ export class Exp1Assembly {
     private isMouseDownOnModel = false
 
     // Animations and interactions attributes
-    private mouseDown: boolean
     private pointer = THREE.Vector2
     private raycaster = THREE.Raycaster
 
@@ -43,8 +35,6 @@ export class Exp1Assembly {
 
     // Temporary attributes waiting refacto of main.ts
     private controls: THREE.OrbitControls
-    private selectedObjectCallback: Function
-    private isMouseOnModel = false
 
 
     private buttonMouseClickEvent: Function
@@ -53,7 +43,6 @@ export class Exp1Assembly {
     private moveHandler
     private buttonMouseReleaseEvent: Function
     private clickReleaseHandler
-    private plane: THREE.Mesh
     private batterymaterial: THREE.material
     private batteryStickersMaterial: THREE.material
 
@@ -66,10 +55,9 @@ export class Exp1Assembly {
         this.modelReady = false
         this.raycaster = new THREE.Raycaster();
         this.pointer = new THREE.Vector2(-1000000, -1000000);
-        this.mouseDown = false
         this.clock = new THREE.Clock()
 
-        this.buttonMouseClickEvent = (e) => {
+        this.buttonMouseClickEvent = () => {
             this.raycaster.setFromCamera(this.pointer, this.camera);
             const intersects = this.raycaster.intersectObjects(this.object.children);
             console.log(intersects)
@@ -202,7 +190,7 @@ export class Exp1Assembly {
             this.isMouseDownOnModel = false
             this.controls.enabled = true
         }
-        
+
         this.mouseMoveEvent = (e) => {
             this.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
             this.pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
@@ -348,7 +336,7 @@ export class Exp1Assembly {
                         transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
                         GlobalLoader.getInstance().playSound("led")
 
-                    }, count) 
+                    }, count)
                 }else{
                     window.setTimeout(() => {
                         transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
@@ -387,8 +375,6 @@ export class Exp1Assembly {
     anim() {
         if (this.rotateUranium && this.modelReady) {
 
-            const speed = 4
-            const sizeFactor = 40
             console.log(this.uranium)
             this.uranium.rotation.set(this.uranium.rotation.x + 0.001, this.uranium.rotation.y + 0.008, this.uranium.rotation.z + 0.025)
 

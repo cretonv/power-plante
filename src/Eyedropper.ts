@@ -1,14 +1,13 @@
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Dye } from "./Dye";
-import { TestTube } from "./TestTube";
-import { AlcoolBottle } from "./AlcoolBottle";
-import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
-import { GlobalLoader } from "./GlobalLoader";
-import { EyedropperSupport } from "./EyedropperSupport";
-import { CAB } from "./CAB";
+import {Dye} from "./Dye";
+import {TestTube} from "./TestTube";
+import {AlcoolBottle} from "./AlcoolBottle";
+import {transformMeshToPlastic} from "./Glassifier";
+import {GlobalLoader} from "./GlobalLoader";
+import {EyedropperSupport} from "./EyedropperSupport";
+import {CAB} from "./CAB";
+
 export class EyeDropper {
     private stateEnum = Object.freeze({
         Empty:"empty",
@@ -48,11 +47,11 @@ export class EyeDropper {
 
          //mousedowxn
          this.buttonMouseClickEvent = () => {
-            
+
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object);
             if(intersectsDownRed.length > 0 && this.redDyeObject.capacity>0 && this.state == this.stateEnum.Empty ){
-                //triggerranim 
+                //triggerranim
                 if(this.redDyeObject.object.position.distanceTo(this.object.position)<0.12){
                 this.state = this.stateEnum.RedDye
                 this.redDyeObject.removeLiquid()
@@ -67,9 +66,9 @@ export class EyeDropper {
             }
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsAlcool = this.raycaster.intersectObject(this.alcoolBottle.object);
-            
+
             if(intersectsAlcool.length > 0 && this.alcoolBottle.capacity>0 && this.state == this.stateEnum.Empty ){
-                //triggerranim 
+                //triggerranim
                 if(this.alcoolBottle.object.position.distanceTo(this.object.position)<0.12){
                     this.state = this.stateEnum.Alcool
                     this.alcoolBottle.removeLiquid()
@@ -82,14 +81,14 @@ export class EyeDropper {
                     this.tubeObject.hasBeenHiglightedOnce = true
                 }
 
-                
+
             }
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsCabPipe = this.raycaster.intersectObject(this.cab.object.getObjectByName("Valve"));
             console.log(intersectsCabPipe)
             if(intersectsCabPipe.length > 0  ){
-                //triggerranim 
-                
+                //triggerranim
+
                if( this.stateEnum.Violet == this.state){
 
                 //TODO higlight button
@@ -100,11 +99,11 @@ export class EyeDropper {
                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                }
             }
-            
+
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsDownTube = this.raycaster.intersectObject(this.tubeObject.object);
             console.log(intersectsDownTube)
-           
+
             if(intersectsDownTube.length > 0  && this.tubeObject.object.position.distanceTo(this.object.position)<0.12){
                 GlobalLoader.getInstance().setSelectedArray([])
 
@@ -120,16 +119,16 @@ export class EyeDropper {
                 else{
                     switch ( this.state) {
                         case this.stateEnum.RedDye:
-                            this.tubeObject.addRed(()=>{ 
+                            this.tubeObject.addRed(()=>{
                                 this.isPart3 = true
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                             })
                             this.removeAllContent()
                             GlobalLoader.getInstance().playSound("bloup")
-                            
+
                             break
                         case this.stateEnum.Alcool:
-                            this.tubeObject.addAlcool(()=>{ 
+                            this.tubeObject.addAlcool(()=>{
                                 this.isPart3 = true
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                             })
@@ -137,7 +136,7 @@ export class EyeDropper {
                              GlobalLoader.getInstance().playSound("bloup")
 
                             break
-    
+
                         default:
                             console.log("pipette vide")
                       }
@@ -156,9 +155,9 @@ export class EyeDropper {
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
                 this.tubeObject.isEnabled = false
-      
+
             }
-     
+
         }
         //mouseup
         this.buttonMouseReleaseEvent = () => {
@@ -168,7 +167,7 @@ export class EyeDropper {
             this.raycaster.set( this.object.position, new THREE.Vector3(0,-1,0) );
             const intersectsSupport = this.raycaster.intersectObject(this.support.object);
             if(intersectsSupport.length>0){
-                
+
                 this.object.position.set(0.2, 0.0, 0)
                 if(this.isPart3){
                     GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("button_2")])
@@ -177,15 +176,15 @@ export class EyeDropper {
                 {
                     GlobalLoader.getInstance().setSelectedArray([])
                 }
-                
-                //TODO destroy drag & drop listener 
-                //Todo set 
+
+                //TODO destroy drag & drop listener
+                //Todo set
                 this.tubeObject.isEnabled=true
 
             }
 
         }
-        //pointermove 
+        //pointermove
         this.mouseMoveEvent = (e) => {
                         // calculate pointer position in normalized device coordinates
             // (-1 to +1) for both components
@@ -193,22 +192,22 @@ export class EyeDropper {
             this.pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
             this.pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
             if(this.isMouseDownOnModel){
-               
+
                 this.raycaster.setFromCamera(this.pointer, this.camera);
-                this.raycaster.ray.intersectPlane(this.plane, this.intersects); 
+                this.raycaster.ray.intersectPlane(this.plane, this.intersects);
                 //console.log(this.intersects)
                 //console.log(this.pointer)
                 //console.log(this.object.scene.children[0].position)
-                // -0.4 is offset to grab on the 
+                // -0.4 is offset to grab on the
                 if(this.intersects.y > 0.06 ){
                     this.object.position.set(this.intersects.x, this.intersects.y-0.07, this.intersects.z);
                 }
 
             }
-          
+
         }
-       
-       
+
+
     }
 
     init(callback: Function,camera:THREE.Camera,plane:THREE.Plane,redDyeObject:Dye,alcoolBottle:AlcoolBottle,tubeObject:TestTube,cameraControler:OrbitControls,support:EyedropperSupport,cab:CAB,) {
@@ -219,13 +218,12 @@ export class EyeDropper {
         this.redDyeObject = redDyeObject
         this.tubeObject = tubeObject
         this.support = support
-        this.cab = cab 
-    
-       
+        this.cab = cab
+
+
         GlobalLoader.getInstance().getFBXLoaded("eyedropper", (object) => {
-  
+
             this.object = object
-            this.mixer = new THREE.AnimationMixer(object)
 
             // const animationAction = this.mixer.clipAction(
             //     (object as THREE.Object3D).animations[0]
@@ -242,18 +240,18 @@ export class EyeDropper {
                         child.visible = false
                     }
                     else if (child.name.includes("bouchon")) {
-                        
+
                         child.visible = false
 
                     }
-                
+
                 }
             })
 
             object.scale.set(0.01, 0.01, 0.01)
 
             object.position.set(0.2, 0.0, 0)
-            
+
             callback()
         })
 
@@ -267,7 +265,7 @@ export class EyeDropper {
 
 
     anim() {
-       
+
     }
     removeAllContent(){
         this.object.traverse((child) => {
@@ -277,8 +275,8 @@ export class EyeDropper {
                     //this.liquidSample.push(child)
                     child.visible = false
                 }
-                
-            
+
+
             }
         })
     }
@@ -291,14 +289,14 @@ export class EyeDropper {
                     child.visible = true
                     child.material = material
                 }
-                
-            
+
+
             }
         })
     }
 
     setAction() {
-    
+
     }
 
     destroy() {

@@ -6,7 +6,7 @@
   width: 100%;
   height: fit-content;
   border-top: solid 6px #15CD8B;
-  background-image: url('./assets/textures/gridModal.png');
+  background-image: url('./public/assets/textures/gridModal.png');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -24,6 +24,9 @@
     height: auto;
     transform: translateX(calc(100% + 50px)) translateY(50px);
     transition: all 1s ease-in;
+  }
+  .btn {
+    display: none;
   }
   .quote {
     font-family: $secondary-fonts;
@@ -53,6 +56,12 @@
     width: calc(100% - 30vw);
     height: calc(100% - 30vh);
     pointer-events: none;
+    .btn {
+      display: block;
+      &.hidden {
+        display: none;
+      }
+    }
     &.visible {
       transform: none;
       opacity: 1;

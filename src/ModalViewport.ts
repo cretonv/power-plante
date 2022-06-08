@@ -27,7 +27,7 @@ export class ModalViewport {
     constructor() {
         this.isVisible = false
         this.isFirstOpening = true
-        this.closeModalEvent =  () => {this.closeModal() 
+        this.closeModalEvent =  () => {this.closeModal()
         console.log("suppr")}
     }
 
@@ -97,13 +97,13 @@ export class ModalViewport {
             this.rtColdLight.target = this.object
             this.openHandler = this.openModalEvent.bind(this);
             this.htmlDescriptionElement.querySelector('a').addEventListener('mousedown', this.openHandler)
-            
+
             callback()
         })
 
         // Plane background
         const planeGeometry = new THREE.PlaneGeometry( 2.5, 1.875 );
-        const planeTexture = new THREE.TextureLoader().load( 'assets/textures/gridModal.png' );
+        const planeTexture = new THREE.TextureLoader().load( '/public/assets/textures/gridModal.png' );
         const planeMaterial = new THREE.MeshBasicMaterial( {map: planeTexture, side: THREE.DoubleSide} );
         this.plane = new THREE.Mesh( planeGeometry, planeMaterial );
         this.plane.position.z = -10
@@ -131,7 +131,7 @@ export class ModalViewport {
                 console.log(this.htmlDescriptionElement.querySelector('.close-cross'))
                 this.closeHandler = this.closeModalEvent.bind(this);
                 this.htmlDescriptionElement.querySelector('.close-cross').addEventListener('mousedown', this.closeHandler)
-                
+
             }
             this.rtRenderer.setViewport(
                 canvas.clientWidth / 2 - ((canvas.clientWidth / 2) / 2),

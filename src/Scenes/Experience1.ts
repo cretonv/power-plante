@@ -1,26 +1,16 @@
 import '../style.css'
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-import { EyeDropper } from '../Eyedropper';
-import { Dye, dyeColorEnum } from '../Dye';
-import { loadSceneBackgroundFromHDR } from '../SceneBackgroundLoader';
-import { TestTube } from '../TestTube';
-import { AlcoolBottle } from '../AlcoolBottle';
-import { GlobalLoader } from '../GlobalLoader';
-import { ActivityScene } from './ActivityScene';
-import { EyedropperSupport } from '../EyedropperSupport';
-import {  BlendFunction, EffectComposer, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {loadSceneBackgroundFromHDR} from '../SceneBackgroundLoader';
+import {GlobalLoader} from '../GlobalLoader';
+import {ActivityScene} from './ActivityScene';
+import {BlendFunction, EffectComposer, EffectPass, OutlineEffect, RenderPass} from 'postprocessing';
 import * as TWEEN from "@tweenjs/tween.js";
-import { CAB } from '../CAB';
-import { Loupe } from '../Loupe';
-import { Exp1Assembly } from '../Exp1Assembly';
-import { Battery } from '../Battery';
-
+import {Exp1Assembly} from '../Exp1Assembly';
+import {Battery} from '../Battery';
 
 
 export class Experience1 extends ActivityScene {
-    private clock:THREE.Clock 
     private controls: OrbitControls
     private camera: THREE.Camera
     private scene: THREE.Scene
@@ -34,16 +24,15 @@ export class Experience1 extends ActivityScene {
 
     constructor() {
         super()
-    
+
 
 
     }
 
-    init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
+    init(renderer, controls: OrbitControls, camera: THREE.Camera) {
 
 
         this.scene = new THREE.Scene()
-        this.clock = clock
 
         /**
          * Renderer
@@ -53,7 +42,7 @@ export class Experience1 extends ActivityScene {
         * Camera
         */
         this.camera = camera
-       
+
         this.scene.add(this.camera)
 
         /**
@@ -65,8 +54,6 @@ export class Experience1 extends ActivityScene {
         /**
          * Composer
          */
-        const parameters = { format: THREE.RGBAFormat };
-        const renderTarget = new THREE.WebGLRenderTarget( GlobalLoader.getInstance().getSizes().width,  GlobalLoader.getInstance().getSizes().height, parameters );
         this.composer = new EffectComposer(this.renderer);
         const plane = new THREE.Plane(new THREE.Vector3(1,0,0.2 ), -0.06)
         //plane.position.set(0.06,0,0)
@@ -91,11 +78,11 @@ export class Experience1 extends ActivityScene {
             this.controls,
             this.exp1assembly,
             )
-        
 
-        
-        loadSceneBackgroundFromHDR('hdri_flo_v-2.hdr', this.scene)  
-        
+
+
+        loadSceneBackgroundFromHDR('hdri_flo_v-2.hdr', this.scene)
+
         GlobalLoader.getInstance().getGLTFLoaded('decor',(object)=>{
             object.scale.set(0.01,0.01,0.01)
             object.position.set(0.00,0.00,-0.1)
@@ -137,7 +124,7 @@ export class Experience1 extends ActivityScene {
         const renderPass = new RenderPass(this.scene, this.camera)
         this.composer.addPass(renderPass);
         this.composer.addPass(this.outlinePass);
-        
+
 
     }
     reloadSelectedLayer(){
@@ -145,7 +132,7 @@ export class Experience1 extends ActivityScene {
         this.outlineEffect.selection.set(GlobalLoader.getInstance().getSelectedArray())
     }
     setup(){
-       
+
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;
@@ -153,8 +140,8 @@ export class Experience1 extends ActivityScene {
         this.controls.maxDistance = 0.75;
         this.controls.enableDamping = true;
         this.controls.enabled = true;
-        this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4; 
-        this.controls.maxPolarAngle = Math.PI/2-0.1; 
+        this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4;
+        this.controls.maxPolarAngle = Math.PI/2-0.1;
         this.controls.minAzimuthAngle =-0.4;
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
@@ -166,10 +153,10 @@ export class Experience1 extends ActivityScene {
             },1200)
         },1200)
 
-        
+
     }
 
-    anim(tick) {
+    anim() {
         TWEEN.update();
         // const elapsedTime = clock.getElapsedTime()
 
@@ -201,7 +188,7 @@ export class Experience1 extends ActivityScene {
 
     destroy() {
         console.log("destroy")
-        
+
         //this.composer.removePass(this.outlinePass)
         // this.exp1assembly.destroy()
         // this.scene.traverse((child) => {
