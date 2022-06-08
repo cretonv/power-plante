@@ -14,7 +14,14 @@
     opacity: 0;
     pointer-events: none;
   }
-  img {
+  video {
+    z-index: 1;
+  }
+  .play-icon  {
+    z-index: 1;
+    margin-top: 32px;
+  }
+  img.bg {
     position: absolute;
     object-fit: cover;
     object-position: center;
@@ -46,5 +53,9 @@
       border-radius: 34px;
       transition: all 1s;
     }
+  }
+  div.hidden,
+  img.hidden {
+    display: none;
   }
 }

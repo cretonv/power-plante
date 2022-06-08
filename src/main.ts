@@ -10,10 +10,13 @@ import { FirstScene } from './Scenes/FirstScene';
 
 
 let globalLoader = null
-const tickonce = () => 
+const tickonce = () =>
 {
     globalLoader = GlobalLoader.getInstance()
     window.requestAnimationFrame(tick)
+    document.querySelector('.play-icon').classList.add('hidden')
+    document.querySelector('.value-loaded').classList.remove('hidden')
+    document.querySelector('.load-bar').classList.remove('hidden')
     console.log("tickonce")
 }
 
@@ -23,13 +26,13 @@ const tick = () =>
 
     if(globalLoader.getLoadState() ){
        // console.log("onélà")
-        globalLoader.getCurrentScene().anim(tick)  
+        globalLoader.getCurrentScene().anim(tick)
     }
 
-    
+
     window.requestAnimationFrame(tick)
     window.removeEventListener("click", tickonce);
-   
+
 }
 
 window.addEventListener("click", tickonce);
@@ -53,15 +56,15 @@ window.addEventListener("click", tickonce);
 // // RenderE
 // switch (globalLoader.getCurrentScene()) {
 //     case 'scene1':
-//         //color picker 
+//         //color picker
 //         currentscene.anim(tick)
 //         break;
 //     case 'scene2':
-//         //TODO shake 
+//         //TODO shake
 //         currentscene2.anim(tick)
 //         break;
 //     case 'scene2':
-//         //TODO shake 
+//         //TODO shake
 //         currentscene2.anim(tick)
 //         break;
 //     default:
@@ -107,7 +110,7 @@ window.addEventListener("click", tickonce);
 
 // const controls = new OrbitControls(camera, renderer.domElement)
 // controls.enableDamping = false
-// controls.enabled = false 
+// controls.enabled = false
 
 
 // const clock = new THREE.Clock()
@@ -182,7 +185,7 @@ window.addEventListener("click", tickonce);
 //     scene.add( testCube );
 
 //     outlineEffect.selection.add(testCube);
-    
+
 //     //const smaaPass = new EffectPass(this.camera, this.smaaEffect);
 //     const outlinePass = new EffectPass(camera, outlineEffect);
 
@@ -195,7 +198,7 @@ window.addEventListener("click", tickonce);
 //     function tick(){
 //         // const elapsedTime = clock.getElapsedTime()
 
-      
+
 //         // Update controls
 //         controls.update()
 
@@ -206,7 +209,7 @@ window.addEventListener("click", tickonce);
 
 //         // Call tick again on the next frame
 //         window.requestAnimationFrame(tick)
-        
+
 //     }
 
 // tick()
