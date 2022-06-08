@@ -1,9 +1,7 @@
 import * as THREE from "three"
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
-import { Experience2Part2 } from "./Experience2Part2";
-import { transformMeshToGlass,transformMeshToLed } from "./Glassifier";
-import { GlobalLoader } from "./GlobalLoader";
-import { Loupe } from "./Loupe";
+import {transformMeshToGlass, transformMeshToLed} from "./Glassifier";
+import {GlobalLoader} from "./GlobalLoader";
+import {Loupe} from "./Loupe";
 
 export class CAB {
 
@@ -13,12 +11,10 @@ export class CAB {
     private camera: THREE.Camera
     private pointer = new THREE.Vector2();
     private raycaster = new THREE.Raycaster();
-    private mixer: THREE.AnimationMixer
-    private activeAction: THREE.clipAction
     public capacity = 4
     private liquidSample: Array<THREE.Mesh> = []
     private liquidIndex: number = 0
-    private isFilled = false 
+    private isFilled = false
 
 
     private buttonMouseClickEvent:Function
@@ -26,7 +22,7 @@ export class CAB {
     private mouseMoveEvent:Function
     private moveHandler
     private loupe:Loupe
-    
+
 
     constructor() {
         this.buttonMouseClickEvent = () => {
@@ -39,14 +35,14 @@ export class CAB {
                 intersects.forEach(element => {
                     if(element.object.name == "button_2"){
                         this.filled()
-                        this.isFilled = true 
-                        this.loupe.isEnabled = true 
+                        this.isFilled = true
+                        this.loupe.isEnabled = true
                         GlobalLoader.getInstance().setSelectedArray(this.loupe.object.children)
                     }
             });
             //console.log('alo') // this line runs ..
 
-            }          
+            }
         }
 
         this.mouseMoveEvent = (e) => {
@@ -59,12 +55,9 @@ export class CAB {
     init(callback: Function, camera: THREE.Camera,loupe:Loupe) {
         this.loupe = loupe
         this.camera = camera
-        const textureLoader = new THREE.TextureLoader();
-        const loader = new FBXLoader()
-       
+
         GlobalLoader.getInstance().getFBXLoaded("cab", (object) => {
             this.object = object
-            this.mixer = new THREE.AnimationMixer(object)
 
             // const animationAction = this.mixer.clipAction(
             //     (object as THREE.Object3D).animations[0]
@@ -100,11 +93,11 @@ export class CAB {
 
             object.scale.set(0.01, 0.01, 0.01)
 
-            
+
             callback()
         })
 
-        
+
 
 
     }
@@ -113,7 +106,7 @@ export class CAB {
 
     anim() {
         if(this.isFilled){
-            
+
         }
 
     }
@@ -123,29 +116,29 @@ export class CAB {
         mesh.visible = true
         GlobalLoader.getInstance().playSound("bloup")
 
-        //this.liquidSample.push(child) 
+        //this.liquidSample.push(child)
         mesh.material = new THREE.MeshBasicMaterial({color: 0x880088})
         this.liquidIndex = this.liquidIndex + 1
         //console.log(this)
         if(this.liquidIndex < 6){
-            setTimeout(() => {this.filled()}, 800); 
+            setTimeout(() => {this.filled()}, 800);
         }
         else{
-            this.loupe.isEnabled = true 
+            this.loupe.isEnabled = true
         }
 
-        
-        
+
+
     }
-    
+
 
     enableButton(){
         this.clickHandler = this.buttonMouseClickEvent.bind(this);
-        
+
         window.addEventListener('click', this.clickHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
         window.addEventListener( 'pointermove',this.moveHandler);
-        
+
     }
 
     setAction() {
@@ -158,5 +151,5 @@ export class CAB {
         window.removeEventListener( 'pointermove',this.moveHandler);
         //console.log("cab destroyed")
     }
-    
+
 }

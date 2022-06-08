@@ -1,19 +1,15 @@
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
 import * as TWEEN from "@tweenjs/tween.js";
-import { Indication } from "./Indication";
-import { ObjectViewModal } from "./ObjectViewModal";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { EyeDropper } from "./Eyedropper";
-import { EventDispatcher } from "three/src/core/EventDispatcher";
-import { transformMeshToGlass } from "./Glassifier";
-import { exp2Part2Name, GlobalLoader } from "./GlobalLoader";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {EventDispatcher} from "three/src/core/EventDispatcher";
+import {transformMeshToGlass} from "./Glassifier";
+import {GlobalLoader} from "./GlobalLoader";
+
 export class TestTube extends EventDispatcher {
 
 
     public object: THREE.Group
     private shakeamount = 0;
-    private modelFileName: string = "testtube_animation_v-2.fbx";
     private intersects = new THREE.Vector3();
     private camera: THREE.Camera
     private controls: OrbitControls
@@ -21,17 +17,13 @@ export class TestTube extends EventDispatcher {
     private raycaster = new THREE.Raycaster();
     private mixer: THREE.AnimationMixer
     private modelReady = false
-    private animationActions: THREE.AnimationAction[] = []
-    private activeAction: THREE.AnimationAction
-    private lastAction: THREE.AnimationAction
     private content = { 'Blue': 0, 'Red': 0, 'Yellow': 0, "Alcool": 0 }
-    private lookDirection = new THREE.Vector3();
 
     /**
      * State Management
      */
     public isFilled = false
-    //to check if is user can shake the tube on part 2  
+    //to check if is user can shake the tube on part 2
     public isEnabled = false
     public shakeEnded = false
     private liquidSample: Array<THREE.Mesh> = []
@@ -55,7 +47,7 @@ export class TestTube extends EventDispatcher {
 
         //mousedowxn
         this.buttonMouseClickEvent = () => {
-            
+
             this.raycaster.setFromCamera(this.pointer, this.camera);
             const intersects = this.raycaster.intersectObjects(this.object.children);
             if (intersects.length > 0) {
@@ -63,11 +55,11 @@ export class TestTube extends EventDispatcher {
                 this.cameraControler.enabled = false
 
             }
-      
+
         }
         //mouseup
         this.buttonMouseReleaseEvent = () => {
-            
+
             this.isMouseDownOnModel = false
             this.cameraControler.enabled = true
             this.raycaster.setFromCamera( this.pointer, this.camera );
@@ -110,7 +102,7 @@ export class TestTube extends EventDispatcher {
                     this.controls.minAzimuthAngle = -Infinity;
                     this.controls.maxAzimuthAngle = Infinity;
                     this.controls.enablePan = true;
-    
+
                     new TWEEN.Tween(coords)
                         .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z, xf: targetCoords.xf, yf: targetCoords.yf, zf: targetCoords.zf })
                         .onUpdate(() => {
@@ -123,7 +115,7 @@ export class TestTube extends EventDispatcher {
                         .onComplete(() => {
                             console.log(this.controls.target)
                             this.controls.enabled = true;
-                            
+
                             this.controls.minDistance = 0.35;
                             this.controls.maxDistance = 0.65;
                             this.controls.enableDamping = true;
@@ -134,38 +126,38 @@ export class TestTube extends EventDispatcher {
                             this.controls.maxAzimuthAngle = 0.4;
                             this.controls.enablePan = false;
                             this.dropzone.visible = false;
-                            
+
                             this.object.traverse((child) => {
                                 if (child instanceof THREE.Mesh) {
                                     //console.log(child)
 
                                     if (child.name.includes("bouchon")) {
-                
+
                                         child.visible = false
-                                        
-                
+
+
                                     }
-                
+
                                 }
                             })
-    
-    
+
+
                             //this.camera.getWorldDirection(this.lookDirection);
                             //this.controls.target.copy(this.camera.position).add(this.lookDirection.multiplyScalar(10));
                             //console.log(this.camera.position)
                         })
                         .start();
                 }
-                //TODO destroy drag & drop listener 
-                //Todo set 
+                //TODO destroy drag & drop listener
+                //Todo set
                 //this.tubeObject.isEnabled=true
 
             }
 
         }
-        //pointermove 
+        //pointermove
         this.mouseMoveEvent = (e) => {
-            
+
                 // calculate pointer position in normalized device coordinates
                 // (-1 to +1) for both components
                 //console.log(this.camera)
@@ -179,7 +171,7 @@ export class TestTube extends EventDispatcher {
                     //console.log(this.intersects)
                     //console.log(this.pointer)
                     //console.log(this.object.scene.children[0].position)
-                    // -0.4 is offset to grab on the 
+                    // -0.4 is offset to grab on the
                     if (this.intersects.y > 0.065) {
                         this.object.position.set(this.intersects.x, this.intersects.y - 0.065, this.intersects.z);
                         GlobalLoader.getInstance().setSelectedArray([this.dropzone])
@@ -201,18 +193,11 @@ export class TestTube extends EventDispatcher {
         this.camera = camera
         // instantiate a loader
         this.camera = camera
-        // instantiate a loader
-        const textureLoader = new THREE.TextureLoader();
-        const loader = new FBXLoader()
 
         GlobalLoader.getInstance().getFBXLoaded("testtube", (object) => {
             this.object = object
             this.mixer = new THREE.AnimationMixer(object)
 
-            const animationAction = this.mixer.clipAction(
-                (object as THREE.Object3D).animations[0]
-            )
-            this.activeAction = animationAction
             object.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
                     //console.log(child)
@@ -242,17 +227,17 @@ export class TestTube extends EventDispatcher {
 
     }
     checkIfCompleted(param) {
-        
+
         //console.log(activity_status)
         if (this.content["Red"] > 1 && this.content["Alcool"] > 1) {
             param()
-            param = true 
+            param = true
             this.isFilled = true
             console.log("go to shake part")
             //GlobalLoader.getInstance().setNextScene(exp2Part2Name)
             this.object.getObjectByName("bouchon").visible = true
             // AppLiveParameter.getInstance().setCurrentScene("scene2")
-            
+
             this.clickHandler = this.buttonMouseClickEvent.bind(this);
             window.addEventListener('mousedown', this.clickHandler)
             this.clickReleaseHandler = this.buttonMouseReleaseEvent.bind(this);
@@ -292,7 +277,7 @@ export class TestTube extends EventDispatcher {
         const mesh = this.object.getObjectByName(this.liquidSample[this.liquidSample.length - this.liquidIndex - 1].name)
         //console.log(mesh)
         mesh.visible = true
-        //this.liquidSample.push(child) 
+        //this.liquidSample.push(child)
         if (isDye) {
             mesh.material = this.redMaterial
         }
@@ -332,11 +317,11 @@ export class TestTube extends EventDispatcher {
         }
         else {
             //AppLiveParameter.getInstance().notifyTransitionDone()
-            
+
                 console.log("fini")
                 this.dropzone.visible = true
-                
-            
+
+
         }
 
 

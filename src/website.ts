@@ -5,7 +5,7 @@ import Swiper, { Navigation } from 'swiper';
 
 Swiper.use([Navigation]);
 
-const swiper = new Swiper('.swiper', {
+new Swiper('.swiper', {
     speed: 400,
     slidesPerView: 7,
     spaceBetween: 32,

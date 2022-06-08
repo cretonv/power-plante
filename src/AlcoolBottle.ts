@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { transformMeshToGlass } from "./Glassifier";
 import { GlobalLoader } from "./GlobalLoader";
 
@@ -8,12 +7,6 @@ export class AlcoolBottle {
 
     public object: THREE.Group
     public is_oppened
-    private modelFileName: string = "alcohol_animation_sam_v-2.fbx";
-    private camera: THREE.Camera
-    private pointer = new THREE.Vector2();
-    private raycaster = new THREE.Raycaster();
-    private mixer: THREE.AnimationMixer
-    private activeAction: THREE.clipAction
     public capacity = 4
     private liquidSample: Array<THREE.Mesh> = []
     private liquidIndex: number = 0
@@ -24,16 +17,10 @@ export class AlcoolBottle {
 
     }
 
-    init(callback: Function, camera: THREE.Camera) {
+    init(callback: Function) {
 
-        this.camera = camera
-        // instantiate a loader
-        const textureLoader = new THREE.TextureLoader();
-        const loader = new FBXLoader()
-   
         GlobalLoader.getInstance().getFBXLoaded("alcoolbottle", (object) => {
             this.object = object
-            this.mixer = new THREE.AnimationMixer(object)
 
             // const animationAction = this.mixer.clipAction(
             //     (object as THREE.Object3D).animations[0]
@@ -72,12 +59,12 @@ export class AlcoolBottle {
         let mesh = this.liquidSample[this.liquidIndex]
         //console.log(mesh)
         mesh.visible = false
-        //this.liquidSample.push(child) 
+        //this.liquidSample.push(child)
         this.liquidIndex = this.liquidIndex + 1
         mesh = this.liquidSample[this.liquidIndex]
         //console.log(mesh)
         mesh.visible = false
-        //this.liquidSample.push(child) 
+        //this.liquidSample.push(child)
         this.liquidIndex = this.liquidIndex + 1
 
     }

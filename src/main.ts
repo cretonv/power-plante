@@ -1,12 +1,6 @@
 import './style.css'
 import '../assets/css/main.css'
-import { GlobalLoader } from './GlobalLoader';
-
-import './style.css'
-import * as THREE from "three"
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-
-import { FirstScene } from './Scenes/FirstScene';
+import {GlobalLoader} from './GlobalLoader';
 
 
 let globalLoader = null

@@ -3,7 +3,6 @@ import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {ActivityScene} from './ActivityScene';
 import {Uranium} from '../Uranium';
-import {EffectComposer, EffectPass, OutlineEffect} from 'postprocessing';
 import {Particle} from '../Particle';
 import {GlobalLoader, landingName} from '../GlobalLoader';
 import {TestTube2D} from "../TestTube2D";
@@ -19,13 +18,10 @@ export class Experience2Part2 extends ActivityScene {
     private pointer  = new THREE.Vector2();
     private raycaster = new THREE.Raycaster();
     //private cube:THREE.Mesh
-    private fadeMesh:THREE.Mesh
     private ParticleArray : Array<Particle> =[]
-    private outlineEffect:OutlineEffect
-    private composer:EffectComposer
     private camGroup: THREE.Object3D
     //private selectedObject:Array<THREE.Object3D> = []
-    private outlinePass:EffectPass
+    // @ts-ignore
     private step:number
     private particleColor1 = new THREE.MeshStandardMaterial({color: 0xffff58})
     private particleColor2 = new THREE.MeshStandardMaterial({color: 0xFF5858})
@@ -45,7 +41,9 @@ export class Experience2Part2 extends ActivityScene {
     init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
         console.log("nouvellescene")
         this.controls =controls
+        // @ts-ignore
         let is_intersecting = false
+        // @ts-ignore
         let display_cube = true
         this.clock = clock
         this.renderer = renderer
@@ -62,12 +60,8 @@ export class Experience2Part2 extends ActivityScene {
 
         // Create Object3D to hold camera and transparent plane
         this.camGroup = new THREE.Object3D();
-        const sizes = {
-            width: 800,
-            height: 600
-          }
 
-            document.body.appendChild(this.renderer.domElement);
+        document.body.appendChild(this.renderer.domElement);
 
 
         this.camera =  camera
@@ -83,10 +77,7 @@ export class Experience2Part2 extends ActivityScene {
         // Add camGroup to scene
         this.scene.add(this.camGroup);
 
-        let targets: {[name: string]: THREE.Object3D} = {}
 
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
 
         // Init Test Tube 2D for each component
         this.gamaTestTube = new TestTube2D()
@@ -105,7 +96,7 @@ export class Experience2Part2 extends ActivityScene {
         // this.scene.add(this.cube);
         // }
 
-       // this.cube.position.z = -10;
+        // this.cube.position.z = -10;
 
         this.step = .03;
         //console.log(this.scene)
@@ -116,30 +107,30 @@ export class Experience2Part2 extends ActivityScene {
 
             this.uranium.object.children[0].material = new THREE.MeshStandardMaterial();
             this.uranium.object.children[0].material.color = new THREE.Color(0.293333333333334,1.0,0.15999999999999998)
-                this.uranium.object.children[0].material.roughnessFactor = 0.5
-                this.uranium.object.children[0].material.emissiveFactor = new THREE.Color(0.4179999999999997,1.0,0.030000000000000028)
+            this.uranium.object.children[0].material.roughnessFactor = 0.5
+            this.uranium.object.children[0].material.emissiveFactor = new THREE.Color(0.4179999999999997,1.0,0.030000000000000028)
 
 
         },this.clock)
 
-          /**
+        /**
          * Lights
          */
-           const light = new THREE.AmbientLight(0xfffffff, 0.2)
-           light.position.set(0.8, 1.4, 1.0)
-           this.scene.add(light)
-            const light2 = new THREE.SpotLight(0xeeeeee, 0.8)
-            light2.position.set(4, 4, 0.08)
-           this.scene.add(light2)
+        const light = new THREE.AmbientLight(0xfffffff, 0.2)
+        light.position.set(0.8, 1.4, 1.0)
+        this.scene.add(light)
+        const light2 = new THREE.SpotLight(0xeeeeee, 0.8)
+        light2.position.set(4, 4, 0.08)
+        this.scene.add(light2)
 
-           const light3 = new THREE.SpotLight(0xffffff, 0.4)
-           light3.position.set(-0.8, -1, 4.0)
-           this.scene.add(light3)
-           //this.scene.add(new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), 1, 0xffff00));
-           // Animate
-           this.createParticle()
+        const light3 = new THREE.SpotLight(0xffffff, 0.4)
+        light3.position.set(-0.8, -1, 4.0)
+        this.scene.add(light3)
+        //this.scene.add(new THREE.PlaneHelper(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), 1, 0xffff00));
+        // Animate
+        this.createParticle()
 
-           window.addEventListener('mousedown', () => {
+        window.addEventListener('mousedown', () => {
 
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.ParticleArray.map(x=>x.object));
@@ -221,7 +212,7 @@ export class Experience2Part2 extends ActivityScene {
         //this.renderer.resetState()
         this.renderer.setClearColor(new THREE.Color( 0x00000 ),1.0)
         //this.renderer.preserveDrawingBuffer = true;
-       // this.renderer.setClearAlpha(0.0)
+        // this.renderer.setClearAlpha(0.0)
         //this.renderer.autoClearDepth = false;
         //this.renderer.autoClearColor = false;
 
@@ -263,8 +254,8 @@ export class Experience2Part2 extends ActivityScene {
         this.controls.update()
         this.renderer.render(this.scene, this.camera)
 
-       //this.composer.render();
-       //console.log(this.composer)
+        //this.composer.render();
+        //console.log(this.composer)
     }
 
     setAction() {
@@ -304,6 +295,7 @@ export class Experience2Part2 extends ActivityScene {
             this.scene.add(particle.object)
         },this.clock)
         this.ParticleArray.push(particle)
+        // @ts-ignore
         const myTimeout = setTimeout(this.createParticle, 850);
 
     }

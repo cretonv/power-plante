@@ -22,7 +22,6 @@ export class Experience2Part1 extends ActivityScene {
     private camera: THREE.Camera
     private scene: THREE.Scene
     private renderer: THREE.WebGLRenderer
-    private clock: THREE.Clock
      //Postprocessing
      private outlineEffect:OutlineEffect
      private composer:EffectComposer
@@ -41,11 +40,10 @@ export class Experience2Part1 extends ActivityScene {
 
     }
 
-    init(renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock) {
+    init(renderer, controls: OrbitControls, camera: THREE.Camera) {
 
 
         this.scene = new THREE.Scene()
-        this.clock = clock
 
         /**
          * Renderer
@@ -55,7 +53,7 @@ export class Experience2Part1 extends ActivityScene {
         * Camera
         */
         this.camera = camera
-       
+
         this.scene.add(this.camera)
 
         /**
@@ -67,10 +65,6 @@ export class Experience2Part1 extends ActivityScene {
         /**
          * Composer
          */
-        const parameters = { format: THREE.RGBAFormat };
-
-        const renderTarget = new THREE.WebGLRenderTarget( GlobalLoader.getInstance().getSizes().width,  GlobalLoader.getInstance().getSizes().height, parameters );
-         
         this.composer = new EffectComposer(this.renderer);
 
         /**
@@ -79,7 +73,7 @@ export class Experience2Part1 extends ActivityScene {
         loadSceneBackgroundFromHDR('hdri_flo_v-2.hdr', this.scene)
 
 
-        
+
 
         const redDyeElement = new Dye()
         redDyeElement.init(() => {
@@ -91,9 +85,9 @@ export class Experience2Part1 extends ActivityScene {
         alcoolBottle.init(() => {
             this.scene.add(alcoolBottle.object)
 
-        }, camera)
+        })
 
-      
+
 
         const geometry = new THREE.BoxGeometry( 0.04, 0.1, 0.0001 );
         const material = new THREE.MeshBasicMaterial( {
@@ -120,7 +114,7 @@ export class Experience2Part1 extends ActivityScene {
         this.loupe = new Loupe()
 
         this.cab = new CAB()
-        
+
         this.cab.init(()=>{
             this.cab.object.position.set(0.55, 0.0, -0.058)
             this.scene.add(this.cab.object)
@@ -129,11 +123,11 @@ export class Experience2Part1 extends ActivityScene {
 
         this.loupe.init(() => {
             // loupe.object.position.set(0.7, 0.0, 0)
-            this.loupe.object.rotation.set(0, 0, 0) 
+            this.loupe.object.rotation.set(0, 0, 0)
             this.scene.add(this.loupe.object)
         }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls,this.cab.object.getObjectByName("GLASS_dome"))
 
-        
+
         // Init pipette
         this.eyedropper = new EyeDropper()
         this.eyedropper.init(() => {
@@ -147,10 +141,10 @@ export class Experience2Part1 extends ActivityScene {
         })
 
 
-      
-        
-       
-        
+
+
+
+
 
         /**
          * Lights
@@ -168,8 +162,8 @@ export class Experience2Part1 extends ActivityScene {
         // Animate
         this.initPostProcessing()
         this.outlineEffect.selection.add(testube_drop_zone);
-        
-        
+
+
     }
     initPostProcessing  = () => {
         this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
@@ -179,7 +173,7 @@ export class Experience2Part1 extends ActivityScene {
             visibleEdgeColor: 0xee00ee,
             hiddenEdgeColor: 0x550055,
             blur: true,
-		
+
 			//blur: false,
 			//xRay: true
 		});
@@ -187,7 +181,7 @@ export class Experience2Part1 extends ActivityScene {
         this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
 
 		//this.outlineEffect.selection.add(this.testCube);
-        
+
 		//const smaaPass = new EffectPass(this.camera, this.smaaEffect);
 		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
 
@@ -198,7 +192,7 @@ export class Experience2Part1 extends ActivityScene {
         this.composer.addPass(renderPass);
         this.composer.addPass(this.outlinePass);
 
-        
+
 
     }
     setup(){
@@ -210,21 +204,21 @@ export class Experience2Part1 extends ActivityScene {
         this.controls.maxDistance = 0.65;
         this.controls.enableDamping = true;
         this.controls.enabled = true;
-        this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4; 
-        this.controls.maxPolarAngle = Math.PI/2-0.1; 
+        this.controls.minPolarAngle = Math.PI-Math.PI/2-0.4;
+        this.controls.maxPolarAngle = Math.PI/2-0.1;
         this.controls.minAzimuthAngle =-0.4;
-        this.controls.maxAzimuthAngle = 0.4; 
-        this.controls.enablePan = false;    
+        this.controls.maxAzimuthAngle = 0.4;
+        this.controls.enablePan = false;
         console.log(this.controls.position)
         window.setTimeout(()=>{document.querySelector('body').classList.remove('active');
         GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
-       
+
     },1100)
-        
+
 
     }
 
-    anim(tick) {
+    anim() {
         TWEEN.update();
         // const elapsedTime = clock.getElapsedTime()
 
@@ -239,7 +233,7 @@ export class Experience2Part1 extends ActivityScene {
         // Render
         this.render()
 
-        
+
 
         // Call tick again on the next frame
         //window.requestAnimationFrame(tick)

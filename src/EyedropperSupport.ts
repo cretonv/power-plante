@@ -1,44 +1,28 @@
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import * as THREE from "three"
-import * as TWEEN from "@tweenjs/tween.js";
-import {Indication} from "./Indication";
-import {ObjectViewModal} from "./ObjectViewModal";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Dye } from "./Dye";
-import { TestTube } from "./TestTube";
-import { AlcoolBottle } from "./AlcoolBottle";
-import { transformMeshToGlass, transformMeshToPlastic } from "./Glassifier";
-import { GlobalLoader } from "./GlobalLoader";
+import {GlobalLoader} from "./GlobalLoader";
+
 export class EyedropperSupport {
 
-    private isMouseDownOnModel:boolean = false;
-    private pointer  = new THREE.Vector2();
-    private raycaster = new THREE.Raycaster();
     public object:THREE.Group
-    private loader:GLTFLoader;
-    private plane: THREE.Plane;
-    private intersects = new THREE.Vector3();
+    // @ts-ignore
     private camera: THREE.Camera
-    private redDyeObject:Dye
+    // @ts-ignore
     private mixer: THREE.AnimationMixer
-    private activeAction : THREE.clipAction
-    private alcoolBottle:AlcoolBottle
-    private tubeObject:TestTube
+    // @ts-ignore
     private cameraControler:OrbitControls
 
     constructor() {
-        this.loader = new FBXLoader()
-       
+
     }
 
     init(callback: Function,camera:THREE.Camera,cameraControler:OrbitControls) {
         this.camera = camera
         this.cameraControler = cameraControler
-    
-       
+
+
         GlobalLoader.getInstance().getGLTFLoaded("support", (object) => {
-  
+
             this.object = object
             this.mixer = new THREE.AnimationMixer(object)
 
@@ -56,8 +40,8 @@ export class EyedropperSupport {
                         //this.liquidSample.push(child)
                         child.visible = false
                     }
-                   
-                
+
+
                 }
             })
 
@@ -70,15 +54,15 @@ export class EyedropperSupport {
 
 
     anim() {
-       
+
     }
-    
+
 
     setAction() {
-    
+
     }
 
     destroy() {
-        
+
     }
 }
