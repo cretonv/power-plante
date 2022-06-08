@@ -9,25 +9,35 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import { FirstScene } from './Scenes/FirstScene';
 
 
-const globalLoader = GlobalLoader.getInstance()
+let globalLoader = null
+const tickonce = () => 
+{
+    globalLoader = GlobalLoader.getInstance()
+    window.requestAnimationFrame(tick)
+    console.log("tickonce")
+}
 
 const tick = () =>
 {
-    if(globalLoader.getLoadState()){
+    //console.log(GlobalLoader.getInstance().getNumberLoaded())
+
+    if(globalLoader.getLoadState() ){
        // console.log("onélà")
         globalLoader.getCurrentScene().anim(tick)  
     }
 
     
     window.requestAnimationFrame(tick)
+    window.removeEventListener("click", tickonce);
    
 }
 
+window.addEventListener("click", tickonce);
 
 
 
 
-tick()
+
 
 
  // const elapsedTime = clock.getElapsedTime()

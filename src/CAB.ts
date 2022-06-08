@@ -41,6 +41,7 @@ export class CAB {
                         this.filled()
                         this.isFilled = true 
                         this.loupe.isEnabled = true 
+                        GlobalLoader.getInstance().setSelectedArray(this.loupe.object.children)
                     }
             });
             //console.log('alo') // this line runs ..
@@ -120,6 +121,8 @@ export class CAB {
         const mesh = this.object.getObjectByName(  this.liquidSample[this.liquidSample.length - this.liquidIndex-1].name)
         //console.log(mesh)
         mesh.visible = true
+        GlobalLoader.getInstance().playSound("bloup")
+
         //this.liquidSample.push(child) 
         mesh.material = new THREE.MeshBasicMaterial({color: 0x880088})
         this.liquidIndex = this.liquidIndex + 1
@@ -138,6 +141,7 @@ export class CAB {
 
     enableButton(){
         this.clickHandler = this.buttonMouseClickEvent.bind(this);
+        
         window.addEventListener('click', this.clickHandler)
         this.moveHandler = this.mouseMoveEvent.bind(this);
         window.addEventListener( 'pointermove',this.moveHandler);

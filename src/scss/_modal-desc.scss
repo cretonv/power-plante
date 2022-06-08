@@ -17,13 +17,16 @@
     text-align: center;
     letter-spacing: 0.04em;
     margin-bottom: 8px;
+    color: #FFFFFF;
   }
   p {
-    margin: 16px auto;
+    margin: 16px auto 40px;
     font-family: 'DM Sans';
     font-weight: 500;
     font-size: 16px;
     text-align: center;
+    color: #FFFFFF;
+    max-width: 80%;
   }
   a {
     width: fit-content;
@@ -31,7 +34,6 @@
     text-align: center;
     padding: 8px 16px;
     border-radius: 16px;
-    background-color: forestgreen;
     color: #FFF;
   }
   .close-cross {

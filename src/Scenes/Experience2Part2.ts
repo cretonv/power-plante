@@ -1,19 +1,12 @@
 import '../style.css'
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-import { EyeDropper } from '../Eyedropper';
-import { Dye, dyeColorEnum } from '../Dye';
-import { loadSceneBackgroundFromHDR } from '../SceneBackgroundLoader';
-import { TestTube } from '../TestTube';
-import { AlcoolBottle } from '../AlcoolBottle';
-import { GlobalLoader } from '../GlobalLoader';
-import { ActivityScene } from './ActivityScene';
-import { Uranium } from '../Uranium';
-import { BlendFunction, BlendMode, EffectComposer, EffectMaterial, EffectPass, OutlineEffect, RenderPass } from 'postprocessing';
-import { Particle } from '../Particle';
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {ActivityScene} from './ActivityScene';
+import {Uranium} from '../Uranium';
+import {EffectComposer, EffectPass, OutlineEffect} from 'postprocessing';
+import {Particle} from '../Particle';
+import {GlobalLoader, landingName} from '../GlobalLoader';
 import {TestTube2D} from "../TestTube2D";
-
 
 
 export class Experience2Part2 extends ActivityScene {
@@ -38,9 +31,11 @@ export class Experience2Part2 extends ActivityScene {
     private particleColor2 = new THREE.MeshStandardMaterial({color: 0xFF5858})
     private particleColor3 = new THREE.MeshStandardMaterial({color: 0xff58ee})
     private particuleClickedState =[0,0,0]
+    private transiHasBeenDone = false
     private alphaTestTube: TestTube2D
     private betaTestTube: TestTube2D
     private gamaTestTube: TestTube2D
+
 
     constructor() {
         super()
@@ -146,10 +141,11 @@ export class Experience2Part2 extends ActivityScene {
 
            window.addEventListener('mousedown', () => {
 
-
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersects = this.raycaster.intersectObjects(this.ParticleArray.map(x=>x.object));
             if(intersects.length > 0 ){
+                GlobalLoader.getInstance().playSound("click")
+
                 intersects[0].object.visible =false
                 switch(intersects[0].object.material) {
                     case this.particleColor1:
@@ -169,6 +165,33 @@ export class Experience2Part2 extends ActivityScene {
 
 
                 }
+            }
+            if (this.particuleClickedState[0]>9 && this.particuleClickedState[1]>9 && this.particuleClickedState[2]>9 && !this.transiHasBeenDone){
+                this.transiHasBeenDone = true
+                window.setTimeout(() => {
+                    document.querySelector('body').classList.add('active');
+                    setTimeout(() => {
+
+                        document.querySelector('.tubes-line').classList.add('hidden')
+                        GlobalLoader.getInstance().setNextScene(landingName)
+                        setTimeout(() => {
+
+                            this.controls.enabled = false
+                            this.controls.minDistance = -Infinity;
+                            this.controls.maxDistance = Infinity;
+                            this.controls.enableDamping = true;
+                            this.controls.minPolarAngle = -Infinity;
+                            this.controls.maxPolarAngle = Infinity;
+                            this.controls.minAzimuthAngle = -Infinity;
+                            this.controls.maxAzimuthAngle = Infinity;
+                            this.controls.enablePan = true;
+                            this.controls.target.set(0, 0, 0)
+                            GlobalLoader.getInstance().notifyTransitionDone()
+                            console.log("ontransi")
+
+                        }, 700)
+                    }, 700)
+                }, 10000)
             }
             console.log(this.particuleClickedState)
         })
@@ -194,14 +217,19 @@ export class Experience2Part2 extends ActivityScene {
         this.camGroup.position.set(0,0,0)
         this.camera.position.set(0,0,0)
         this.controls.enabled = true
-        document.querySelector('body').classList.remove('active');
+        //document.querySelector('body').classList.remove('active');
         //this.renderer.resetState()
         this.renderer.setClearColor(new THREE.Color( 0x00000 ),1.0)
         //this.renderer.preserveDrawingBuffer = true;
        // this.renderer.setClearAlpha(0.0)
         //this.renderer.autoClearDepth = false;
         //this.renderer.autoClearColor = false;
-        document.querySelector('.tubes-line').classList.remove('hidden')
+
+        window.setTimeout(()=>{
+            document.querySelector('body').classList.remove('active');
+            document.querySelector('.tubes-line').classList.remove('hidden')
+        },1000)
+
     }
 
     anim() {

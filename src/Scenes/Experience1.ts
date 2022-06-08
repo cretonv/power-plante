@@ -34,6 +34,7 @@ export class Experience1 extends ActivityScene {
 
     constructor() {
         super()
+    
 
 
     }
@@ -116,14 +117,11 @@ export class Experience1 extends ActivityScene {
     initPostProcessing  = () => {
         this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
             blendFunction: BlendFunction.ADD,
-            edgeStrength: 1000,
+            edgeStrength: 100,
             pulseSpeed: 0.64,
             visibleEdgeColor: 0xee00ee,
             hiddenEdgeColor: 0x550055,
-            blur: true,
-		
-			//blur: false,
-			//xRay: true
+            blur: true
 		});
         this.outlineEffect.resolution.width = GlobalLoader.getInstance().getSizes().width
         this.outlineEffect.resolution.height = GlobalLoader.getInstance().getSizes().height
@@ -134,7 +132,7 @@ export class Experience1 extends ActivityScene {
 		this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
 
 		//this.effect = outlineEffect;
-        //this.composer.addPass(new EffectPass(this.camera,this.outlineEffect));
+        //this.composer.addPass(new EffectPass(this.camera,this.outlieEffect));
         //this.outlinePass.setEnabled(this.outlinePass.isEnabled())
         const renderPass = new RenderPass(this.scene, this.camera)
         this.composer.addPass(renderPass);
@@ -147,7 +145,7 @@ export class Experience1 extends ActivityScene {
         this.outlineEffect.selection.set(GlobalLoader.getInstance().getSelectedArray())
     }
     setup(){
-        document.querySelector('body').classList.remove('active');
+       
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;
@@ -160,7 +158,8 @@ export class Experience1 extends ActivityScene {
         this.controls.minAzimuthAngle =-0.4;
         this.controls.maxAzimuthAngle = 0.4; 
         this.controls.enablePan = false;    
-        console.log(this.controls.position)
+        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');},1100)
+        
     }
 
     anim(tick) {
@@ -195,20 +194,21 @@ export class Experience1 extends ActivityScene {
 
     destroy() {
         console.log("destroy")
+        
         //this.composer.removePass(this.outlinePass)
-      
-        this.scene.traverse((child) => {
-            if(child instanceof THREE.Mesh){
-                child.geometry.dispose()
+        // this.exp1assembly.destroy()
+        // this.scene.traverse((child) => {
+        //     if(child instanceof THREE.Mesh){
+        //         child.geometry.dispose()
 
-                for(const key in child.material){
-                    const value = child.material[key]
+        //         for(const key in child.material){
+        //             const value = child.material[key]
 
-                    if (value && typeof value.dispose === 'function'){
-                        value.dispose()
-                    }
-                }
-            }
-        })
+        //             if (value && typeof value.dispose === 'function'){
+        //                 value.dispose()
+        //             }
+        //         }
+        //     }
+        // })
     }
 }
