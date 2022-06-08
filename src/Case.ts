@@ -443,6 +443,7 @@ export class Case {
             .easing(TWEEN.Easing.Cubic.InOut)
             .onUpdate(() => {
                 this.camera.position.set(distance * Math.sin(v.value), this.camera.position.y, distance * Math.cos(v.value))
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0))
             })
             .onComplete(()=>{
                 GlobalLoader.getInstance().setMascotVisible()
