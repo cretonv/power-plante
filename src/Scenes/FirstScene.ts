@@ -76,9 +76,14 @@ export class FirstScene extends ActivityScene {
 
     setup(): void {
         if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()) {
-            this.camera.position.z = 1.3563360735759848
+            this.camera.position.z = 0.5
             this.case.animCameraOnAppear()
+<<<<<<< HEAD
             
+=======
+            document.querySelector('.loader').classList.add('hidden')
+            document.querySelector('.canvas-title').classList.remove('hidden')
+>>>>>>> 1da800f0761affb43a21cb6e11b3dd1d894b3c1f
         }
         else {
             this.camera.position.x = 0;
@@ -117,7 +122,7 @@ export class FirstScene extends ActivityScene {
          * Camera
         //  */
         // this.camera = new THREE.PerspectiveCamera(50, GlobalLoader.getInstance().getCanvas().clientWidth / GlobalLoader.getInstance().getCanvas().clientHeight, 0.1, 100)
-        this.camera.position.z = 1
+        this.camera.position.z = 0.5
         this.camera.position.y = 0.7
         this.scene.add(this.camera)
 
@@ -228,7 +233,7 @@ export class FirstScene extends ActivityScene {
             () => {
                                 GlobalLoader.getInstance().playSound("click")
                 //TODO change to exp1
-                
+
                 setTimeout(() => {
                     GlobalLoader.getInstance().setNextScene(exp1Name)
                     setTimeout(() => {

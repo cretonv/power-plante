@@ -4,6 +4,8 @@
   left: 50%;
   transform: translateX(-50%);
   top: 40px;
+  opacity: 1;
+  transition: all 2s;
   .on-title {
     font-family: $primary-fonts;
     font-style: normal;
@@ -23,5 +25,6 @@
   &.hidden {
     opacity: 0;
     pointer-events: none;
+    transition: all 1s;
   }
 }
