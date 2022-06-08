@@ -103,7 +103,7 @@ export class ModalViewport {
 
         // Plane background
         const planeGeometry = new THREE.PlaneGeometry( 2.5, 1.875 );
-        const planeTexture = new THREE.TextureLoader().load( '/public/images/textures/gridModal.png' );
+        const planeTexture = new THREE.TextureLoader().load( '/images/textures/gridModal.png' );
         const planeMaterial = new THREE.MeshBasicMaterial( {map: planeTexture, side: THREE.DoubleSide} );
         this.plane = new THREE.Mesh( planeGeometry, planeMaterial );
         this.plane.position.z = -10
