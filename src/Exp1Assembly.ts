@@ -79,9 +79,9 @@ export class Exp1Assembly {
                         case "GLASS_dome":
                             if (!this.animpart3 && this.animpart2) {
                                 const targetCoords = {
-                                    x: 0.5084644805746876,
-                                    y: 0.17242656592455635,
-                                    z: 0.05116099495563462,
+                                    x: 0.3434035546894982,
+                                    y: 0.1349416958263899,
+                                    z: -0.04209424450546512,
                                     xf: 0.0,
                                     yf: 0.1,
                                     zf: -0.1,
@@ -326,7 +326,32 @@ export class Exp1Assembly {
         window.setTimeout(() => {
             GlobalLoader.getInstance().setMascotAlternateVisible()
             GlobalLoader.getInstance().setMascotChangeQuote(2)
+            GlobalLoader.getInstance().setMascotCallback(()=>{
+                GlobalLoader.getInstance().setMascotAlternateVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(1)
+                GlobalLoader.getInstance().setMascotCallback(()=>{
+                    document.querySelector('body').classList.add('active');
+                    setTimeout(() => {
+                        GlobalLoader.getInstance().setNextScene(landingName)
+                        setTimeout(() => {
+                            this.controls.enabled = false
+                            this.controls.minDistance = -Infinity;
+                            this.controls.maxDistance = Infinity;
+                            this.controls.enableDamping = true;
+                            this.controls.minPolarAngle = -Infinity;
+                            this.controls.maxPolarAngle = Infinity;
+                            this.controls.minAzimuthAngle = -Infinity;
+                            this.controls.maxAzimuthAngle = Infinity;
+                            this.controls.enablePan = true;
+                            this.controls.target.set(0, 0, 0)
+                           GlobalLoader.getInstance().notifyTransitionDone()
+                        }, 400)
+                    }, 1200)
+                    
+    
+                },"Retour à la malette")
 
+            },"Suivant")
         }, 6500) 
         this.object.traverse((child) => {
 
@@ -351,28 +376,13 @@ export class Exp1Assembly {
        
 
         window.setTimeout(() => {
-            document.querySelector('body').classList.add('active');
-            setTimeout(() => {
-                GlobalLoader.getInstance().setNextScene(landingName)
-                setTimeout(() => {
-
-                    this.controls.enabled = false
-                    this.controls.minDistance = -Infinity;
-                    this.controls.maxDistance = Infinity;
-                    this.controls.enableDamping = true;
-                    this.controls.minPolarAngle = -Infinity;
-                    this.controls.maxPolarAngle = Infinity;
-                    this.controls.minAzimuthAngle = -Infinity;
-                    this.controls.maxAzimuthAngle = Infinity;
-                    this.controls.enablePan = true;
-                    this.controls.target.set(0, 0, 0)
-                    GlobalLoader.getInstance().notifyTransitionDone()
-                }, 400)
-            }, 1200)
+            
         }, 12000)
     }
 
     anim() {
+        console.log(this.camera)
+        console.log(this.controls)
         if (this.rotateUranium && this.modelReady) {
 
             console.log(this.uranium)
@@ -391,9 +401,7 @@ export class Exp1Assembly {
             this.lastAction = this.activeAction
             this.activeAction = toAction
             this.lastAction.stop()
-
             this.activeAction.reset()
-
             this.activeAction.play()
         }
     }
@@ -413,5 +421,6 @@ export class Exp1Assembly {
         window.removeEventListener('pointermove', this.moveHandler)
         window.removeEventListener('mouseup', this.clickReleaseHandler)
     }
+
 
 }

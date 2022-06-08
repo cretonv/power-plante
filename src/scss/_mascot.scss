@@ -17,6 +17,7 @@
   padding-bottom: 16px;
   transform: translateY(100%);
   transition: all 1s ease-in;
+
   img.mascot-illu {
     position: absolute;
     right: 0;
@@ -26,13 +27,16 @@
     transform: translateX(calc(100% + 50px)) translateY(50px);
     transition: all 1s ease-in;
   }
+
   img.mark-logo {
     display: none;
   }
+
   .btn {
     display: none;
     top: 32px;
   }
+
   .quote {
     font-family: $secondary-fonts;
     font-style: normal;
@@ -43,14 +47,17 @@
     max-width: 50%;
     margin: 0 auto;
   }
+
   &.visible {
     transform: translateY(0);
     transition: all 1s ease-in;
+
     img {
       transform: translateX(50px) translateY(50px);
       transition: all 1s ease-in;
     }
   }
+
   &.alternative-version {
     bottom: 10vh;
     top: 10vh;
@@ -62,21 +69,26 @@
     height: calc(100% - 30vh);
     pointer-events: none;
     border-top: none;
+
     .btn {
       display: flex;
+
       &.hidden {
         display: none;
       }
     }
+
     &.visible {
       transform: none;
       opacity: 1;
       pointer-events: auto;
     }
+
     img.mascot-illu {
       right: -25%;
       bottom: -39%;
     }
+
     img.mark-logo {
       display: block;
       position: absolute;
@@ -86,6 +98,7 @@
       height: auto;
       z-index: 1;
     }
+
     .quote {
       font-size: 24px;
       line-height: 28px;
@@ -95,3 +108,4 @@
     }
   }
 }
+

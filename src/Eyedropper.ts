@@ -179,6 +179,8 @@ export class EyeDropper {
 
                 //TODO destroy drag & drop listener
                 //Todo set
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(11)
                 this.tubeObject.isEnabled=true
 
             }

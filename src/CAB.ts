@@ -111,6 +111,8 @@ export class CAB {
 
     }
     filled(){
+        GlobalLoader.getInstance().setMascotVisible()
+        GlobalLoader.getInstance().setMascotChangeQuote(9)
         const mesh = this.object.getObjectByName(  this.liquidSample[this.liquidSample.length - this.liquidIndex-1].name)
         //console.log(mesh)
         mesh.visible = true
@@ -125,6 +127,8 @@ export class CAB {
         }
         else{
             this.loupe.isEnabled = true
+            GlobalLoader.getInstance().setMascotVisible()
+            GlobalLoader.getInstance().setMascotChangeQuote(8)
         }
 
 
@@ -133,6 +137,7 @@ export class CAB {
 
 
     enableButton(){
+        GlobalLoader.getInstance().setMascotHidden()
         this.clickHandler = this.buttonMouseClickEvent.bind(this);
 
         window.addEventListener('click', this.clickHandler)

@@ -160,16 +160,14 @@ export class Case {
                     this.scene.addBlurOnScene()
                     break;
                 case 'exp2':
-
+                    
                     GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
                     GlobalLoader.getInstance().playSound("click")
-
                     this.modalExp2.object.position.set(0, -0.5, 0)
-
                     this.modalExp2.rtScene.add(this.modalExp2.object)
                     this.modalExp2.htmlDescriptionElement.classList.add('visible')
                     document.querySelector('.modal-border').classList.add('visible')

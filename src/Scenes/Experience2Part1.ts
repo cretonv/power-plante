@@ -210,8 +210,11 @@ export class Experience2Part1 extends ActivityScene {
         this.controls.maxAzimuthAngle = 0.4;
         this.controls.enablePan = false;
         console.log(this.controls.position)
-        window.setTimeout(()=>{document.querySelector('body').classList.remove('active');
-        GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
+        window.setTimeout(()=>{
+            document.querySelector('body').classList.remove('active')
+            GlobalLoader.getInstance().setMascotVisible()
+            GlobalLoader.getInstance().setMascotChangeQuote(12)
+            GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
 
     },1100)
 

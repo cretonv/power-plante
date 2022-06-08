@@ -5,6 +5,8 @@ export class Mascot {
     private activeQuote: string
     private mascotContainer: HTMLDivElement
     private typeWriter: Typewriter
+    private buttonHandler
+
     constructor() {
         this.quotesArray = null
     }
@@ -27,9 +29,12 @@ export class Mascot {
             delay: 18
         }).typeString(this.activeQuote)
             .start()
+        this.removeEventOnButton()
+
     }
     makeVisible() {
         this.mascotContainer.classList.add('visible')
+        this.mascotContainer.classList.add('alternative-remove')
     }
     makeVisibleAlternative() {  
         this.mascotContainer.classList.add('alternative-version')
@@ -40,5 +45,25 @@ export class Mascot {
     }
     hide() {
         this.mascotContainer.classList.remove('visible')
+        this.removeEventOnButton()
+    }
+    addEventOnButton(callback:Function,buttonContent:string ){
+        this.buttonHandler = callback.bind(this);
+        window.addEventListener('mousedown', this.buttonHandler);
+        this.mascotContainer.getElementsByClassName("button-interract-mascot")[0].getElementsByClassName("text")[0].innerHTML = buttonContent
+        this.displaybutton()
+    }
+    removeEventOnButton(){
+        window.removeEventListener('mousedown', this.buttonHandler)
+        this.hideButton()
+
+    }
+    hideButton(){
+        this.mascotContainer.getElementsByClassName( "button-interract-mascot")[0].classList.add('hidden')
+
+    }
+    displaybutton(){
+        this.mascotContainer.getElementsByClassName( "button-interract-mascot")[0].classList.remove('hidden')
+
     }
 }

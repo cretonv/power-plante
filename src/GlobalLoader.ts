@@ -106,6 +106,10 @@ export var GlobalLoader = (function () {
       isThereModalOpened = bool
     }
 
+    this.setMascotCallback= function (callback:Function , name){
+      mascot.addEventOnButton(callback,name)
+    }
+
     this.getFBXLoaded = function (name: string, callback: Function) {
       return callback(FbxArray[name])
     }
@@ -124,9 +128,11 @@ export var GlobalLoader = (function () {
     this.getSizes = function () {
       return sizes
     }
+
     this.getCanvas = function (): HTMLCanvasElement {
       return canvas
     }
+
     this.getLoadState = function () {
       if (numberLoaded == 23) {
         if (firstsceneloaded) {
@@ -144,6 +150,7 @@ export var GlobalLoader = (function () {
       }
       return false
     }
+
     this.getHasLandedBeenLoadedOnce = function () {
       return hasLandedBeenLoadedOnce
     }
