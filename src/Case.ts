@@ -3,7 +3,6 @@ import * as TWEEN from "@tweenjs/tween.js";
 import { Indication } from "./Indication";
 import { ModalViewport } from "./ModalViewport";
 import { transformMeshToGlass, transformMeshToLed } from "./Glassifier";
-import { Mascot } from "./Mascot";
 import { GlobalLoader} from "./GlobalLoader";
 import { FirstScene } from "./Scenes/FirstScene";
 
@@ -152,6 +151,7 @@ export class Case {
                     this.modalExp1Open = true
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
                     GlobalLoader.getInstance().playSound("click")
+                    this.modalExp1.object.position.set(0, -0.5, 0)
                     this.modalExp1.object.position.set(0, 0.0, 0)
                     this.modalExp1.rtScene.add(this.modalExp1.object)
                     this.modalExp1.htmlDescriptionElement.classList.add('visible')
@@ -163,13 +163,12 @@ export class Case {
 
                     GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
+                    this.modalExp2.setCameraPosition(0, 0, 2)
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
                     GlobalLoader.getInstance().playSound("click")
-
                     this.modalExp2.object.position.set(0, -0.5, 0)
-
                     this.modalExp2.rtScene.add(this.modalExp2.object)
                     this.modalExp2.htmlDescriptionElement.classList.add('visible')
                     document.querySelector('.modal-border').classList.add('visible')
