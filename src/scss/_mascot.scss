@@ -71,6 +71,9 @@
 
     .btn {
       display: flex;
+      position: absolute;
+      bottom: 32px;
+      top: unset;
       svg {
         path {
           stroke: $color-2;
@@ -107,7 +110,7 @@
 
     .quote {
       font-size: 24px;
-      line-height: 28px;
+      line-height: 46px;
       color: #09130B;
       max-width: 80%;
       text-align: center;
