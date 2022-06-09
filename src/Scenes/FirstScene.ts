@@ -89,10 +89,13 @@ export class FirstScene extends ActivityScene {
             this.camera.position.z = 0.49586116341112374;
         }
 
+        
         this.controls.enableDamping = true
         window.setTimeout(()=>{
             document.querySelector('body').classList.remove('active');
-        },1100)
+            GlobalLoader.getInstance().setMascotVisible()
+            GlobalLoader.getInstance().setMascotChangeQuote(12)
+        },3000)
     }
 
     initThreeElements = () => {
@@ -274,8 +277,8 @@ export class FirstScene extends ActivityScene {
             blendFunction: BlendFunction.ADD,
             edgeStrength: 1000,
             pulseSpeed: 0.64,
-            visibleEdgeColor: 0xee00ee,
-            hiddenEdgeColor: 0x550055,
+            visibleEdgeColor: 0x00FAB1,
+            hiddenEdgeColor: 0x00FAB1,
             blur: true,
 
             //blur: false,

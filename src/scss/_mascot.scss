@@ -64,11 +64,11 @@
     left: 15vw;
     opacity: 0;
     transform: none;
-    width: calc(100% - 30vw);
-    height: calc(100% - 30vh);
+    width: 70vw;
+    height: 70vh;
     pointer-events: none;
     border-top: none;
-
+    transition: none;
     .btn {
       display: flex;
       position: absolute;

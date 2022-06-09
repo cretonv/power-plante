@@ -124,7 +124,6 @@ export class Experience2Part1 extends ActivityScene {
 
         this.loupe.init(() => {
             // loupe.object.position.set(0.7, 0.0, 0)
-            this.loupe.object.rotation.set(0, 0, 0)
             this.scene.add(this.loupe.object)
             this.loupe.object.rotation.set(0.55, 0.0, 0.0)
         }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls,this.cab.object.getObjectByName("GLASS_dome"))
@@ -172,8 +171,8 @@ export class Experience2Part1 extends ActivityScene {
             blendFunction: BlendFunction.ADD,
             edgeStrength: 1000,
             pulseSpeed: 0.64,
-            visibleEdgeColor: 0xee00ee,
-            hiddenEdgeColor: 0x550055,
+            visibleEdgeColor: 0x00FAB1,
+            hiddenEdgeColor: 0x00FAB1,
             blur: true,
 
 			//blur: false,
@@ -214,8 +213,7 @@ export class Experience2Part1 extends ActivityScene {
         console.log(this.controls.position)
         window.setTimeout(()=>{
             document.querySelector('body').classList.remove('active')
-            GlobalLoader.getInstance().setMascotVisible()
-            GlobalLoader.getInstance().setMascotChangeQuote(12)
+
             GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
 
         },1100)
