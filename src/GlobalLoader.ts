@@ -138,6 +138,19 @@ export var GlobalLoader = (function () {
       return canvas
     }
 
+    this.setVisited = function (index) {
+      if(index == 1 ){
+        isExp1Visited = true
+      }
+      if (index == 2 ){
+        isExp2Visited = true
+      }
+      return canvas
+    }
+    this.isAllHasBeenDone = function(){
+      return isExp1Visited && isExp2Visited
+    }
+
     this.getLoadState = function () {
       if (numberLoaded == 25) {
         if (firstsceneloaded) {
@@ -186,6 +199,9 @@ export var GlobalLoader = (function () {
   var canvas
   var sizes
   var selectedObjects
+  let isExp1Visited = false
+  let isExp2Visited = false
+
 
   let visualLoader: VisualLoader
   let mascot = new Mascot()

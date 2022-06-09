@@ -75,27 +75,64 @@ export class FirstScene extends ActivityScene {
     }
 
     setup(): void {
+        
         if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()) {
             this.camera.position.z = 0.5
             this.case.animCameraOnAppear()
             document.querySelector('.loader').classList.add('hidden')
             document.querySelector('.canvas-title').classList.remove('hidden')
+            window.setTimeout(()=>{
+                document.querySelector('body').classList.remove('active');
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(0)
+            },3000)
         }
         else {
-            this.camera.position.x = 0;
-            this.controls.enable = true
+            if(!GlobalLoader.getInstance().isAllHasBeenDone()){
+                this.camera.position.x = 0;
+                this.controls.enable = true
+    
+                this.camera.position.y = 0.8343677459755188;
+                this.camera.position.z = 0.49586116341112374;
+                window.setTimeout(()=>{
+                    document.querySelector('body').classList.remove('active');
+                },3000)
+            }
+            else{
+                this.camera.position.x = 0;
+                this.controls.enable = false 
+                GlobalLoader.getInstance().setIsThereModalOpened(true)
+                window.setTimeout(()=>{
+                    this.addBlurOnScene()
+                    GlobalLoader.getInstance().setMascotAlternateVisible()
+                    GlobalLoader.getInstance().setMascotChangeQuote(5)
+                    GlobalLoader.getInstance().setMascotCallback(()=>{
+                        GlobalLoader.getInstance().setMascotAlternateVisible()
+                        GlobalLoader.getInstance().setMascotChangeQuote(6)
+                        GlobalLoader.getInstance().setMascotCallback(()=>{
+                            setTimeout(() => {
+                                window.location.href = 'http://www.powerplante.ch/website.html';
+                            }, 4500)
+        
+        
+                        },"ACHETER !")
+        
+                    },"Suivant")
+                },420)
 
-            this.camera.position.y = 0.8343677459755188;
-            this.camera.position.z = 0.49586116341112374;
+                this.camera.position.y = 0.8343677459755188;
+                this.camera.position.z = 0.49586116341112374;
+                window.setTimeout(()=>{
+                    document.querySelector('body').classList.remove('active');
+                },3000)
+
+            }
+
         }
 
         
         this.controls.enableDamping = true
-        window.setTimeout(()=>{
-            document.querySelector('body').classList.remove('active');
-            GlobalLoader.getInstance().setMascotVisible()
-            GlobalLoader.getInstance().setMascotChangeQuote(12)
-        },3000)
+        
     }
 
     initThreeElements = () => {

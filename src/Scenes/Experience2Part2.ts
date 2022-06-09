@@ -61,7 +61,7 @@ export class Experience2Part2 extends ActivityScene {
         // Create Object3D to hold camera and transparent plane
         this.camGroup = new THREE.Object3D();
 
-        document.body.appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
 
 
         this.camera =  camera
@@ -166,7 +166,6 @@ export class Experience2Part2 extends ActivityScene {
                     document.querySelector('body').classList.add('active');
                     console.log("onélà")
                     setTimeout(() => {
-                        GlobalLoader.getInstance().setNextScene(landingName)
                         setTimeout(() => {
                             
 

@@ -27,6 +27,7 @@ export class Exp1Assembly {
     private animpart2 = false
     private animpart3 = false
     private state = "start"
+    public isBatteryReady = false
 
     // private modelFileName = 'case_flo_v-14.fbx';
 
@@ -249,6 +250,7 @@ export class Exp1Assembly {
                     else {
                         this.object.getObjectByName("cache").position.z = 14
                         this.state = "rangelespilesfdp"
+                        this.isBatteryReady = true
                         GlobalLoader.getInstance().setMascotVisible()
                         GlobalLoader.getInstance().setMascotChangeQuote(17)
                         //this.setBatteryLessTransparent()
@@ -408,10 +410,6 @@ export class Exp1Assembly {
                         GlobalLoader.getInstance().playSound("led")
 
                     }, count)
-                }else{
-                    window.setTimeout(() => {
-                        transformMeshToLedLight(child, 'hdri_power_plante_flo_v-1.hdr')
-                    }, count)
                 }
 
                 count += 900
@@ -430,7 +428,7 @@ export class Exp1Assembly {
         if (this.rotateUranium && this.modelReady) {
 
             console.log(this.uranium)
-            this.uranium.rotation.set(this.uranium.rotation.x + 0.001, this.uranium.rotation.y + 0.008, this.uranium.rotation.z + 0.025)
+            this.uranium.rotation.set(this.uranium.rotation.x + 0.01, this.uranium.rotation.y + 0.08, this.uranium.rotation.z + 0.25)
 
         }
         //console.log(this.object)

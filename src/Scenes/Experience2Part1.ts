@@ -197,6 +197,8 @@ export class Experience2Part1 extends ActivityScene {
 
     }
     setup(){
+        GlobalLoader.getInstance().setVisited(2)
+
         //document.querySelector('body').classList.remove('active');
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
@@ -213,6 +215,9 @@ export class Experience2Part1 extends ActivityScene {
         console.log(this.controls.position)
         window.setTimeout(()=>{
             document.querySelector('body').classList.remove('active')
+
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(12)
 
             GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
 

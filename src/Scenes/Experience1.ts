@@ -132,7 +132,7 @@ export class Experience1 extends ActivityScene {
         this.outlineEffect.selection.set(GlobalLoader.getInstance().getSelectedArray())
     }
     setup(){
-
+        GlobalLoader.getInstance().setVisited(1)
         this.camera.position.z = 0.6056062446915709;
         this.camera.position.y = 0.22947195647688093;
         this.camera.position.x = -0.05553105060454619;
@@ -151,9 +151,10 @@ export class Experience1 extends ActivityScene {
                 GlobalLoader.getInstance().setMascotVisible()
                 GlobalLoader.getInstance().setMascotChangeQuote(15)
                 console.log(GlobalLoader.getInstance().getIndications())
-                GlobalLoader.getInstance().getIndications().points[4].element.classList.remove('destroyed')
+                
             },1200)
         },1200)
+        GlobalLoader.getInstance().getIndications().points[4].element.classList.remove('destroyed') 
 
         console.log(this.exp1assembly.object)
     }

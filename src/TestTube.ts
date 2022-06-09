@@ -54,7 +54,6 @@ export class TestTube extends EventDispatcher {
             if (intersects.length > 0) {
                 this.isMouseDownOnModel = true
                 this.cameraControler.enabled = false
-
             }
 
         }

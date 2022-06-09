@@ -36,12 +36,8 @@ export class Mascot {
     }
     makeVisible() {
         this.mascotContainer.classList.remove('alternative-version')
-<<<<<<< HEAD
         this.talk()
-=======
-        this.mascotContainer.classList.add('visible')
-
->>>>>>> f999d37b8d40d200d7118212da84e4fd1a0867e9
+        this.mascotContainer.classList.add('visible')   
     }
     makeVisibleAlternative() {
         this.mascotContainer.classList.add('alternative-version')

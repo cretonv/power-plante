@@ -19,7 +19,7 @@ export class Battery {
     private clickReleaseHandler
     private mouseMoveEvent:Function
     private moveHandler
-
+    
     constructor() {
 
         //mousedowxn
@@ -53,7 +53,7 @@ export class Battery {
         this.mouseMoveEvent = (e) => {
             this.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
             this.pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
-            if (this.isMouseDownOnModel) {
+            if (this.isMouseDownOnModel && this.target.isBatteryReady) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 this.raycaster.ray.intersectPlane(this.plane, this.intersects);
                 if (this.intersects.y > 0.) {

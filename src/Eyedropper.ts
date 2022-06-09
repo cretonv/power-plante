@@ -47,8 +47,7 @@ export class EyeDropper {
 
          //mousedowxn
          this.buttonMouseClickEvent = () => {
-
-            this.raycaster.set( this.object.position.add(new THREE.Vector3(0,0.5,0)), new THREE.Vector3(0,-1,0) );
+            this.raycaster.set( new THREE.Vector3(this.object.position.x,this.object.position.y+0.2,this.object.position.z), new THREE.Vector3(0,-1,0) );
             const intersectsDownRed = this.raycaster.intersectObject(this.redDyeObject.object);
             if(intersectsDownRed.length > 0 && this.redDyeObject.capacity>0 && this.state == this.stateEnum.Empty ){
                 //triggerranim
@@ -64,7 +63,7 @@ export class EyeDropper {
                     this.tubeObject.hasBeenHiglightedOnce = true
                 }
             }
-            this.raycaster.set( this.object.position.add(new THREE.Vector3(0,0.5,0)), new THREE.Vector3(0,-1,0) );
+            this.raycaster.set( new THREE.Vector3(this.object.position.x,this.object.position.y+0.2,this.object.position.z), new THREE.Vector3(0,-1,0) );
             const intersectsAlcool = this.raycaster.intersectObject(this.alcoolBottle.object);
 
             if(intersectsAlcool.length > 0 && this.alcoolBottle.capacity>0 && this.state == this.stateEnum.Empty ){
@@ -83,7 +82,7 @@ export class EyeDropper {
 
 
             }
-            this.raycaster.set( this.object.position.add(new THREE.Vector3(0,0.5,0)), new THREE.Vector3(0,-1,0) );
+            this.raycaster.set( new THREE.Vector3(this.object.position.x,this.object.position.y+0.2,this.object.position.z), new THREE.Vector3(0,-1,0) );
             const intersectsCabPipe = this.raycaster.intersectObject(this.cab.object.getObjectByName("Valve"));
             console.log(intersectsCabPipe)
             if(intersectsCabPipe.length > 0  ){
@@ -104,7 +103,7 @@ export class EyeDropper {
                }
             }
 
-            this.raycaster.set( this.object.position.add(new THREE.Vector3(0,0.5,0)), new THREE.Vector3(0,-1,0) );
+            this.raycaster.set( new THREE.Vector3(this.object.position.x,this.object.position.y+0.2,this.object.position.z), new THREE.Vector3(0,-1,0) );
             const intersectsDownTube = this.raycaster.intersectObject(this.tubeObject.object);
             console.log(intersectsDownTube)
 
@@ -128,6 +127,7 @@ export class EyeDropper {
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                                 GlobalLoader.getInstance().setMascotVisible()
                                 GlobalLoader.getInstance().setMascotChangeQuote(11)
+                                GlobalLoader.getInstance().getIndications().points[8].element.classList.remove('destroyed')
                             })
                             this.removeAllContent()
                             GlobalLoader.getInstance().playSound("bloup")
@@ -139,6 +139,7 @@ export class EyeDropper {
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                                 GlobalLoader.getInstance().setMascotVisible()
                                 GlobalLoader.getInstance().setMascotChangeQuote(11)
+                                GlobalLoader.getInstance().getIndications().points[8].element.classList.remove('destroyed')
                             })
                             this.removeAllContent()
                              GlobalLoader.getInstance().playSound("bloup")
@@ -172,7 +173,7 @@ export class EyeDropper {
             this.isMouseDownOnModel =false
             this.cameraControler.enabled = true
 
-            this.raycaster.set( this.object.position.add(new THREE.Vector3(0,0.5,0)), new THREE.Vector3(0,-1,0) );
+            this.raycaster.set( new THREE.Vector3(this.object.position.x,this.object.position.y+0.2,this.object.position.z), new THREE.Vector3(0,-1,0) );
             const intersectsSupport = this.raycaster.intersectObject(this.support.object);
             if(intersectsSupport.length>0){
 
