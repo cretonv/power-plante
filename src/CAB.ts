@@ -2,6 +2,9 @@ import * as THREE from "three"
 import {transformMeshToGlass, transformMeshToLed} from "./Glassifier";
 import {GlobalLoader} from "./GlobalLoader";
 import {Loupe} from "./Loupe";
+import * as TWEEN from "@tweenjs/tween.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 
 export class CAB {
 
@@ -15,6 +18,7 @@ export class CAB {
     private liquidSample: Array<THREE.Mesh> = []
     private liquidIndex: number = 0
     private isFilled = false
+    private controls: OrbitControls
 
 
     private buttonMouseClickEvent:Function
@@ -38,6 +42,37 @@ export class CAB {
                         GlobalLoader.getInstance().setSelectedArray([])
                         this.isFilled = true
                         this.loupe.isEnabled = true
+                        const targetCoords = {
+                            x: 0.7538687283149133,
+                            y: 0.21759561301318526,
+                            z: 0.4551694646181694
+                        }
+                        const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z};
+                        this.controls.enabled = false
+                        this.controls.minDistance = -Infinity;
+                        this.controls.maxDistance = Infinity;
+                        this.controls.enableDamping = true;
+                        this.controls.minPolarAngle = -Infinity;
+                        this.controls.maxPolarAngle = Infinity;
+                        this.controls.minAzimuthAngle = -Infinity;
+                        this.controls.maxAzimuthAngle = Infinity;
+                        this.controls.enablePan = true;
+                        new TWEEN.Tween(coords)
+                            .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
+                            .onUpdate(() => {
+                                this.camera.position.set(coords.x, coords.y, coords.z)
+                                this.camera.lookAt( 0.8038687283149133, this.object.position.y, this.object.position.z)
+                            })
+                            .easing(TWEEN.Easing.Sinusoidal.InOut)
+                            .onComplete(() => {
+                                console.log(this.camera.position)
+                                window.setTimeout(() => {
+                                    console.log(this.camera.position)
+                                })
+                                console.log(this.object.position)
+                                this.camera.lookAt( 2.8038687283149133, 0.3, 0.1)
+                            })
+                            .start();
                     }
             });
             //console.log('alo') // this line runs ..
@@ -52,9 +87,10 @@ export class CAB {
 
     }
 
-    init(callback: Function, camera: THREE.Camera,loupe:Loupe) {
+    init(callback: Function, camera: THREE.Camera,loupe:Loupe,controls:OrbitControls) {
         this.loupe = loupe
         this.camera = camera
+        this.controls = controls
 
         GlobalLoader.getInstance().getFBXLoaded("cab", (object) => {
             this.object = object
@@ -92,13 +128,8 @@ export class CAB {
             })
 
             object.scale.set(0.01, 0.01, 0.01)
-
-
             callback()
         })
-
-
-
 
     }
 
@@ -108,7 +139,6 @@ export class CAB {
         if(this.isFilled){
 
         }
-
     }
     filled(){
 

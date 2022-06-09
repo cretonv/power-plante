@@ -117,9 +117,9 @@ export class Experience2Part1 extends ActivityScene {
 
         this.cab.init(()=>{
             this.cab.object.position.set(0.55, 0.0, -0.058)
-            
+
             this.scene.add(this.cab.object)
-        },this.camera,this.loupe)
+        },this.camera,this.loupe, this.controls)
 
 
         this.loupe.init(() => {
@@ -237,7 +237,7 @@ export class Experience2Part1 extends ActivityScene {
         // Update controls
         this.controls.update()
         GlobalLoader.getInstance().getIndications().anim(this.camera, this.scene)
-        //console.log(this.camera.position)
+        // console.log(this.camera.position)
 
 
         // Render

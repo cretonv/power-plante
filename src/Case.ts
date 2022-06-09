@@ -107,15 +107,16 @@ export class Case {
                         this.indications.points[2].element.classList.add('destroyed')
                         const targetCoords = {
                             x: 0,
-                            y: 0.8343677459755188,
-                            z: 0.49586116341112374
+                            y: 0.7543677459755188,
+                            z: 0.39586116341112374
                         }
                         const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z };
                         new TWEEN.Tween(coords)
                             .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
-                            .onUpdate(() =>
+                            .onUpdate(() => {
                                 this.camera.position.set(coords.x, coords.y, coords.z)
-                            )
+                                this.camera.lookAt(0, 0, 0)
+                            })
                             .onComplete(() => {
                                 this.hasBeenOpened = true
                                 if ((!this.modalExp1Open && !this.modalExp2Open) && !this.animEnded) {
@@ -165,11 +166,11 @@ export class Case {
 
                     break;
                 case 'exp2':
-                    
+
                     GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
                     this.modalExp2.setCameraPosition(0, 0, 2)
-                    
+
                     this.modalExp2.controls.reset()
                     this.modalExp2.controls.update()
                     this.modalExp2.isVisible = true
@@ -177,7 +178,7 @@ export class Case {
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
                     GlobalLoader.getInstance().playSound("click")
                     this.modalExp2.object.position.set(0, -0.5, 0)
-                    
+
                     this.modalExp2.htmlDescriptionElement.classList.add('visible')
                     this.modalExp2.rtScene.add(this.modalExp2.object)
                     document.querySelector('.modal-border').classList.add('visible')
@@ -253,6 +254,7 @@ export class Case {
                             .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
                             .onUpdate(() => {
                                 this.camera.position.set(coords.x, coords.y, coords.z)
+                                this.camera.lookAt(0, 0, 0)
                             })
                             .onComplete(() => {
                                 if (!this.blockLoop) {
