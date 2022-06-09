@@ -35,9 +35,10 @@ export class CAB {
                 intersects.forEach(element => {
                     if(element.object.name == "button_2"){
                         this.filled()
+                        GlobalLoader.getInstance().setSelectedArray([])
                         this.isFilled = true
                         this.loupe.isEnabled = true
-                        GlobalLoader.getInstance().setSelectedArray(this.loupe.object.children)
+                       
                     }
             });
             //console.log('alo') // this line runs ..
@@ -111,8 +112,7 @@ export class CAB {
 
     }
     filled(){
-        GlobalLoader.getInstance().setMascotVisible()
-        GlobalLoader.getInstance().setMascotChangeQuote(9)
+
         const mesh = this.object.getObjectByName(  this.liquidSample[this.liquidSample.length - this.liquidIndex-1].name)
         //console.log(mesh)
         mesh.visible = true
@@ -129,6 +129,7 @@ export class CAB {
             this.loupe.isEnabled = true
             GlobalLoader.getInstance().setMascotVisible()
             GlobalLoader.getInstance().setMascotChangeQuote(8)
+            GlobalLoader.getInstance().setSelectedArray(this.loupe.object.children)
         }
 
 

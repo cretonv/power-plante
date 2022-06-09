@@ -147,33 +147,43 @@ export class Case {
                 case 'exp1':
                     GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
+                    this.modalExp1.setCameraPosition(0, 0, 2)
                     this.modalExp1.isVisible = true
                     this.modalExp1Open = true
+                    this.modalExp1.controls.reset()
+                    this.modalExp1.controls.update()
+
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
                     GlobalLoader.getInstance().playSound("click")
-                    this.modalExp1.object.position.set(0, -0.5, 0)
+                    //this.modalExp1.object.position.set(0, -0.5, 0)
                     this.modalExp1.object.position.set(0, 0.0, 0)
                     this.modalExp1.rtScene.add(this.modalExp1.object)
                     this.modalExp1.htmlDescriptionElement.classList.add('visible')
                     document.querySelector('.modal-border').classList.add('visible')
                     this.indications.points[3].element.classList.add('destroyed')
                     this.scene.addBlurOnScene()
+
                     break;
                 case 'exp2':
                     
                     GlobalLoader.getInstance().setMascotHidden()
                     this.controls.enabled = false
                     this.modalExp2.setCameraPosition(0, 0, 2)
+                    
+                    this.modalExp2.controls.reset()
+                    this.modalExp2.controls.update()
                     this.modalExp2.isVisible = true
                     this.modalExp2Open = true
                     GlobalLoader.getInstance().setIsThereModalOpened(true)
                     GlobalLoader.getInstance().playSound("click")
                     this.modalExp2.object.position.set(0, -0.5, 0)
-                    this.modalExp2.rtScene.add(this.modalExp2.object)
+                    
                     this.modalExp2.htmlDescriptionElement.classList.add('visible')
+                    this.modalExp2.rtScene.add(this.modalExp2.object)
                     document.querySelector('.modal-border').classList.add('visible')
                     this.indications.points[3].element.classList.add('destroyed')
                     this.scene.addBlurOnScene()
+
                     break;
                 default:
                 //onfaitrien

@@ -83,6 +83,7 @@ export class Loupe {
             this.object = object
             this.object.scale.set(0.01, 0.01, 0.01)
             this.object.position.set(0.70,0.02,0)
+           // object.rotation.set(3,0.0,0)
             callback()
 
         })

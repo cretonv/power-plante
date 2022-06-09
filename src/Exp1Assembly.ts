@@ -374,7 +374,7 @@ export class Exp1Assembly {
             GlobalLoader.getInstance().setMascotChangeQuote(2)
             GlobalLoader.getInstance().setMascotCallback(()=>{
                 GlobalLoader.getInstance().setMascotAlternateVisible()
-                GlobalLoader.getInstance().setMascotChangeQuote(1)
+                GlobalLoader.getInstance().setMascotChangeQuote(3)
                 GlobalLoader.getInstance().setMascotCallback(()=>{
                     document.querySelector('body').classList.add('active');
                     setTimeout(() => {

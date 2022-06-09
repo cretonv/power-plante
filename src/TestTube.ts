@@ -41,6 +41,7 @@ export class TestTube extends EventDispatcher {
     private mouseMoveEvent:Function
     private moveHandler
     public hasBeenHiglightedOnce = false
+    private hasmascotspeeked1 = false
 
     constructor() {
         super()
@@ -65,12 +66,9 @@ export class TestTube extends EventDispatcher {
             this.raycaster.setFromCamera( this.pointer, this.camera );
             const intersectsSupport = this.raycaster.intersectObject(this.dropzone);
             const intersectsObject = this.raycaster.intersectObject(this.object);
-            console.log(intersectsSupport)
-            console.log(intersectsObject)
             if (intersectsSupport.length > 0 && intersectsObject.length > 0) {
 
-                GlobalLoader.getInstance().setMascotVisible()
-                GlobalLoader.getInstance().setMascotChangeQuote(10)
+
                 this.object.position.set(this.dropzone.position.x, 0, 0)
                 console.log("onélà")
                 if (!this.shakeEnded) {
@@ -319,9 +317,15 @@ export class TestTube extends EventDispatcher {
         }
         else {
             //AppLiveParameter.getInstance().notifyTransitionDone()
+                if(!this.hasmascotspeeked1)
+                {
+                    this.hasmascotspeeked1 = true
+                    console.log("fini")
+                    this.dropzone.visible = true
+                    GlobalLoader.getInstance().setMascotVisible()
+                    GlobalLoader.getInstance().setMascotChangeQuote(10)
+                }
 
-                console.log("fini")
-                this.dropzone.visible = true
 
 
         }

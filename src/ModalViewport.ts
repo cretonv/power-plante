@@ -14,7 +14,7 @@ export class ModalViewport {
     private rtCameraLight: THREE.DirectionalLight
     private rtWarmLight: THREE.DirectionalLight
     private rtColdLight: THREE.DirectionalLight
-    private controls: OrbitControls
+    public controls: OrbitControls
     private rtRenderer: THREE.WebGLRenderer
     private plane: THREE.PlaneGeometry
     private openModalEvent: Function
