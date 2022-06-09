@@ -117,7 +117,7 @@ export class Experience2Part1 extends ActivityScene {
 
         this.cab.init(()=>{
             this.cab.object.position.set(0.55, 0.0, -0.058)
-            this.cab.object.rotation.set(0.55, 0.0, 0.0)
+            
             this.scene.add(this.cab.object)
         },this.camera,this.loupe)
 
@@ -126,6 +126,7 @@ export class Experience2Part1 extends ActivityScene {
             // loupe.object.position.set(0.7, 0.0, 0)
             this.loupe.object.rotation.set(0, 0, 0)
             this.scene.add(this.loupe.object)
+            this.loupe.object.rotation.set(0.55, 0.0, 0.0)
         }, camera, new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),this.controls,this.cab.object.getObjectByName("GLASS_dome"))
 
 
