@@ -72,10 +72,28 @@ export class Exp1Assembly {
                                 this.animpart1 = true
                                 GlobalLoader.getInstance().getIndications().points[5].element.classList.remove('destroyed')
                                 GlobalLoader.getInstance().getIndications().points[4].element.classList.add('destroyed')
+                                const targetCoords = {
+                                    x: 0.14719998442087057,
+                                    y: 0.0836237267007484,
+                                    z: 0.6275661215514879
+                                }
+                                const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z};
+                                new TWEEN.Tween(coords)
+                                    .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
+                                    .onUpdate(() => {
+                                        this.camera.position.set(coords.x, coords.y, coords.z)
+                                        this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+                                    })
+                                    .easing(TWEEN.Easing.Sinusoidal.InOut)
+                                    .onComplete(() => {
+                                        console.log(this.controls.target)
+                                        this.controls.enabled = true;
+
+                                    })
+                                    .start();
                             }
                             else {
                                 GlobalLoader.getInstance().playSound("wrong")
-
                             }
                             break;
                         case "GLASS_dome":
@@ -153,6 +171,27 @@ export class Exp1Assembly {
                                 this.state = "opencase"
                                 GlobalLoader.getInstance().getIndications().points[6].element.classList.remove('destroyed')
                                 GlobalLoader.getInstance().getIndications().points[5].element.classList.add('destroyed')
+                                window.setTimeout(() => {
+                                    const targetCoords = {
+                                        x: -0.2509366144644587,
+                                        y: 0.08522763061943775,
+                                        z: 0.5935209065400482
+                                    }
+                                    const coords = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z};
+                                    new TWEEN.Tween(coords)
+                                        .to({ x: targetCoords.x, y: targetCoords.y, z: targetCoords.z })
+                                        .onUpdate(() => {
+                                            this.camera.position.set(coords.x, coords.y, coords.z)
+                                            this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+                                        })
+                                        .easing(TWEEN.Easing.Sinusoidal.InOut)
+                                        .onComplete(() => {
+                                            console.log(this.controls.target)
+                                            this.controls.enabled = true;
+
+                                        })
+                                        .start();
+                                }, 1000)
                             }
                             else {
                                 if(!this.animpart2){
@@ -427,5 +466,16 @@ export class Exp1Assembly {
         window.removeEventListener('mouseup', this.clickReleaseHandler)
     }
 
+    disableControl() {
+        this.controls.enabled = false
+        this.controls.minDistance = -Infinity;
+        this.controls.maxDistance = Infinity;
+        this.controls.enableDamping = true;
+        this.controls.minPolarAngle = -Infinity;
+        this.controls.maxPolarAngle = Infinity;
+        this.controls.minAzimuthAngle = -Infinity;
+        this.controls.maxAzimuthAngle = Infinity;
+        this.controls.enablePan = true;
+    }
 
 }

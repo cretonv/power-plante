@@ -169,8 +169,6 @@ export class Experience1 extends ActivityScene {
         this.controls.update()
         GlobalLoader.getInstance().getIndications().anim(this.camera, this.scene)
         //console.log(this.camera.position)
-
-
         // Render
         this.render()
 
