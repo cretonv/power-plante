@@ -71,7 +71,7 @@ export class FirstScene extends ActivityScene {
 
         this.initSceneObjects()
         //this.tick()
-        loadSceneBackgroundFromHDR("hdri_power_plante_flo_v-1.hdr", this.scene)
+        loadSceneBackgroundFromHDR("hdri_flo_v-2.hdr", this.scene)
     }
 
     setup(): void {
@@ -131,13 +131,13 @@ export class FirstScene extends ActivityScene {
         /**
          * Lights
          */
-        this.light = new THREE.AmbientLight(0xFFFFFF, 0.3)
+        this.light = new THREE.AmbientLight(0xFFFFFF, 0.6)
         this.light.position.set(0.44, 0.18, 0.34)
         this.scene.add(this.light)
-        this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.6)
+        this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.9)
         this.directionalLight.position.set(0.46, 0.13, 0.03)
         this.scene.add(this.directionalLight)
-        this.backLight = new THREE.DirectionalLight(0xFFFFFF, 0.4)
+        this.backLight = new THREE.DirectionalLight(0xFFFFFF, 0.7)
         this.backLight.position.set(0, -0.43, -0.3)
         this.warmLight = new THREE.SpotLight(0xFFFFFF, 1, 2.19);
         this.warmLight.position.set(0, -1.09, 0)

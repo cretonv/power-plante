@@ -117,6 +117,7 @@ export class Experience2Part1 extends ActivityScene {
 
         this.cab.init(()=>{
             this.cab.object.position.set(0.55, 0.0, -0.058)
+            this.cab.object.rotation.set(0.55, 0.0, 0.0)
             this.scene.add(this.cab.object)
         },this.camera,this.loupe)
 

@@ -93,10 +93,14 @@ export class EyeDropper {
 
                 //TODO higlight button
                 this.cab.enableButton()
+                GlobalLoader.getInstance().setMascotVisible()
+                GlobalLoader.getInstance().setMascotChangeQuote(9)
+                GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("button_2")])
+                
                 GlobalLoader.getInstance().playSound("bloup")
 
                 this.removeAllContent()
-                GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
+                //GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
                }
             }
 
@@ -122,6 +126,8 @@ export class EyeDropper {
                             this.tubeObject.addRed(()=>{
                                 this.isPart3 = true
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
+                                GlobalLoader.getInstance().setMascotVisible()
+                                GlobalLoader.getInstance().setMascotChangeQuote(11)
                             })
                             this.removeAllContent()
                             GlobalLoader.getInstance().playSound("bloup")
@@ -131,6 +137,8 @@ export class EyeDropper {
                             this.tubeObject.addAlcool(()=>{
                                 this.isPart3 = true
                                 GlobalLoader.getInstance().setSelectedArray(this.support.object.children[0].children)
+                                GlobalLoader.getInstance().setMascotVisible()
+                                GlobalLoader.getInstance().setMascotChangeQuote(11)
                             })
                             this.removeAllContent()
                              GlobalLoader.getInstance().playSound("bloup")
@@ -169,19 +177,26 @@ export class EyeDropper {
             if(intersectsSupport.length>0){
 
                 this.object.position.set(0.2, 0.0, 0)
-                if(this.isPart3){
-                    GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("button_2")])
+                if(this.tubeObject.shakeEnded){
+                    GlobalLoader.getInstance().setSelectedArray([this.cab.object.getObjectByName("button_2")])         
                 }
-                else
-                {
-                    GlobalLoader.getInstance().setSelectedArray([])
+                else {
+                    GlobalLoader.getInstance().setSelectedArray([])   
                 }
+                    
+         
+
+                   
+                // }
+
+
+
 
                 //TODO destroy drag & drop listener
                 //Todo set
-                GlobalLoader.getInstance().setMascotVisible()
-                GlobalLoader.getInstance().setMascotChangeQuote(11)
+               
                 this.tubeObject.isEnabled=true
+
 
             }
 
