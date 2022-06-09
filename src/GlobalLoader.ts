@@ -161,7 +161,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = exp1Name;
+  var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -242,6 +242,10 @@ export var GlobalLoader = (function () {
     {
       position: new THREE.Vector3(0.10, 0.075, -0.06),
       element: document.querySelector('.indication-7')
+    },
+    {
+      position: new THREE.Vector3(0.075, 0.1, 0),
+      element: document.querySelector('.indication-8')
     },
   ]
   let indications = new Indication()
