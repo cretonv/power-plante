@@ -90,7 +90,9 @@ export class FirstScene extends ActivityScene {
         }
 
         this.controls.enableDamping = true
-        document.querySelector('body').classList.remove('active');
+        window.setTimeout(()=>{
+            document.querySelector('body').classList.remove('active');
+        },1100)
     }
 
     initThreeElements = () => {
@@ -227,7 +229,8 @@ export class FirstScene extends ActivityScene {
             document.querySelector('.cab-desc'),
             this.renderer,
             () => {
-                                GlobalLoader.getInstance().playSound("click")
+                document.querySelector('body').classList.add('active');
+                GlobalLoader.getInstance().playSound("click")
                 //TODO change to exp1
 
                 setTimeout(() => {

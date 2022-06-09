@@ -39,6 +39,7 @@ export var GlobalLoader = (function () {
       }
     }
     this.loadScene = function (renderer, controls: OrbitControls, camera: THREE.Camera, clock: THREE.Clock, thisSceneId = sceneId) {
+      mascot.hide()
       console.log(   this.getCurrentScene(thisSceneId))
       this.getCurrentScene(thisSceneId).init(renderer, controls, camera, clock)
     }
@@ -196,17 +197,17 @@ export var GlobalLoader = (function () {
     "Bravo ! Tu as pu observer les différentes ondes, le morceau d’uranium produit 3 types d’ondes qui sont présentes partout et qui aident l’écosystème, les animaux et la croissance de tes légumes : les ondes Gamma, Alpha, Beta C est grâce à elles que tu as des frites croustillantes !",
     "Grâce à tes expériences tu as obtenu ton certificat du futur grand physicien nucléaire qui te donne une réduction de 10% sur le kit POWER PLANTE pour continuer tes expériences.  Tu pourras fabriquer des bonbons avec les déchets nucléaires,  faire fonctionner ta lampe sans éléctricité et bien plus encore ! Montre vite ça à tes parents pour continuer !",
     "Si tu veux continuer, achète notre super kit POWER PLANTE en magasin ! Tu pourras avoir accès à plus de 1000 expériences.",
-    "Ce que tu vois ici, ce sont les ondes invisibles qui nettoient l’environnement. Clique sur les ondes Gamma, ce sont les plus grosses ondes qui s’occupent du carbone.",
-    "Prend ta loupe et observe les particules purificatrice !",
+    "Ce que tu vois ici, ce sont les ondes invisibles qui nettoient l’environnement. Clique sur les ondes Gamma, Beta et Alpha, ce sont les plus grosses ondes qui s’occupent du carbone.",
+    "Prend ta loupe et observe les particules purificatrices !",
     "Actionne l’interrupteur pour diffuser ton mélange !",
     "Verse le dans le reservoir et actionne l’interrupteur !",
     "Maintenant que tout est rassemblé, secoue vite ta mixture avant les gaz verts ne s’échappe !",
     "Tu es de retour dans ton laboratoire ! Cette fois tu vas pouvoir observer les ondes qui purifient l’air de ta maison chaque jour avec ton kit ! Utilise les différents colorants alimentaires et l’alcool de bambou recyclé avec ton uranium naturel pour les voir !",
-    "Impressionant ! Regarde, les leds indiquent que l’uranium naturel a rechargé ta batterie propremment et sans consommer d’éléctricité !",
-    "La pile est en place ! Tourne le bouton pour activer la recharge par énergie verte !",
+    "Impressionnant ! Regarde, les leds indiquent que l’uranium naturel a rechargé ta batterie proprement et sans consommer d’électricité !",
+    "La pile est en place ! Appuie sur le bouton pour activer la recharge par énergie verte !",
     "Réassemble la centrale recyclée pour pouvoir recharger tes batteries de manière naturelle !",
-    "Bravo ! Ta centrale naturelle fonctionne ! Maintenant trouve le cache où mettre ta pile rechargeable !",
-    "Plus qu'à mettre ta Pile dans le cache !"
+    "Bravo ! Ta centrale naturelle fonctionne ! Maintenant ouvre le cache où mettre ta pile rechargeable en le tirant vers la droite !",
+    "Plus qu'à mettre ta Pile sous le cache et le fermer !"
   ]
 
   // Init 2D indications
