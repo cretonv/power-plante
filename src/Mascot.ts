@@ -1,4 +1,5 @@
 import Typewriter from 'typewriter-effect/dist/core';
+import { GlobalLoader } from './GlobalLoader';
 
 export class Mascot {
     private quotesArray: [string]
@@ -36,6 +37,7 @@ export class Mascot {
     makeVisible() {
         this.mascotContainer.classList.add('visible')
         this.mascotContainer.classList.remove('alternative-version')
+        this.talk()
     }
     makeVisibleAlternative() {
         this.mascotContainer.classList.add('alternative-version')
@@ -43,6 +45,7 @@ export class Mascot {
         this.mascotContainer.classList.add('visible')
         },1000
         )
+        this.talk()
     }
     hide() {
         this.mascotContainer.classList.remove('visible')
@@ -66,5 +69,14 @@ export class Mascot {
     displaybutton(){
         this.mascotContainer.getElementsByClassName( "button-interract-mascot")[0].classList.remove('hidden')
 
+    }
+    talk(){
+        let random_boolean = Math.random() < 0.5;
+        if(random_boolean){
+            GlobalLoader.getInstance().playSound("glowy1")
+        }
+        else{
+            GlobalLoader.getInstance().playSound("glowy2")
+        }
     }
 }

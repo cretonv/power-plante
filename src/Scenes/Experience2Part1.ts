@@ -172,8 +172,8 @@ export class Experience2Part1 extends ActivityScene {
             blendFunction: BlendFunction.ADD,
             edgeStrength: 1000,
             pulseSpeed: 0.64,
-            visibleEdgeColor: 0xee00ee,
-            hiddenEdgeColor: 0x550055,
+            visibleEdgeColor: 0x00FAB1,
+            hiddenEdgeColor: 0x00FAB1,
             blur: true,
 
 			//blur: false,

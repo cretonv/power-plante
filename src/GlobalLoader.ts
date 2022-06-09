@@ -75,7 +75,7 @@ export var GlobalLoader = (function () {
       return backgroundtexture
     }
     this.getNumberLoaded = function () {
-      return Math.round(numberLoaded * 100 / 23)
+      return Math.round(numberLoaded * 100 / 25)
     }
     this.setCurrentBackground = function () {
       backgroundtexture
@@ -139,7 +139,7 @@ export var GlobalLoader = (function () {
     }
 
     this.getLoadState = function () {
-      if (numberLoaded == 23) {
+      if (numberLoaded == 25) {
         if (firstsceneloaded) {
           return true
         }
@@ -385,6 +385,16 @@ export var GlobalLoader = (function () {
 
         })
         loadSound(audioLoader,listener, AudioArray , 'turn','Cab_qui_tourne.mp3', () => {
+          numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
+          console.log("charger son")
+        })
+        loadSound(audioLoader,listener, AudioArray , 'glowy1','1.mp3', () => {
+          numberLoaded += 1
+          visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
+          console.log("charger son")
+        })
+        loadSound(audioLoader,listener, AudioArray , 'glowy2','2.mp3', () => {
           numberLoaded += 1
           visualLoader.changeValue(GlobalLoader.getInstance().getNumberLoaded())
           console.log("charger son")
