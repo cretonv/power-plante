@@ -52,7 +52,7 @@
     transform: translateY(0);
     transition: all 1s ease-in;
 
-    img {
+    img.mascot-illu {
       transform: translateX(50px) translateY(50px);
       transition: all 1s ease-in;
     }
@@ -72,7 +72,14 @@
 
     .btn {
       display: flex;
-
+      svg {
+        path {
+          stroke: $color-2;
+        }
+      }
+      .text {
+        color: $color-2;
+      }
       &.hidden {
         display: none;
       }
@@ -92,8 +99,8 @@
     img.mark-logo {
       display: block;
       position: absolute;
-      top: -10%;
-      right: 7%;
+      top: 0;
+      right: 0;
       width: 96px;
       height: auto;
       z-index: 1;
