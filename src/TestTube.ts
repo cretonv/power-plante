@@ -85,7 +85,6 @@ export class TestTube extends EventDispatcher {
                         yf: 0.0,
                         zf: 0.0,
                     }
-                    console.log(this.camera.rotation)
                     let camPosition = new THREE.Vector3()
                     let camRotation = new THREE.Euler()
                     this.camera.getWorldPosition(camPosition);

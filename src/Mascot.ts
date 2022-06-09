@@ -17,7 +17,7 @@ export class Mascot {
         this.typeWriter = new Typewriter('.mascot .quote', {
             autoStart: false,
             cursor: "",
-            delay: 18
+            delay: 16
         });
     }
     changeActiveQuote(index) {
@@ -34,14 +34,15 @@ export class Mascot {
 
     }
     makeVisible() {
-        this.mascotContainer.classList.add('visible')
         this.mascotContainer.classList.remove('alternative-version')
+        this.mascotContainer.classList.add('visible')
+
     }
     makeVisibleAlternative() {
         this.mascotContainer.classList.add('alternative-version')
         window.setTimeout(()=>{
         this.mascotContainer.classList.add('visible')
-        },1000
+        },1200
         )
     }
     hide() {

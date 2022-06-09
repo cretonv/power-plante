@@ -65,8 +65,14 @@ export class Loupe {
             if (this.isMouseDownOnModel && this.isEnabled) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 this.raycaster.ray.intersectPlane(this.plane, this.intersects);
-                this.object.position.set(this.intersects.x, this.intersects.y - 0.01, this.intersects.z);
-                GlobalLoader.getInstance().setSelectedArray([this.target])
+                if (this.intersects.y > 0.070) {
+                    this.object.position.set(this.intersects.x, this.intersects.y - 0.01, this.intersects.z);
+                    GlobalLoader.getInstance().setSelectedArray([this.target])
+                }
+                else{
+                    this.object.position.set(this.intersects.x, 0.07, this.intersects.z);
+                    GlobalLoader.getInstance().setSelectedArray([this.target])
+                }
             }
         }
 
