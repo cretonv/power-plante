@@ -56,7 +56,13 @@ export class Battery {
             if (this.isMouseDownOnModel) {
                 this.raycaster.setFromCamera(this.pointer, this.camera);
                 this.raycaster.ray.intersectPlane(this.plane, this.intersects);
+                if (this.intersects.y > 0.) {
                 this.object.position.set(this.intersects.x, this.intersects.y  - 0.025, this.intersects.z);
+
+                }
+                else{
+                    this.object.position.set(this.intersects.x, 0, this.intersects.z);
+                }
 
             }
         }

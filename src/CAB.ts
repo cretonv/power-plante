@@ -38,7 +38,6 @@ export class CAB {
                         GlobalLoader.getInstance().setSelectedArray([])
                         this.isFilled = true
                         this.loupe.isEnabled = true
-                       
                     }
             });
             //console.log('alo') // this line runs ..
