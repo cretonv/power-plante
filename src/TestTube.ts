@@ -47,7 +47,7 @@ export class TestTube extends EventDispatcher {
 
         //mousedowxn
         this.buttonMouseClickEvent = () => {
-
+            GlobalLoader.getInstance().getIndications().points[8].element.classList.add('destroyed')
             this.raycaster.setFromCamera(this.pointer, this.camera);
             const intersects = this.raycaster.intersectObjects(this.object.children);
             if (intersects.length > 0) {

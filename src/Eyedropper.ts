@@ -175,6 +175,7 @@ export class EyeDropper {
                 else
                 {
                     GlobalLoader.getInstance().setSelectedArray([])
+                    GlobalLoader.getInstance().getIndications().points[4].element.classList.add('destroyed')
                 }
 
                 //TODO destroy drag & drop listener
