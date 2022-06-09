@@ -70,6 +70,8 @@ export class Exp1Assembly {
                             if (!this.animpart1) {
                                 this.activeAction = this.animationActions[1]
                                 this.animpart1 = true
+                                GlobalLoader.getInstance().getIndications().points[5].element.classList.remove('destroyed')
+                                GlobalLoader.getInstance().getIndications().points[4].element.classList.add('destroyed')
                             }
                             else {
                                 GlobalLoader.getInstance().playSound("wrong")
@@ -78,6 +80,7 @@ export class Exp1Assembly {
                             break;
                         case "GLASS_dome":
                             if (!this.animpart3 && this.animpart2) {
+                                GlobalLoader.getInstance().getIndications().points[6].element.classList.add('destroyed')
                                 const targetCoords = {
                                     x: 0.3434035546894982,
                                     y: 0.1349416958263899,
@@ -131,6 +134,7 @@ export class Exp1Assembly {
                                             GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("cache")])
                                             GlobalLoader.getInstance().setMascotVisible()
                                             GlobalLoader.getInstance().setMascotChangeQuote(16)
+                                            GlobalLoader.getInstance().getIndications().points[7].element.classList.remove('destroyed')
                                         })
                                         .start();
                                 }, 1600)
@@ -147,6 +151,8 @@ export class Exp1Assembly {
                                 this.activeAction = this.animationActions[2]
                                 this.animpart2 = true
                                 this.state = "opencase"
+                                GlobalLoader.getInstance().getIndications().points[6].element.classList.remove('destroyed')
+                                GlobalLoader.getInstance().getIndications().points[5].element.classList.add('destroyed')
                             }
                             else {
                                 if(!this.animpart2){
@@ -208,6 +214,7 @@ export class Exp1Assembly {
                         GlobalLoader.getInstance().setMascotChangeQuote(17)
                         //this.setBatteryLessTransparent()
                         GlobalLoader.getInstance().setSelectedArray([this.object.getObjectByName("battery")])
+                        GlobalLoader.getInstance().getIndications().points[7].element.classList.add('destroyed')
                     }
 
                 }
@@ -347,12 +354,12 @@ export class Exp1Assembly {
                            GlobalLoader.getInstance().notifyTransitionDone()
                         }, 400)
                     }, 1200)
-                    
-    
+
+
                 },"Retour à la malette")
 
             },"Suivant")
-        }, 6500) 
+        }, 6500)
         this.object.traverse((child) => {
 
             if (child.name.includes("led")) {
@@ -373,16 +380,14 @@ export class Exp1Assembly {
 
             }
         })
-       
+
 
         window.setTimeout(() => {
-            
+
         }, 12000)
     }
 
     anim() {
-        console.log(this.camera)
-        console.log(this.controls)
         if (this.rotateUranium && this.modelReady) {
 
             console.log(this.uranium)
