@@ -217,7 +217,8 @@ export class Experience2Part1 extends ActivityScene {
             GlobalLoader.getInstance().setMascotChangeQuote(12)
             GlobalLoader.getInstance().setSelectedArray([this.eyedropper.object.children[1].children[0],this.eyeDropperSupport.object.children[0]])
 
-    },1100)
+        },1100)
+        console.log(this.testtube)
 
 
     }
@@ -231,6 +232,7 @@ export class Experience2Part1 extends ActivityScene {
 
         // Update controls
         this.controls.update()
+        GlobalLoader.getInstance().getIndications().anim(this.camera, this.scene)
         //console.log(this.camera.position)
 
 

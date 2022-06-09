@@ -9,6 +9,7 @@ import { FirstScene } from "./Scenes/FirstScene";
 import { ActivityScene } from "./Scenes/ActivityScene";
 import {VisualLoader} from "./VisualLoader";
 import { Mascot } from "./Mascot";
+import {Indication} from "./Indication";
 
 export const landingName = "landingName"
 export const exp2Part1Name = "exp2Part1Name"
@@ -98,6 +99,9 @@ export var GlobalLoader = (function () {
       mascot.changeActiveQuote(index)
     }
 
+    this.getIndications = () => {
+      return indications
+    }
 
     this.getIsThereModalOpened = function () {
       return isThereModalOpened
@@ -157,7 +161,7 @@ export var GlobalLoader = (function () {
   }
 
   // variables for scene state management
-  var sceneId = landingName;
+  var sceneId = exp2Part1Name;
   var nextSceneId = "none";
   var oldSceneId = "none";
   var fbxLoader = new FBXLoader()
@@ -204,7 +208,49 @@ export var GlobalLoader = (function () {
     "Bravo ! Ta centrale naturelle fonctionne ! Maintenant trouve le cache où mettre ta pile rechargeable !",
     "Plus qu'à mettre ta Pile sous le cache !"
   ]
- 
+
+  // Init 2D indications
+  const points = [
+    {
+      position: new THREE.Vector3(-0.1, 0.11, 0.1),
+      element: document.querySelector('.indication-0')
+    },
+    {
+      position: new THREE.Vector3(-0.1, 0.16, 0.5),
+      element: document.querySelector('.indication-1')
+    },
+    {
+      position: new THREE.Vector3(-0.045, 0.15, 0.5),
+      element: document.querySelector('.indication-2')
+    },
+    {
+      position: new THREE.Vector3(-0.01, 0.1, 0.1),
+      element: document.querySelector('.indication-3')
+    },
+    {
+      position: new THREE.Vector3(-0.18147988683353248, 0.02033084751348027, -0.18),
+      element: document.querySelector('.indication-4')
+    },
+    {
+      position: new THREE.Vector3(0.118, 0.02, 0.205),
+      element: document.querySelector('.indication-5')
+    },
+    {
+      position: new THREE.Vector3(0.18147988683353248, 0.02033084751348027, -0.08),
+      element: document.querySelector('.indication-6')
+    },
+    {
+      position: new THREE.Vector3(0.10, 0.075, -0.06),
+      element: document.querySelector('.indication-7')
+    },
+    {
+      position: new THREE.Vector3(0.075, 0.1, 0),
+      element: document.querySelector('.indication-8')
+    },
+  ]
+  let indications = new Indication()
+  indications.init(points)
+
   var backgroundtexture = null;
   var FbxArray: { string: THREE.Group } = {
     string: undefined
