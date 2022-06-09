@@ -207,13 +207,13 @@ export var GlobalLoader = (function () {
   let mascot = new Mascot()
   const quotes = [
     "Salut ! Je suis Glowy, un physicien, et j’ai besoin de ton aide pour refaire fonctionner ma centrale nucléaire à l’uranium recyclé ! Est-tu prêt à aider la planète dans cette “Green Adventure” avec moi ? ",
-    "Je te présente le Kit du Petit Physicien ! Comme tu peux le voir il faut recomposer mon kit recyclé d’energie autonome pour qu’il puisse de nouveau purifier l’air et recharger nos appareils sans élécricités pour sauver la planète !",
+    "Je te présente le Kit du Petit Physicien ! Comme tu peux le voir il faut recomposer mon kit recyclé d’energie autonome pour qu’il puisse de nouveau purifier l’air et recharger nos appareils sans électricités pour sauver la planète !",
     "Grâce à tes talents d’apprentis physicien, tu as créer une mini-fission nucléaire naturelle avec ta centrale et ton uranium recyclé ! Cette énergie verte a permis de recharger ta batterie, d’économiser de l’énergie et préserver notre chère planète !",
-    "Maintenant que tu as ta mini-centrale retourne vite à la malette pour tester plein d’autres expériences bonnes pour l’environnement !",
+    "Maintenant que tu as ta mini-centrale retourne vite à la mallette pour tester plein d’autres expériences bonnes pour l’environnement !",
     "Bravo ! Tu as pu observer les différentes ondes, le morceau d’uranium produit 3 types d’ondes qui sont présentes partout et qui aident l’écosystème, les animaux et la croissance de tes légumes : les ondes Gamma, Alpha, Beta C est grâce à elles que tu as des frites croustillantes !",
     "Grâce à tes expériences tu as obtenu ton certificat du futur grand physicien nucléaire qui te donne une réduction de 10% sur le kit POWER PLANTE pour continuer tes expériences.  Tu pourras fabriquer des bonbons avec les déchets nucléaires,  faire fonctionner ta lampe sans éléctricité et bien plus encore ! Montre vite ça à tes parents pour continuer !",
     "Si tu veux continuer, achète notre super kit POWER PLANTE en magasin ! Tu pourras avoir accès à plus de 1000 expériences.",
-    "Ce que tu vois ici, ce sont les ondes invisibles qui nettoient l’environnement. Clique sur les ondes Gamma, Beta et Alpha, ce sont les plus grosses ondes qui s’occupent du carbone.",
+    "Ce que tu vois ici, ce sont les ondes invisibles qui nettoient l’environnement. Clique sur les ondes Gamma, Beta et Alpha, elles s'occupent respectivement de réduire le carbone dans l'atmosphère, de désinfecter et détruire les microbes et de rendre les frites croustillantes .",
     "Prend ta loupe et observe les particules purificatrices !",
     "Actionne l’interrupteur pour diffuser ton mélange !",
     "Verse le dans le reservoir et actionne l’interrupteur !",

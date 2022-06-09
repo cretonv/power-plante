@@ -36,8 +36,8 @@ export class Particle {
     }
 
     anim() {
-        this.object.position.x += this.MoveVector.x
-        this.object.position.y += this.MoveVector.y
+        this.object.position.x += this.MoveVector.x * 0.5
+        this.object.position.y += this.MoveVector.y * 0.5
         //console.log("onélà")
        const speed = 1
        const sizeFactor =40

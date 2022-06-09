@@ -75,7 +75,7 @@ export class FirstScene extends ActivityScene {
     }
 
     setup(): void {
-        
+
         if (!GlobalLoader.getInstance().getHasLandedBeenLoadedOnce()) {
             this.camera.position.z = 0.5
             this.case.animCameraOnAppear()
@@ -91,7 +91,7 @@ export class FirstScene extends ActivityScene {
             if(!GlobalLoader.getInstance().isAllHasBeenDone()){
                 this.camera.position.x = 0;
                 this.controls.enable = true
-    
+
                 this.camera.position.y = 0.8343677459755188;
                 this.camera.position.z = 0.49586116341112374;
                 window.setTimeout(()=>{
@@ -100,7 +100,7 @@ export class FirstScene extends ActivityScene {
             }
             else{
                 this.camera.position.x = 0;
-                this.controls.enable = false 
+                this.controls.enable = false
                 GlobalLoader.getInstance().setIsThereModalOpened(true)
                 window.setTimeout(()=>{
                     this.addBlurOnScene()
@@ -111,12 +111,12 @@ export class FirstScene extends ActivityScene {
                         GlobalLoader.getInstance().setMascotChangeQuote(6)
                         GlobalLoader.getInstance().setMascotCallback(()=>{
                             setTimeout(() => {
-                                window.location.href = 'http://www.powerplante.ch/website.html';
+                                window.location.href = 'http://www.powerplante.cf/website.html';
                             }, 4500)
-        
-        
+
+
                         },"ACHETER !")
-        
+
                     },"Suivant")
                 },420)
 
@@ -130,9 +130,9 @@ export class FirstScene extends ActivityScene {
 
         }
 
-        
+
         this.controls.enableDamping = true
-        
+
     }
 
     initThreeElements = () => {

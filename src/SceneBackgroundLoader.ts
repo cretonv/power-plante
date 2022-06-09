@@ -10,7 +10,7 @@ export function loadSceneBackgroundFromHDR(hdrPath: string,scene: THREE.Scene){
 	}
 	else{
 		const hdrEquirect = new RGBELoader()
-				.setPath( 'assets/textures/' )
+				.setPath( '/images/textures/' )
 				.load( hdrPath, function () {
 					hdrEquirect.mapping = THREE.EquirectangularReflectionMapping
                     scene.background = hdrEquirect

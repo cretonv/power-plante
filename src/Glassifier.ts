@@ -73,15 +73,15 @@ export function transformMeshToGlass( meshToGlassify: THREE.Mesh,hdrPath: string
     let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
 	if ( hdrEquirect == null){
          hdrEquirect = new RGBELoader()
-        .setPath( 'assets/textures/' )
+        .setPath( '/images/textures/' )
         .load( hdrPath, function () {
 
             hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-           
+
         } );
 	}
 
-                
+
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
 				texture.magFilter = THREE.NearestFilter;
 				texture.wrapT = THREE.RepeatWrapping;
@@ -111,11 +111,11 @@ export function transformMeshToPlastic( meshToGlassify: THREE.Mesh,hdrPath: stri
     let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
 	if ( hdrEquirect == null){
          hdrEquirect = new RGBELoader()
-        .setPath( 'assets/textures/' )
+        .setPath( '/images/textures/' )
         .load( hdrPath, function () {
 
             hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-           
+
         } );
 	}
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
@@ -148,11 +148,11 @@ export function transformMeshToLed( meshToGlassify: THREE.Mesh,hdrPath: string){
     let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
 	if ( hdrEquirect == null){
          hdrEquirect = new RGBELoader()
-        .setPath( 'assets/textures/' )
+        .setPath( '/images/textures/' )
         .load( hdrPath, function () {
 
             hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-           
+
         } );
 	}
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
@@ -185,11 +185,11 @@ export function transformMeshToLedLight( meshToGlassify: THREE.Mesh,hdrPath: str
     let hdrEquirect = GlobalLoader.getInstance().getCurrentBackground()
 	if ( hdrEquirect == null){
          hdrEquirect = new RGBELoader()
-        .setPath( 'assets/textures/' )
+        .setPath( '/images/textures/' )
         .load( hdrPath, function () {
 
             hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-           
+
         } );
 	}
     const texture = new THREE.CanvasTexture( generateTextureForGlassTexture() );
