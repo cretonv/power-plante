@@ -182,6 +182,7 @@ export class EyeDropper {
                 }
                 else {
                     GlobalLoader.getInstance().setSelectedArray([])   
+
                 }
                     
          
